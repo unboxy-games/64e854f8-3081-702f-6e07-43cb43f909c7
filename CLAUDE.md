@@ -77,4 +77,4 @@ In `update()`, pipes with `x < -PIPE_W - 20` are removed via `pipes.remove(p, tr
 ---
 
 ## Changed this turn
-- Increased starting lives from **5 to 6** — updated field initializer and `create()` reset.
+- Changed hint text from "Tap to flap" to "Tap to start".
