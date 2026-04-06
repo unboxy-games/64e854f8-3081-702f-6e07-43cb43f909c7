@@ -77,4 +77,4 @@ In `update()`, pipes with `x < -PIPE_W - 20` are removed via `pipes.remove(p, tr
 ---
 
 ## Changed this turn
-- Increased starting lives from **3 to 4** — updated both the field initializer and `create()` reset, and changed `_buildLivesDisplay()` to render 4 heart icons.
+- Changed hint text from "Tap  or  SPACE  to  flap!" to "Tap to flap"
