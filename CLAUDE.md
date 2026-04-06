@@ -16,6 +16,7 @@
 - Game-over overlay with animated pop-in, showing final score
 - Death flash (alpha flicker) + tilt animation on collision or hitting ground/ceiling
 - Tap / Space to restart (calls `scene.restart()`)
+- **Pause button** — circular button (top-right corner, depth 15); icon toggles between ‖ (pause) and ▶ (play). Also toggled with **P** key. Clicking anywhere while paused resumes the game.
 
 ---
 
@@ -46,5 +47,15 @@ In `update()`, pipes with `x < -PIPE_W - 20` are removed via `pipes.remove(p, tr
 
 ---
 
+**Pause system**  
+- `isPaused` boolean guards `_togglePause()`.  
+- Pause: `this.physics.pause()` + `pipeTimer.paused = true` + fade-in overlay.  
+- Resume: `this.physics.resume()` + `pipeTimer.paused = false` + fade-out overlay.  
+- Pause button built in `_buildPauseButton()` — circle bg + Graphics icon redrawn via `_updatePauseBtnIcon(paused)`.  
+- `_onInput` checks pointer coordinates against `PAUSE_BTN_X/Y/R` before processing flap or restart.  
+- **P** key → `_onPKey()` (only when game started and not dead).
+
+---
+
 ## Changed this turn
-- Built complete Flappy Bird from scratch (GameScene, UIScene).
+- Added pause button (top-right), P key shortcut, and animated pause overlay.

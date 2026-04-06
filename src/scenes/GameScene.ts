@@ -18,11 +18,19 @@ export class GameScene extends Phaser.Scene {
   private score       = 0;
   private gameStarted = false;
   private isDead      = false;
+  private isPaused    = false;
 
   private scoreText!: Phaser.GameObjects.Text;
   private hintText!:  Phaser.GameObjects.Text;
   private gameOverBox!: Phaser.GameObjects.Container;
   private goScoreText!: Phaser.GameObjects.Text;
+  private pauseOverlay!: Phaser.GameObjects.Container;
+  private pauseBtn!: Phaser.GameObjects.Container;
+
+  // Hit area for pause button (top-right corner)
+  private readonly PAUSE_BTN_X = GAME_WIDTH - 52;
+  private readonly PAUSE_BTN_Y = 52;
+  private readonly PAUSE_BTN_R = 24;
 
   private pipeTimer?: Phaser.Time.TimerEvent;
   private idleTween?: Phaser.Tweens.Tween;
@@ -37,6 +45,7 @@ export class GameScene extends Phaser.Scene {
     this.score       = 0;
     this.gameStarted = false;
     this.isDead      = false;
+    this.isPaused    = false;
     this.pipeData    = [];
 
     this._drawBackground();
@@ -101,9 +110,27 @@ export class GameScene extends Phaser.Scene {
       duration: 650, yoyo: true, repeat: -1, ease: 'Sine.easeInOut',
     });
 
+    // ── Pause button (top-right) ──────────────────────────────────────
+    this.pauseBtn = this._buildPauseButton();
+
+    // ── Pause overlay ─────────────────────────────────────────────────
+    const dimRect = this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.55).setOrigin(0);
+    const pPanel  = this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, 340, 180, 0x1a1a2e, 0.92).setOrigin(0.5);
+    const pTitle  = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 38, 'PAUSED', {
+      fontSize: '52px', color: '#FFD700', stroke: '#333', strokeThickness: 7,
+    }).setOrigin(0.5);
+    const pHint = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 28, 'Click  or  P  to  resume', {
+      fontSize: '22px', color: '#ffffff', stroke: '#333', strokeThickness: 4,
+    }).setOrigin(0.5);
+    this.pauseOverlay = this.add
+      .container(0, 0, [dimRect, pPanel, pTitle, pHint])
+      .setDepth(30)
+      .setVisible(false);
+
     // Input
     this.input.on('pointerdown', this._onInput, this);
     this.input.keyboard!.on('keydown-SPACE', this._onInput, this);
+    this.input.keyboard!.on('keydown-P', this._onPKey, this);
 
     // Keep UIScene score in sync
     this.scene.launch('UIScene');
@@ -152,13 +179,54 @@ export class GameScene extends Phaser.Scene {
   }
 
   // ─────────────────────────────────────────────
-  private _onInput(): void {
+  private _onInput(pointer?: Phaser.Input.Pointer): void {
+    // Check if the click landed on the pause button
+    if (pointer) {
+      const dx = pointer.x - this.PAUSE_BTN_X;
+      const dy = pointer.y - this.PAUSE_BTN_Y;
+      if (Math.sqrt(dx * dx + dy * dy) <= this.PAUSE_BTN_R + 6) {
+        if (this.gameStarted && !this.isDead) this._togglePause();
+        return;
+      }
+    }
+
+    // While paused, any click/tap resumes the game
+    if (this.isPaused) {
+      this._togglePause();
+      return;
+    }
+
     if (this.isDead) {
       this.scene.restart();
       return;
     }
     if (!this.gameStarted) this._startGame();
     this._flap();
+  }
+
+  private _onPKey(): void {
+    if (this.gameStarted && !this.isDead) this._togglePause();
+  }
+
+  private _togglePause(): void {
+    this.isPaused = !this.isPaused;
+
+    if (this.isPaused) {
+      this.physics.pause();
+      if (this.pipeTimer) this.pipeTimer.paused = true;
+      this.pauseOverlay.setVisible(true).setAlpha(0);
+      this.tweens.add({ targets: this.pauseOverlay, alpha: 1, duration: 180, ease: 'Sine.easeOut' });
+      // Animate pause button icon to "play" state
+      this._updatePauseBtnIcon(true);
+    } else {
+      this.physics.resume();
+      if (this.pipeTimer) this.pipeTimer.paused = false;
+      this.tweens.add({
+        targets: this.pauseOverlay, alpha: 0, duration: 140, ease: 'Sine.easeIn',
+        onComplete: () => this.pauseOverlay.setVisible(false),
+      });
+      this._updatePauseBtnIcon(false);
+    }
   }
 
   private _flap(): void {
@@ -241,6 +309,56 @@ export class GameScene extends Phaser.Scene {
         scale: 1, alpha: 1, duration: 280, ease: 'Back.easeOut',
       });
     });
+  }
+
+  // ─────────────────────────────────────────────
+  private _buildPauseButton(): Phaser.GameObjects.Container {
+    const bx = this.PAUSE_BTN_X;
+    const by = this.PAUSE_BTN_Y;
+
+    // Background circle
+    const bg = this.add.graphics();
+    bg.fillStyle(0x000000, 0.45);
+    bg.fillCircle(0, 0, this.PAUSE_BTN_R);
+    bg.lineStyle(2, 0xffffff, 0.55);
+    bg.strokeCircle(0, 0, this.PAUSE_BTN_R);
+
+    // Pause icon: two vertical bars
+    const icon = this.add.graphics();
+    this._drawPauseIcon(icon, false);
+
+    const container = this.add.container(bx, by, [bg, icon]).setDepth(15);
+
+    // Hover glow
+    const hitZone = this.add.zone(bx, by, this.PAUSE_BTN_R * 2 + 12, this.PAUSE_BTN_R * 2 + 12)
+      .setInteractive({ useHandCursor: true });
+    hitZone.on('pointerover', () => {
+      this.tweens.add({ targets: container, scale: 1.15, duration: 100, ease: 'Sine.easeOut' });
+    });
+    hitZone.on('pointerout', () => {
+      this.tweens.add({ targets: container, scale: 1, duration: 100, ease: 'Sine.easeIn' });
+    });
+
+    return container;
+  }
+
+  private _drawPauseIcon(g: Phaser.GameObjects.Graphics, showPlay: boolean): void {
+    g.clear();
+    g.fillStyle(0xffffff, 0.95);
+    if (showPlay) {
+      // Play triangle
+      g.fillTriangle(-6, -10, -6, 10, 10, 0);
+    } else {
+      // Two bars
+      g.fillRect(-8, -9, 5, 18);
+      g.fillRect(3, -9, 5, 18);
+    }
+  }
+
+  private _updatePauseBtnIcon(paused: boolean): void {
+    // icon is the second child (index 1) in the pauseBtn container
+    const icon = this.pauseBtn.getAt(1) as Phaser.GameObjects.Graphics;
+    this._drawPauseIcon(icon, paused);
   }
 
   // ─────────────────────────────────────────────
