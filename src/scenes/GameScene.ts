@@ -107,7 +107,7 @@ export class GameScene extends Phaser.Scene {
 
     // Hint
     this.hintText = this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 100, 'Tap to start x', {
+      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 100, 'Tap to start y', {
         fontSize: '26px', color: '#ffffff',
         stroke: '#333', strokeThickness: 5,
       })
