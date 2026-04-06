@@ -350,11 +350,8 @@ export class GameScene extends Phaser.Scene {
     this.enemyTimer?.remove();
     this.enemyData.forEach(e => e.wingTween?.stop());
 
-    // Stop bird physics
-    const bBody = this.bird.body as Phaser.Physics.Arcade.Body;
-    bBody.setVelocityX(0);
-    bBody.setVelocityY(0);
-    bBody.setAllowGravity(false);
+    // Freeze the entire physics world — stops pipes, enemies, and the bird
+    this.physics.pause();
 
     // Flash red
     this.tweens.add({

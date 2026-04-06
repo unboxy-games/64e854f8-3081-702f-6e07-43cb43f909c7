@@ -77,6 +77,4 @@ In `update()`, pipes with `x < -PIPE_W - 20` are removed via `pipes.remove(p, tr
 ---
 
 ## Changed this turn
-- Added three enemy types (red bird, bee, bat) with distinct hand-drawn Graphics textures, sine/homing movement, and wing-flap tweens.
-- Enemy timer spawns enemies every 2.8 s after game start; paused/resumed and cleaned up correctly.
-- `update()` now guards on `isPaused` and uses the `time` parameter for sine-wave vertical motion.
+- Fixed game-over bug: `_die()` now calls `this.physics.pause()` to freeze all physics bodies (pipes, enemies, bird) immediately on death. Previously only the bird body was zeroed out, so pipes and enemies kept scrolling while the game-over overlay was showing.
