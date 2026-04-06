@@ -77,4 +77,4 @@ In `update()`, pipes with `x < -PIPE_W - 20` are removed via `pipes.remove(p, tr
 ---
 
 ## Changed this turn
-- Changed hint text from "Tap to flap" to "Tap to start".
+- Changed hint text from "Tap to start" to "Tap to start x".
