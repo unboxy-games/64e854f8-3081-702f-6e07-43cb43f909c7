@@ -77,4 +77,4 @@ In `update()`, pipes with `x < -PIPE_W - 20` are removed via `pipes.remove(p, tr
 ---
 
 ## Changed this turn
-- Increased starting lives from **4 to 5** — updated field initializer, `create()` reset, and `_buildLivesDisplay()` loop to render 5 heart icons.
+- Increased starting lives from **5 to 6** — updated field initializer and `create()` reset.
