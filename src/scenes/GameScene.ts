@@ -24,17 +24,20 @@ export class GameScene extends Phaser.Scene {
   private pipes!: Phaser.Physics.Arcade.Group;
   private pipeData: { ref: Phaser.Physics.Arcade.Image; scored: boolean }[] = [];
 
-  private score       = 0;
-  private gameStarted = false;
-  private isDead      = false;
-  private isPaused    = false;
+  private score        = 0;
+  private lives        = 3;
+  private gameStarted  = false;
+  private isDead       = false;
+  private isPaused     = false;
+  private isInvincible = false;
 
-  private scoreText!: Phaser.GameObjects.Text;
-  private hintText!:  Phaser.GameObjects.Text;
-  private gameOverBox!: Phaser.GameObjects.Container;
-  private goScoreText!: Phaser.GameObjects.Text;
+  private scoreText!:    Phaser.GameObjects.Text;
+  private hintText!:     Phaser.GameObjects.Text;
+  private gameOverBox!:  Phaser.GameObjects.Container;
+  private goScoreText!:  Phaser.GameObjects.Text;
   private pauseOverlay!: Phaser.GameObjects.Container;
-  private pauseBtn!: Phaser.GameObjects.Container;
+  private pauseBtn!:     Phaser.GameObjects.Container;
+  private livesContainer!: Phaser.GameObjects.Container;
 
   // Hit area for pause button (top-right corner)
   private readonly PAUSE_BTN_X = GAME_WIDTH - 52;
@@ -55,12 +58,14 @@ export class GameScene extends Phaser.Scene {
   // ─────────────────────────────────────────────
   create(): void {
     // Reset state (called again on scene.restart)
-    this.score       = 0;
-    this.gameStarted = false;
-    this.isDead      = false;
-    this.isPaused    = false;
-    this.pipeData    = [];
-    this.enemyData   = [];
+    this.score        = 0;
+    this.lives        = 3;
+    this.gameStarted  = false;
+    this.isDead       = false;
+    this.isPaused     = false;
+    this.isInvincible = false;
+    this.pipeData     = [];
+    this.enemyData    = [];
 
     this._drawBackground();
     this._genBirdTexture();
@@ -84,9 +89,9 @@ export class GameScene extends Phaser.Scene {
     // Overlap: we handle death manually, no physics separation
     this.physics.add.overlap(this.bird, this.pipes, () => this._die(), undefined, this);
 
-    // Enemy group + collision
+    // Enemy group + collision (enemy hit reduces life; pipe/ground kills instantly)
     this.enemies = this.physics.add.group();
-    this.physics.add.overlap(this.bird, this.enemies, () => this._die(), undefined, this);
+    this.physics.add.overlap(this.bird, this.enemies, () => this._hitEnemy(), undefined, this);
 
     // Score display
     this.scoreText = this.add
@@ -96,6 +101,9 @@ export class GameScene extends Phaser.Scene {
       })
       .setOrigin(0.5)
       .setDepth(10);
+
+    // Lives display (hearts, top-left)
+    this._buildLivesDisplay();
 
     // Hint
     this.hintText = this.add
@@ -372,6 +380,88 @@ export class GameScene extends Phaser.Scene {
         scale: 1, alpha: 1, duration: 280, ease: 'Back.easeOut',
       });
     });
+  }
+
+  // ─────────────────────────────────────────────
+  /** Draw a heart at local (ox, oy) on graphics g; filled=red, empty=dark */
+  private _drawHeart(g: Phaser.GameObjects.Graphics, ox: number, oy: number, filled: boolean): void {
+    const r = 10;
+    const color = filled ? 0xFF3355 : 0x443344;
+    const alpha = filled ? 1 : 0.45;
+    g.fillStyle(color, alpha);
+    // Two overlapping circles form the top bumps
+    g.fillCircle(ox + r * 0.6,  oy + r * 0.55, r * 0.72);
+    g.fillCircle(ox + r * 1.4,  oy + r * 0.55, r * 0.72);
+    // Triangle for the bottom point
+    g.fillTriangle(
+      ox,          oy + r,
+      ox + r * 2,  oy + r,
+      ox + r,      oy + r * 2.15,
+    );
+    // Shine on filled hearts
+    if (filled) {
+      g.fillStyle(0xFF99BB, 0.65);
+      g.fillCircle(ox + r * 0.75, oy + r * 0.42, r * 0.3);
+    }
+  }
+
+  private _buildLivesDisplay(): void {
+    const items: Phaser.GameObjects.Graphics[] = [];
+    for (let i = 0; i < 3; i++) {
+      const hg = this.add.graphics();
+      this._drawHeart(hg, 0, 0, true);
+      items.push(hg);
+    }
+    // Space hearts 44 px apart; anchor the container at top-left
+    this.livesContainer = this.add.container(28, 20, items).setDepth(10);
+    items.forEach((hg, i) => { hg.x = i * 44; });
+  }
+
+  private _updateLivesDisplay(): void {
+    const children = this.livesContainer.getAll() as Phaser.GameObjects.Graphics[];
+    children.forEach((hg, i) => {
+      hg.clear();
+      this._drawHeart(hg, 0, 0, i < this.lives);
+    });
+  }
+
+  /** Called when the bird touches an enemy — lose one life, not instant death */
+  private _hitEnemy(): void {
+    if (this.isDead || this.isInvincible) return;
+
+    this.lives = Math.max(0, this.lives - 1);
+    this._updateLivesDisplay();
+
+    // Pop-out tween on the heart that just turned empty
+    const lostHeart = this.livesContainer.getAt(this.lives) as Phaser.GameObjects.Graphics;
+    this.tweens.add({
+      targets: lostHeart,
+      scaleX: 1.7, scaleY: 1.7,
+      duration: 120, yoyo: true, ease: 'Power3',
+    });
+
+    if (this.lives <= 0) {
+      this._die();
+      return;
+    }
+
+    // Brief invincibility so one enemy can't drain all hearts at once
+    this.isInvincible = true;
+
+    // Rapid blink to signal invincibility
+    this.tweens.add({
+      targets: this.bird,
+      alpha: 0.2,
+      duration: 70, yoyo: true, repeat: 7,
+      ease: 'Sine.easeInOut',
+      onComplete: () => this.bird.setAlpha(1),
+    });
+
+    // Subtle camera shake for impact
+    this.cameras.main.shake(180, 0.007);
+
+    // End invincibility after 1.4 s
+    this.time.delayedCall(1400, () => { this.isInvincible = false; });
   }
 
   // ─────────────────────────────────────────────

@@ -77,4 +77,8 @@ In `update()`, pipes with `x < -PIPE_W - 20` are removed via `pipes.remove(p, tr
 ---
 
 ## Changed this turn
-- Fixed game-over bug: `_die()` now calls `this.physics.pause()` to freeze all physics bodies (pipes, enemies, bird) immediately on death. Previously only the bird body was zeroed out, so pipes and enemies kept scrolling while the game-over overlay was showing.
+- Added **3-life system**: hitting an enemy costs one life instead of instant death; hitting a pipe or the ground/ceiling is still instant game over.
+- Hearts display (top-left, depth 10) drawn with Phaser Graphics (two circles + triangle + shine); filled = red, empty = dark grey.
+- `_hitEnemy()` method: decrements lives, pops out the lost heart with a scale tween, triggers 7-cycle rapid blink + subtle camera shake, grants 1.4 s invincibility window; calls `_die()` when lives reach 0.
+- `isInvincible` flag prevents multiple life losses from a single enemy overlap.
+- Enemy `overlap` callback changed from `_die` to `_hitEnemy`.
