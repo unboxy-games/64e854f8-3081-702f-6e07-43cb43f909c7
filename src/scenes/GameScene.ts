@@ -1,6 +1,15 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT } from '../config';
 
+type EnemyType = 'bird' | 'bee' | 'bat';
+interface EnemyEntry {
+  sprite: Phaser.Physics.Arcade.Image;
+  type: EnemyType;
+  baseY: number;
+  phase: number;
+  wingTween?: Phaser.Tweens.Tween;
+}
+
 const BIRD_GRAVITY   = 1400;
 const FLAP_VELOCITY  = -460;
 const PIPE_SPEED     = -230;
@@ -35,6 +44,10 @@ export class GameScene extends Phaser.Scene {
   private pipeTimer?: Phaser.Time.TimerEvent;
   private idleTween?: Phaser.Tweens.Tween;
 
+  private enemies!: Phaser.Physics.Arcade.Group;
+  private enemyData: EnemyEntry[] = [];
+  private enemyTimer?: Phaser.Time.TimerEvent;
+
   constructor() {
     super({ key: 'GameScene' });
   }
@@ -47,10 +60,12 @@ export class GameScene extends Phaser.Scene {
     this.isDead      = false;
     this.isPaused    = false;
     this.pipeData    = [];
+    this.enemyData   = [];
 
     this._drawBackground();
     this._genBirdTexture();
     this._genPipeTexture();
+    this._genEnemyTextures();
 
     // Ground
     this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT - GROUND_H / 2,  GAME_WIDTH, GROUND_H, 0xC8A96E).setDepth(1);
@@ -68,6 +83,10 @@ export class GameScene extends Phaser.Scene {
 
     // Overlap: we handle death manually, no physics separation
     this.physics.add.overlap(this.bird, this.pipes, () => this._die(), undefined, this);
+
+    // Enemy group + collision
+    this.enemies = this.physics.add.group();
+    this.physics.add.overlap(this.bird, this.enemies, () => this._die(), undefined, this);
 
     // Score display
     this.scoreText = this.add
@@ -138,8 +157,8 @@ export class GameScene extends Phaser.Scene {
   }
 
   // ─────────────────────────────────────────────
-  update(_t: number, _d: number): void {
-    if (!this.gameStarted || this.isDead) return;
+  update(time: number, _d: number): void {
+    if (!this.gameStarted || this.isDead || this.isPaused) return;
 
     // Ground / ceiling kill
     if (this.bird.y > GAME_HEIGHT - GROUND_H - 16 || this.bird.y < -10) {
@@ -176,6 +195,39 @@ export class GameScene extends Phaser.Scene {
       }
     }
     this.pipeData = this.pipeData.filter(d => d.ref.active);
+
+    // ── Enemy movement & cleanup ───────────────────────────────────────
+    const t = time * 0.001; // convert ms → seconds for sine waves
+    for (const e of this.enemyData) {
+      const body = e.sprite.body as Phaser.Physics.Arcade.Body;
+      switch (e.type) {
+        case 'bird':
+          // Gentle sine bob  (A=28px, ω=2.5 rad/s → vy = A·ω·cos)
+          body.setVelocityY(70 * Math.cos(2.5 * t + e.phase));
+          break;
+        case 'bee':
+          // Faster zigzag  (A=55px, ω=4 rad/s)
+          body.setVelocityY(220 * Math.cos(4 * t + e.phase));
+          break;
+        case 'bat': {
+          // Home toward bird Y with a spring-like velocity
+          const dy = this.bird.y - e.sprite.y;
+          body.setVelocityY(Phaser.Math.Clamp(dy * 2.8, -220, 220));
+          e.sprite.angle = Phaser.Math.Clamp(dy * 0.18, -28, 28);
+          break;
+        }
+      }
+    }
+    // Clean up off-screen enemies
+    const eChildren = this.enemies.getChildren().slice() as Phaser.Physics.Arcade.Image[];
+    for (const s of eChildren) {
+      if (s.x < -70) {
+        const entry = this.enemyData.find(e => e.sprite === s);
+        entry?.wingTween?.stop();
+        this.enemies.remove(s, true, true);
+      }
+    }
+    this.enemyData = this.enemyData.filter(e => e.sprite.active);
   }
 
   // ─────────────────────────────────────────────
@@ -214,6 +266,8 @@ export class GameScene extends Phaser.Scene {
     if (this.isPaused) {
       this.physics.pause();
       if (this.pipeTimer) this.pipeTimer.paused = true;
+      if (this.enemyTimer) this.enemyTimer.paused = true;
+      this.enemyData.forEach(e => e.wingTween?.pause());
       this.pauseOverlay.setVisible(true).setAlpha(0);
       this.tweens.add({ targets: this.pauseOverlay, alpha: 1, duration: 180, ease: 'Sine.easeOut' });
       // Animate pause button icon to "play" state
@@ -221,6 +275,8 @@ export class GameScene extends Phaser.Scene {
     } else {
       this.physics.resume();
       if (this.pipeTimer) this.pipeTimer.paused = false;
+      if (this.enemyTimer) this.enemyTimer.paused = false;
+      this.enemyData.forEach(e => e.wingTween?.resume());
       this.tweens.add({
         targets: this.pauseOverlay, alpha: 0, duration: 140, ease: 'Sine.easeIn',
         onComplete: () => this.pauseOverlay.setVisible(false),
@@ -248,6 +304,14 @@ export class GameScene extends Phaser.Scene {
     this.pipeTimer = this.time.addEvent({
       delay: PIPE_INTERVAL,
       callback: this._spawnPipe,
+      callbackScope: this,
+      loop: true,
+    });
+
+    // Enemies: first one after 3 s, then every 2.8 s
+    this.enemyTimer = this.time.addEvent({
+      delay: 2800,
+      callback: this._spawnEnemy,
       callbackScope: this,
       loop: true,
     });
@@ -283,6 +347,8 @@ export class GameScene extends Phaser.Scene {
     if (this.isDead) return;
     this.isDead = true;
     this.pipeTimer?.remove();
+    this.enemyTimer?.remove();
+    this.enemyData.forEach(e => e.wingTween?.stop());
 
     // Stop bird physics
     const bBody = this.bird.body as Phaser.Physics.Arcade.Body;
@@ -388,6 +454,148 @@ export class GameScene extends Phaser.Scene {
     g.fillStyle(0xFF8C00, 1);  g.fillTriangle(cx + 17, cy - 2, cx + 27, cy + 2, cx + 17, cy + 7); // beak
     g.generateTexture('bird', 50, 44);
     g.destroy();
+  }
+
+  private _spawnEnemy(): void {
+    if (this.isDead) return;
+    const types: EnemyType[] = ['bird', 'bee', 'bat'];
+    const type = types[Phaser.Math.Between(0, 2)];
+
+    const minY = 90;
+    const maxY = GAME_HEIGHT - GROUND_H - 70;
+    const spawnY = Phaser.Math.Between(minY, maxY);
+    const spawnX = GAME_WIDTH + 60;
+
+    const sprite = this.enemies.create(spawnX, spawnY, `enemy_${type}`) as Phaser.Physics.Arcade.Image;
+    sprite.setDepth(2.5);
+    const body = sprite.body as Phaser.Physics.Arcade.Body;
+    body.setAllowGravity(false);
+    body.setImmovable(false);
+
+    const speeds: Record<EnemyType, number> = { bird: PIPE_SPEED, bee: PIPE_SPEED * 0.72, bat: PIPE_SPEED * 1.15 };
+    body.setVelocityX(speeds[type]);
+
+    // Body hit-boxes (smaller than visual for fairness)
+    const hitSizes: Record<EnemyType, [number, number]> = { bird: [34, 26], bee: [28, 18], bat: [26, 22] };
+    body.setSize(...hitSizes[type]);
+
+    // Enemy birds face left
+    if (type === 'bird') sprite.setFlipX(true);
+
+    // Wing-flap tween
+    let wingTween: Phaser.Tweens.Tween | undefined;
+    if (type === 'bird') {
+      wingTween = this.tweens.add({
+        targets: sprite, scaleY: 0.72, duration: 190, yoyo: true, repeat: -1, ease: 'Sine.easeInOut',
+      });
+    } else if (type === 'bee') {
+      wingTween = this.tweens.add({
+        targets: sprite, scaleY: 0.78, duration: 75, yoyo: true, repeat: -1, ease: 'Sine.easeInOut',
+      });
+    } else {
+      // Bat: wings fold and spread (scaleX pulse)
+      wingTween = this.tweens.add({
+        targets: sprite, scaleX: 0.82, duration: 280, yoyo: true, repeat: -1, ease: 'Sine.easeInOut',
+      });
+    }
+
+    this.enemyData.push({ sprite, type, baseY: spawnY, phase: Math.random() * Math.PI * 2, wingTween });
+  }
+
+  private _genEnemyTextures(): void {
+    // ── Enemy Bird (red, same layout as player, will be flipped) ──────
+    {
+      const g = this.make.graphics({ x: 0, y: 0 });
+      const cx = 24, cy = 22;
+      g.fillStyle(0xCC2233, 1); g.fillCircle(cx, cy, 20);           // body
+      g.fillStyle(0xFF7788, 1); g.fillCircle(cx + 5, cy + 6, 12);   // belly
+      g.fillStyle(0x991122, 1); g.fillEllipse(cx - 7, cy + 6, 18, 10); // wing
+      g.fillStyle(0xffffff, 1); g.fillCircle(cx + 10, cy - 5, 7);   // eye white
+      g.fillStyle(0x111111, 1); g.fillCircle(cx + 12, cy - 5, 4);   // pupil
+      g.fillStyle(0xffffff, 1); g.fillCircle(cx + 14, cy - 7, 2);   // shine
+      g.fillStyle(0xFF6600, 1);
+      g.fillTriangle(cx + 17, cy - 2, cx + 27, cy + 2, cx + 17, cy + 7); // beak
+      // Angry eyebrow
+      g.lineStyle(3, 0x330000, 1);
+      g.beginPath(); g.moveTo(cx + 6, cy - 12); g.lineTo(cx + 16, cy - 10); g.strokePath();
+      g.generateTexture('enemy_bird', 50, 44);
+      g.destroy();
+    }
+
+    // ── Bee ──────────────────────────────────────────────────────────
+    {
+      const g = this.make.graphics({ x: 0, y: 0 });
+      const cx = 26, cy = 17;
+      // Wings (behind body)
+      g.fillStyle(0xCCEEFF, 0.75); g.fillEllipse(cx - 9, cy - 10, 22, 12); // left wing
+      g.fillStyle(0xCCEEFF, 0.75); g.fillEllipse(cx + 9, cy - 10, 22, 12); // right wing
+      // Wing outline
+      g.lineStyle(1, 0x88AACC, 0.6);
+      g.strokeEllipse(cx - 9, cy - 10, 22, 12);
+      g.strokeEllipse(cx + 9, cy - 10, 22, 12);
+      // Body
+      g.fillStyle(0xFFD700, 1); g.fillEllipse(cx, cy + 3, 36, 24);
+      // Black stripes
+      g.fillStyle(0x111111, 0.85);
+      g.fillRect(cx - 14, cy - 4, 6, 16);
+      g.fillRect(cx - 4,  cy - 4, 6, 16);
+      g.fillRect(cx + 6,  cy - 4, 6, 16);
+      // Head
+      g.fillStyle(0xFFD700, 1); g.fillCircle(cx - 18, cy + 2, 10);
+      // Eye
+      g.fillStyle(0x111111, 1); g.fillCircle(cx - 22, cy, 3.5);
+      g.fillStyle(0xffffff, 1); g.fillCircle(cx - 23, cy - 1, 1.5);
+      // Antennae
+      g.lineStyle(2, 0x333300, 1);
+      g.beginPath(); g.moveTo(cx - 20, cy - 8); g.lineTo(cx - 26, cy - 18); g.strokePath();
+      g.beginPath(); g.moveTo(cx - 14, cy - 8); g.lineTo(cx - 14, cy - 20); g.strokePath();
+      g.fillStyle(0x333300, 1); g.fillCircle(cx - 26, cy - 18, 2.5);
+      g.fillStyle(0x333300, 1); g.fillCircle(cx - 14, cy - 20, 2.5);
+      // Stinger
+      g.fillStyle(0x333300, 1);
+      g.fillTriangle(cx + 16, cy, cx + 26, cy + 3, cx + 16, cy + 7);
+      g.generateTexture('enemy_bee', 52, 34);
+      g.destroy();
+    }
+
+    // ── Bat ───────────────────────────────────────────────────────────
+    {
+      const g = this.make.graphics({ x: 0, y: 0 });
+      const cx = 30, cy = 19;
+      // Left wing (two segments)
+      g.fillStyle(0x7B2FBE, 1);
+      g.fillTriangle(cx - 2, cy + 2, cx - 28, cy - 16, cx - 22, cy + 12);
+      g.fillTriangle(cx - 2, cy + 2, cx - 22, cy + 12, cx - 14, cy + 22);
+      // Right wing
+      g.fillTriangle(cx + 2, cy + 2, cx + 28, cy - 16, cx + 22, cy + 12);
+      g.fillTriangle(cx + 2, cy + 2, cx + 22, cy + 12, cx + 14, cy + 22);
+      // Wing membrane lines
+      g.lineStyle(1, 0x9B4FDE, 0.55);
+      g.beginPath(); g.moveTo(cx - 2, cy + 2); g.lineTo(cx - 28, cy - 16); g.strokePath();
+      g.beginPath(); g.moveTo(cx - 2, cy + 2); g.lineTo(cx - 14, cy + 22); g.strokePath();
+      g.beginPath(); g.moveTo(cx + 2, cy + 2); g.lineTo(cx + 28, cy - 16); g.strokePath();
+      g.beginPath(); g.moveTo(cx + 2, cy + 2); g.lineTo(cx + 14, cy + 22); g.strokePath();
+      // Body
+      g.fillStyle(0x4A1A7E, 1); g.fillEllipse(cx, cy + 4, 18, 22);
+      // Ears
+      g.fillStyle(0x7B2FBE, 1);
+      g.fillTriangle(cx - 6, cy - 3, cx - 12, cy - 18, cx - 2, cy - 3);
+      g.fillTriangle(cx + 6, cy - 3, cx + 12, cy - 18, cx + 2, cy - 3);
+      g.fillStyle(0xFF5577, 0.7);
+      g.fillTriangle(cx - 5, cy - 4, cx - 10, cy - 14, cx - 2, cy - 4);
+      g.fillTriangle(cx + 5, cy - 4, cx + 10, cy - 14, cx + 2, cy - 4);
+      // Glowing red eyes
+      g.fillStyle(0xFF2222, 1); g.fillCircle(cx - 4, cy + 3, 3);
+      g.fillStyle(0xFF2222, 1); g.fillCircle(cx + 4, cy + 3, 3);
+      g.fillStyle(0xFF8888, 1); g.fillCircle(cx - 5, cy + 2, 1.5);
+      g.fillStyle(0xFF8888, 1); g.fillCircle(cx + 3, cy + 2, 1.5);
+      // Fangs
+      g.fillStyle(0xffffff, 1);
+      g.fillTriangle(cx - 3, cy + 12, cx - 1, cy + 18, cx + 1, cy + 12);
+      g.fillTriangle(cx + 3, cy + 12, cx + 5, cy + 18, cx + 7, cy + 12);
+      g.generateTexture('enemy_bat', 60, 38);
+      g.destroy();
+    }
   }
 
   private _genPipeTexture(): void {
