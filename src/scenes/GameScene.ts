@@ -25,7 +25,7 @@ export class GameScene extends Phaser.Scene {
   private pipeData: { ref: Phaser.Physics.Arcade.Image; scored: boolean }[] = [];
 
   private score        = 0;
-  private lives        = 3;
+  private lives        = 4;
   private gameStarted  = false;
   private isDead       = false;
   private isPaused     = false;
@@ -59,7 +59,7 @@ export class GameScene extends Phaser.Scene {
   create(): void {
     // Reset state (called again on scene.restart)
     this.score        = 0;
-    this.lives        = 3;
+    this.lives        = 4;
     this.gameStarted  = false;
     this.isDead       = false;
     this.isPaused     = false;
@@ -407,7 +407,7 @@ export class GameScene extends Phaser.Scene {
 
   private _buildLivesDisplay(): void {
     const items: Phaser.GameObjects.Graphics[] = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
       const hg = this.add.graphics();
       this._drawHeart(hg, 0, 0, true);
       items.push(hg);
