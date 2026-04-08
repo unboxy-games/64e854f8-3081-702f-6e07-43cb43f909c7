@@ -3,12 +3,12 @@
 ## Game Overview
 - **Title**: Star Defender
 - **Genre**: Arcade space shooter (omni-directional)
-- **Core mechanic**: Control a spaceship freely in 4 directions; auto-shoot the nearest enemy; survive as long as possible before HP runs out.
+- **Core mechanic**: Control a spaceship freely in 4 directions; auto-shoot toward the mouse/touch pointer direction; survive as long as possible before HP runs out.
 - **Visual style**: Classic retro arcade (monospace HUD, glowing shapes, pixel-style palette)
 
 ## Features Implemented
 - **Player ship**: Procedurally drawn cyan/white retro triangle with cockpit dome and engine glow. Moves in 4 directions (WASD / arrow keys). Constrained to screen bounds.
-- **Auto-shooting**: Player fires toward the nearest enemy automatically on cooldown (280 ms default).
+- **Mouse/touch aiming**: Ship rotates to face the pointer; bullets auto-fire toward the pointer direction on cooldown (280 ms default). A pulsing cyan retro crosshair is rendered at the pointer. Works with mouse on desktop and tap/drag on iPad/touch devices. Default OS cursor is hidden in-game.
 - **Two enemy types**:
   - *Small (red)*: Fast (158 base speed), 1 HP, 10 pts — 75% of spawns
   - *Big (orange)*: Slow (72 base speed), 4 HP, 30 pts — 25% of spawns
@@ -29,7 +29,7 @@
 | Key | Action |
 |-----|--------|
 | WASD or Arrow keys | Move spaceship |
-| (auto) | Shoot toward nearest enemy |
+| Mouse move / touch | Aim crosshair — ship rotates and shoots toward pointer |
 | R | Restart after game over |
 
 ## Key Implementation Details
@@ -43,4 +43,4 @@
 - Particle explosions use Phaser 3.60+ `this.add.particles(x, y, key, config)` API
 
 ## Last Change
-Initial full implementation: retro arcade space shooter with two enemy types, three power-ups, difficulty scaling, and polished HUD.
+Replaced nearest-enemy auto-aim with mouse/touch pointer aiming: ship hull rotates to face the pointer every frame (`aimAtPointer()`), bullets fire toward pointer direction in `autoShoot()`, a pulsing retro cyan crosshair (`drawCrosshair()`) follows the pointer, and the OS cursor is hidden in-game (`setDefaultCursor('none')`) and restored on game over.

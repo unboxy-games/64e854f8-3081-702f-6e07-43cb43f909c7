@@ -28,6 +28,9 @@ export class GameScene extends Phaser.Scene {
   // --- Shield visual ---
   private shieldGraphics!: Phaser.GameObjects.Graphics;
 
+  // --- Aim crosshair ---
+  private aimGraphics!: Phaser.GameObjects.Graphics;
+
   // --- Input ---
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private keyW!: Phaser.Input.Keyboard.Key;
@@ -262,6 +265,9 @@ export class GameScene extends Phaser.Scene {
     // Shield visual (drawn around player)
     this.shieldGraphics = this.add.graphics().setDepth(2);
 
+    // Aim crosshair (rendered above everything)
+    this.aimGraphics = this.add.graphics().setDepth(10);
+
     // Idle pulse tween
     this.tweens.add({
       targets: this.player,
@@ -296,6 +302,8 @@ export class GameScene extends Phaser.Scene {
     this.keyA = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     this.keyS = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.keyD = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    // Hide the OS cursor — replaced by our retro crosshair
+    this.input.setDefaultCursor('none');
   }
 
   private setupCollisions(): void {
@@ -332,7 +340,9 @@ export class GameScene extends Phaser.Scene {
 
     this.scrollStars(delta);
     this.movePlayer();
+    this.aimAtPointer();
     this.autoShoot(time);
+    this.drawCrosshair();
     this.steerEnemies();
     this.tickDifficulty(delta);
     this.tickPowerUpTimers(delta);
@@ -389,19 +399,67 @@ export class GameScene extends Phaser.Scene {
     (this.player.body as Phaser.Physics.Arcade.Body).setVelocity(vx, vy);
   }
 
+  // ─── Aiming ───────────────────────────────────────────────────────────────
+
+  /** Rotate the ship hull to face the active pointer (mouse or last touch). */
+  private aimAtPointer(): void {
+    const ptr = this.input.activePointer;
+    const angle = Phaser.Math.Angle.Between(
+      this.player.x, this.player.y,
+      ptr.x, ptr.y
+    );
+    // Ship texture nose points UP; Phaser rotation 0 = right → add PI/2
+    this.player.setRotation(angle + Math.PI / 2);
+  }
+
+  /** Draw a retro crosshair at the pointer position. */
+  private drawCrosshair(): void {
+    const ptr = this.input.activePointer;
+    const g = this.aimGraphics;
+    g.clear();
+
+    const cx = ptr.x;
+    const cy = ptr.y;
+    const r = 14;
+    const gap = 5;
+    const tick = 7;
+    const pulse = 0.7 + 0.3 * Math.sin(this.time.now * 0.007);
+
+    // Outer ring
+    g.lineStyle(1.5, 0x00ffff, 0.55 * pulse);
+    g.strokeCircle(cx, cy, r);
+
+    // Cross hairs
+    g.lineStyle(1.5, 0x00ffff, 0.9 * pulse);
+    // top
+    g.lineBetween(cx, cy - gap, cx, cy - gap - tick);
+    // bottom
+    g.lineBetween(cx, cy + gap, cx, cy + gap + tick);
+    // left
+    g.lineBetween(cx - gap, cy, cx - gap - tick, cy);
+    // right
+    g.lineBetween(cx + gap, cy, cx + gap + tick, cy);
+
+    // Center dot
+    g.fillStyle(0x00ffff, 0.8 * pulse);
+    g.fillCircle(cx, cy, 2);
+  }
+
   // ─── Shooting ────────────────────────────────────────────────────────────
 
   private autoShoot(time: number): void {
     const cooldown = this.rapidActive ? 130 : 280;
     if (time - this.lastShotTime < cooldown) return;
 
-    const target = this.nearestEnemy();
-    if (!target) return;
+    const ptr = this.input.activePointer;
+    // Don't fire if pointer is right on top of the player (no direction)
+    const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, ptr.x, ptr.y);
+    if (dist < 5) return;
 
     this.lastShotTime = time;
     const angle = Phaser.Math.Angle.Between(
       this.player.x, this.player.y,
-      target.x, target.y
+      ptr.x, ptr.y
     );
     const SPEED = 620;
 
@@ -424,18 +482,6 @@ export class GameScene extends Phaser.Scene {
       Math.cos(angle) * speed,
       Math.sin(angle) * speed
     );
-  }
-
-  private nearestEnemy(): Phaser.Physics.Arcade.Sprite | null {
-    let nearest: Phaser.Physics.Arcade.Sprite | null = null;
-    let best = Infinity;
-    this.enemies.getChildren().forEach((obj) => {
-      const e = obj as Phaser.Physics.Arcade.Sprite;
-      if (!e.active) return;
-      const d = Phaser.Math.Distance.Between(this.player.x, this.player.y, e.x, e.y);
-      if (d < best) { best = d; nearest = e; }
-    });
-    return nearest;
   }
 
   // ─── Enemy Spawning & Steering ───────────────────────────────────────────
@@ -694,9 +740,12 @@ export class GameScene extends Phaser.Scene {
     this.gameRunning = false;
     this.player.setActive(false).setVisible(false);
     this.shieldGraphics.clear();
+    this.aimGraphics.clear();
     this.enemies.clear(true, true);
     this.bullets.clear(true, true);
     this.powerUps.clear(true, true);
+    // Restore the OS cursor on game over
+    this.input.setDefaultCursor('default');
     this.game.events.emit('game:over', this.score);
   }
 }
