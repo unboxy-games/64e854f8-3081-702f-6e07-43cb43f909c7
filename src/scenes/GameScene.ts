@@ -50,6 +50,7 @@ export class GameScene extends Phaser.Scene {
   // --- Game state ---
   private score: number = 0;
   private gameRunning: boolean = false;
+  private gamePaused: boolean = false;
 
   // --- Difficulty ---
   private spawnTimer: number = 0;
@@ -68,6 +69,7 @@ export class GameScene extends Phaser.Scene {
 
   create(): void {
     this.gameRunning = true;
+    this.gamePaused = false;
     this.playerHP = this.MAX_HP;
     this.score = 0;
     this.spawnInterval = 1800;
@@ -88,6 +90,7 @@ export class GameScene extends Phaser.Scene {
     this.createGroups();
     this.setupInput();
     this.setupCollisions();
+    this.setupPause();
 
     // Emit initial state so UIScene can sync
     this.game.events.emit('game:updateHP', this.playerHP, this.MAX_HP);
@@ -335,8 +338,33 @@ export class GameScene extends Phaser.Scene {
 
   // ─── Update Loop ─────────────────────────────────────────────────────────
 
+  // ─── Pause ───────────────────────────────────────────────────────────────
+
+  private setupPause(): void {
+    // P key or Escape to toggle pause
+    this.input.keyboard!.on('keydown-P',   () => { if (this.gameRunning) this.togglePause(); });
+    this.input.keyboard!.on('keydown-ESC', () => { if (this.gameRunning) this.togglePause(); });
+    // UIScene pause button also fires this event
+    this.game.events.off('ui:togglePause');
+    this.game.events.on('ui:togglePause', () => { if (this.gameRunning) this.togglePause(); });
+  }
+
+  private togglePause(): void {
+    this.gamePaused = !this.gamePaused;
+    if (this.gamePaused) {
+      this.physics.pause();
+      this.tweens.pauseAll();
+      this.aimGraphics.clear();
+      this.game.events.emit('game:paused');
+    } else {
+      this.physics.resume();
+      this.tweens.resumeAll();
+      this.game.events.emit('game:resumed');
+    }
+  }
+
   update(time: number, delta: number): void {
-    if (!this.gameRunning) return;
+    if (!this.gameRunning || this.gamePaused) return;
 
     this.scrollStars(delta);
     this.movePlayer();

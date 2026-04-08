@@ -10,12 +10,17 @@ export class UIScene extends Phaser.Scene {
   private finalScoreText!: Phaser.GameObjects.Text;
   private gameOverVisible: boolean = false;
 
+  private pauseButton!: Phaser.GameObjects.Text;
+  private pauseOverlayGroup!: Phaser.GameObjects.Group;
+  private isPaused: boolean = false;
+
   constructor() {
     super({ key: 'UIScene' });
   }
 
   create(): void {
     this.gameOverVisible = false;
+    this.isPaused = false;
 
     // ── Score (top-left) ─────────────────────────────────────────────────
     this.scoreText = this.add.text(22, 18, 'SCORE: 0', {
@@ -46,12 +51,14 @@ export class UIScene extends Phaser.Scene {
     }).setDepth(10).setOrigin(0.5, 0).setAlpha(0);
 
     // ── Controls hint (bottom-center) ────────────────────────────────────
-    this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 18, 'WASD / ARROWS to move   •   Auto-shoots nearest enemy', {
+    this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 18, 'WASD / ARROWS to move   •   Mouse to aim & auto-shoot   •   P = Pause', {
       fontSize: '13px', fontFamily: 'monospace',
       color: '#334466',
     }).setDepth(10).setOrigin(0.5, 1);
 
     this.buildGameOverScreen();
+    this.buildPauseScreen();
+    this.createPauseButton();
     this.registerEvents();
   }
 
@@ -97,6 +104,10 @@ export class UIScene extends Phaser.Scene {
       if (!this.gameOverVisible) return;
       this.gameOverGroup.setVisible(false);
       this.gameOverVisible = false;
+      // Reset pause state in case player had paused before dying
+      this.isPaused = false;
+      this.pauseOverlayGroup.setVisible(false);
+      this.pauseButton.setText('⏸  PAUSE').setColor('#556677');
       // Reset HUD to initial values immediately
       this.refreshHP(5, 5);
       this.refreshScore(0);
@@ -116,6 +127,8 @@ export class UIScene extends Phaser.Scene {
     this.game.events.on('game:powerUpActive', this.showPowerUp,     this);
     this.game.events.on('game:powerUpExpired',this.hidePowerUp,     this);
     this.game.events.on('game:over',          this.showGameOver,    this);
+    this.game.events.on('game:paused',        this.showPause,       this);
+    this.game.events.on('game:resumed',       this.hidePause,       this);
   }
 
   shutdown(): void {
@@ -125,6 +138,8 @@ export class UIScene extends Phaser.Scene {
     this.game.events.off('game:powerUpActive',  this.showPowerUp,     this);
     this.game.events.off('game:powerUpExpired', this.hidePowerUp,     this);
     this.game.events.off('game:over',           this.showGameOver,    this);
+    this.game.events.off('game:paused',         this.showPause,       this);
+    this.game.events.off('game:resumed',        this.hidePause,       this);
   }
 
   // ─── Handlers ────────────────────────────────────────────────────────────
@@ -200,6 +215,93 @@ export class UIScene extends Phaser.Scene {
       targets: this.powerUpBadge,
       alpha: 0, duration: 300,
     });
+  }
+
+  // ─── Pause screen ────────────────────────────────────────────────────────
+
+  private buildPauseScreen(): void {
+    this.pauseOverlayGroup = this.add.group();
+
+    const overlay = this.add.rectangle(
+      GAME_WIDTH / 2, GAME_HEIGHT / 2,
+      GAME_WIDTH, GAME_HEIGHT,
+      0x000022, 0.72
+    ).setDepth(16);
+
+    const title = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 80, 'PAUSED', {
+      fontSize: '72px', fontFamily: 'monospace',
+      color: '#00e5ff',
+      stroke: '#000000', strokeThickness: 8,
+    }).setDepth(17).setOrigin(0.5);
+
+    // Subtle glow pulse on title
+    this.tweens.add({
+      targets: title,
+      alpha: 0.6,
+      duration: 800, yoyo: true, repeat: -1, ease: 'Sine.easeInOut',
+    });
+
+    const hint = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 20, '[ PRESS  P  TO  RESUME ]', {
+      fontSize: '24px', fontFamily: 'monospace',
+      color: '#ffffff',
+      stroke: '#000000', strokeThickness: 3,
+    }).setDepth(17).setOrigin(0.5);
+
+    this.tweens.add({
+      targets: hint, alpha: 0,
+      duration: 600, yoyo: true, repeat: -1,
+    });
+
+    this.pauseOverlayGroup.addMultiple([overlay, title, hint]);
+    this.pauseOverlayGroup.setVisible(false);
+  }
+
+  private createPauseButton(): void {
+    this.pauseButton = this.add.text(
+      GAME_WIDTH - 18, GAME_HEIGHT - 40,
+      '⏸  PAUSE', {
+        fontSize: '14px', fontFamily: 'monospace',
+        color: '#556677',
+        stroke: '#000033', strokeThickness: 2,
+        backgroundColor: '#00000066',
+        padding: { x: 8, y: 4 },
+      }
+    ).setDepth(10).setOrigin(1, 1).setInteractive({ useHandCursor: true });
+
+    this.pauseButton.on('pointerover', () => {
+      if (!this.gameOverVisible) this.pauseButton.setColor('#aaccee');
+    });
+    this.pauseButton.on('pointerout', () => {
+      this.pauseButton.setColor(this.isPaused ? '#ffff88' : '#556677');
+    });
+    this.pauseButton.on('pointerdown', () => {
+      if (!this.gameOverVisible) this.game.events.emit('ui:togglePause');
+    });
+  }
+
+  private showPause(): void {
+    this.isPaused = true;
+    this.pauseOverlayGroup.setVisible(true);
+    this.pauseButton.setText('▶  RESUME').setColor('#ffff88');
+    // Pop-in tween
+    this.pauseOverlayGroup.getChildren().forEach((c) => {
+      const go = c as Phaser.GameObjects.GameObject & { setAlpha: (a: number) => void };
+      go.setAlpha(0);
+    });
+    this.tweens.add({
+      targets: this.pauseOverlayGroup.getChildren(),
+      alpha: 1, duration: 250,
+    });
+  }
+
+  private hidePause(): void {
+    this.isPaused = false;
+    this.tweens.add({
+      targets: this.pauseOverlayGroup.getChildren(),
+      alpha: 0, duration: 180,
+      onComplete: () => this.pauseOverlayGroup.setVisible(false),
+    });
+    this.pauseButton.setText('⏸  PAUSE').setColor('#556677');
   }
 
   private showGameOver(score: number): void {

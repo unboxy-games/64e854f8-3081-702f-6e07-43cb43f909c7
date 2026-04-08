@@ -30,6 +30,7 @@
 |-----|--------|
 | WASD or Arrow keys | Move spaceship |
 | Mouse move / touch | Aim crosshair — ship rotates and shoots toward pointer |
+| P or Escape | Pause / Resume |
 | R | Restart after game over |
 
 ## Key Implementation Details
@@ -43,4 +44,4 @@
 - Particle explosions use Phaser 3.60+ `this.add.particles(x, y, key, config)` API
 
 ## Last Change
-Replaced nearest-enemy auto-aim with mouse/touch pointer aiming: ship hull rotates to face the pointer every frame (`aimAtPointer()`), bullets fire toward pointer direction in `autoShoot()`, a pulsing retro cyan crosshair (`drawCrosshair()`) follows the pointer, and the OS cursor is hidden in-game (`setDefaultCursor('none')`) and restored on game over.
+Added pause system: P or Escape key toggles pause (handled in GameScene via `togglePause()` which freezes `this.physics` and `this.tweens`); a clickable ⏸ PAUSE button lives in UIScene's bottom-right corner; UIScene shows a semi-transparent dark overlay with a pulsing "PAUSED" title and blinking "PRESS P TO RESUME" prompt on `game:paused` event, and fades it out on `game:resumed`. Pause state is also reset on game restart.
