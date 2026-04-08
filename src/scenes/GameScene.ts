@@ -225,6 +225,25 @@ export class GameScene extends Phaser.Scene {
           break;
         }
       }
+
+      // ── Pipe avoidance: clamp enemy into the gap when X columns overlap ──
+      const halfEnemyW = (e.sprite.displayWidth  || 48) * 0.5;
+      const halfEnemyH = (e.sprite.displayHeight || 40) * 0.5;
+      for (const pd of this.pipeData) {
+        if (!pd.ref.active) continue;
+        if (Math.abs(e.sprite.x - pd.ref.x) < PIPE_W / 2 + halfEnemyW) {
+          const gapTop    = pd.ref.y + PIPE_H / 2;   // y of gap's top edge
+          const gapBottom = gapTop + PIPE_GAP;         // y of gap's bottom edge
+          const margin    = halfEnemyH + 6;
+          const clampedY  = Phaser.Math.Clamp(e.sprite.y, gapTop + margin, gapBottom - margin);
+          if (clampedY !== e.sprite.y) {
+            e.sprite.y = clampedY;
+            // Dampen vertical velocity so the enemy doesn't immediately escape the gap
+            body.setVelocityY(Phaser.Math.Clamp(body.velocity.y, -60, 60));
+          }
+          break;
+        }
+      }
     }
     // Clean up off-screen enemies
     const eChildren = this.enemies.getChildren().slice() as Phaser.Physics.Arcade.Image[];
@@ -550,8 +569,24 @@ export class GameScene extends Phaser.Scene {
 
     const minY = 90;
     const maxY = GAME_HEIGHT - GROUND_H - 70;
-    const spawnY = Phaser.Math.Between(minY, maxY);
     const spawnX = GAME_WIDTH + 60;
+
+    // Constrain spawn Y to the gap of any pipe that is near the spawn column
+    let safeMinY = minY;
+    let safeMaxY = maxY;
+    for (const pd of this.pipeData) {
+      if (!pd.ref.active) continue;
+      if (Math.abs(pd.ref.x - spawnX) < PIPE_W + 80) {
+        const gapTop    = pd.ref.y + PIPE_H / 2;   // bottom edge of top pipe
+        const gapBottom = gapTop + PIPE_GAP;         // top edge of bottom pipe
+        safeMinY = Phaser.Math.Clamp(gapTop    + 32, minY, maxY);
+        safeMaxY = Phaser.Math.Clamp(gapBottom - 32, minY, maxY);
+        break;
+      }
+    }
+    // Guard against a degenerate range
+    if (safeMinY > safeMaxY) safeMinY = safeMaxY = (safeMinY + safeMaxY) / 2;
+    const spawnY = Phaser.Math.Between(Math.round(safeMinY), Math.round(safeMaxY));
 
     const sprite = this.enemies.create(spawnX, spawnY, `enemy_${type}`) as Phaser.Physics.Arcade.Image;
     sprite.setDepth(2.5);

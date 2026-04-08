@@ -77,4 +77,6 @@ In `update()`, pipes with `x < -PIPE_W - 20` are removed via `pipes.remove(p, tr
 ---
 
 ## Changed this turn
-- Changed hint text from "Tap to start y" to "Tap to start z".
+- Fixed enemies overlapping with pipes via two-part fix:
+  1. **Spawn guard** — `_spawnEnemy()` now inspects `pipeData` for any pipe near the spawn column (GAME_WIDTH + 60) and constrains the random Y to lie within that pipe's gap (±32 px margin).
+  2. **In-flight clamp** — every `update()` tick, each enemy checks all active pipes; if its X column overlaps a pipe's X range it is immediately clamped into the gap and its vertical velocity is dampened to ≤ 60 px/s, preventing it from instantly escaping back into a pipe body.
