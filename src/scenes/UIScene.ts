@@ -37,7 +37,7 @@ export class UIScene extends Phaser.Scene {
     }).setDepth(10);
 
     // ── HP (top-right) ───────────────────────────────────────────────────
-    this.hpDisplay = this.add.text(GAME_WIDTH - 18, 18, '♥♥♥♥♥', {
+    this.hpDisplay = this.add.text(GAME_WIDTH - 18, 18, '♥♥♥♥♥♥', {
       fontSize: '26px', fontFamily: 'monospace',
       color: '#ff4455',
       stroke: '#000033', strokeThickness: 3,
@@ -109,7 +109,7 @@ export class UIScene extends Phaser.Scene {
       this.pauseOverlayGroup.setVisible(false);
       this.pauseButton.setText('⏸  PAUSE').setColor('#556677');
       // Reset HUD to initial values immediately
-      this.refreshHP(5, 5);
+      this.refreshHP(6, 6);
       this.refreshScore(0);
       this.refreshWave(1);
       this.powerUpBadge.setAlpha(0).setText('');
