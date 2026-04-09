@@ -37,7 +37,7 @@ export class UIScene extends Phaser.Scene {
     }).setDepth(10);
 
     // ── HP (top-right) ───────────────────────────────────────────────────
-    this.hpDisplay = this.add.text(GAME_WIDTH - 18, 18, '♥♥♥♥♥♥', {
+    this.hpDisplay = this.add.text(GAME_WIDTH - 18, 18, '♥♥♥♥♥', {
       fontSize: '26px', fontFamily: 'monospace',
       color: '#ff4455',
       stroke: '#000033', strokeThickness: 3,
