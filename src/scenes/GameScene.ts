@@ -15,8 +15,8 @@ interface StarData {
 export class GameScene extends Phaser.Scene {
   // --- Player ---
   private player!: Phaser.Physics.Arcade.Sprite;
-  private playerHP: number = 5;
-  private readonly MAX_HP: number = 5;
+  private playerHP: number = 6;
+  private readonly MAX_HP: number = 6;
   private playerInvincible: boolean = false;
   private invincibleTimer: number = 0;
 

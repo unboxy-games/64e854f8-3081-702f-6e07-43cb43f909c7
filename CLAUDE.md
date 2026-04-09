@@ -14,7 +14,7 @@
   - *Big (orange)*: Slow (72 base speed), 4 HP, 30 pts — 25% of spawns
 - **Enemies** spawn from all four screen edges and steer toward the player each frame. They rotate to face movement direction.
 - **Collision**: Enemy touching player deals 1 (small) or 2 (big) damage; player gets 1.4s invincibility after hit (flicker effect). Camera shake on hit.
-- **HP system**: 5 hearts, displayed as ♥♥♥♥♥ in top-right HUD. Game over when HP = 0.
+- **HP system**: 6 hearts, displayed as ♥♥♥♥♥♥ in top-right HUD. Game over when HP = 0.
 - **Power-ups** (drop on enemy death — 14% small / 45% big):
   - 🛡 **Shield** (cyan): 4s full invincibility with animated shield ring
   - ⚡ **Rapid Fire** (orange): 5s, cooldown 130 ms
@@ -44,4 +44,4 @@
 - Particle explosions use Phaser 3.60+ `this.add.particles(x, y, key, config)` API
 
 ## Last Change
-Reduced player max HP back to 5 (MAX_HP = 5 in GameScene; initial display string and reset call updated in UIScene to show ♥♥♥♥♥).
+Increased player max HP to 6 (MAX_HP = 6 in GameScene; initial display string updated in UIScene to show ♥♥♥♥♥♥).
