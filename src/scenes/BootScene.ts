@@ -35,7 +35,9 @@ export class BootScene extends Phaser.Scene {
     });
 
     // ── Asset manifest ──────────────────────────────────────────────
-    this.load.image('bird_sprite', 'generated/bird_sprite.png');
+    this.load.image('bird_frame1', 'generated/bird_frame1.png');
+    this.load.image('bird_frame2', 'generated/bird_frame2.png');
+    this.load.image('bird_frame3', 'generated/bird_frame3.png');
   }
 
   create(): void {

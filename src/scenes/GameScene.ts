@@ -20,7 +20,7 @@ const GROUND_H       = 64;
 const PIPE_INTERVAL  = 1800;  // ms between pipe pairs
 
 export class GameScene extends Phaser.Scene {
-  private bird!: Phaser.Physics.Arcade.Image;
+  private bird!: Phaser.Physics.Arcade.Sprite;
   private pipes!: Phaser.Physics.Arcade.Group;
   private pipeData: { ref: Phaser.Physics.Arcade.Image; scored: boolean }[] = [];
 
@@ -75,9 +75,25 @@ export class GameScene extends Phaser.Scene {
     this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT - GROUND_H / 2,  GAME_WIDTH, GROUND_H, 0xC8A96E).setDepth(1);
     this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT - GROUND_H,       GAME_WIDTH, 16,       0x7EC850).setDepth(1);
 
-    // Bird — AI-generated Angry Birds style sprite, scaled to ~68×60 px
-    this.bird = this.physics.add.image(220, GAME_HEIGHT / 2, 'bird_sprite').setDepth(3);
-    this.bird.setScale(60 / this.bird.height);
+    // Bird — AI-generated sprite with 3-frame wing-flap animation, facing right
+    // Build animation from the three separate frame textures
+    if (!this.anims.exists('bird_flap')) {
+      this.anims.create({
+        key: 'bird_flap',
+        frames: [
+          { key: 'bird_frame1' }, // wings raised
+          { key: 'bird_frame2' }, // wings level
+          { key: 'bird_frame3' }, // wings lowered
+          { key: 'bird_frame2' }, // wings level (return)
+        ],
+        frameRate: 9,
+        repeat: -1,
+      });
+    }
+
+    this.bird = this.physics.add.sprite(220, GAME_HEIGHT / 2, 'bird_frame1').setDepth(3);
+    this.bird.setDisplaySize(72, 60);
+    this.bird.play('bird_flap');
     const bBody = this.bird.body as Phaser.Physics.Arcade.Body;
     bBody.setGravityY(BIRD_GRAVITY);
     bBody.setAllowGravity(false);
@@ -379,6 +395,9 @@ export class GameScene extends Phaser.Scene {
 
     // Freeze the entire physics world — stops pipes, enemies, and the bird
     this.physics.pause();
+
+    // Stop wing animation on death
+    this.bird.stop();
 
     // Flash red
     this.tweens.add({

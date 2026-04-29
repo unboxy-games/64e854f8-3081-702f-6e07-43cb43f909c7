@@ -7,7 +7,7 @@
 
 ## Features implemented
 - Sky gradient background with static clouds and a ground strip
-- **AI-generated Angry Birds style bird sprite** (`public/generated/bird_sprite.png`) — round chubby yellow bird with angry brow, large eyes, orange beak, red tuft; loaded in BootScene with a loading-progress bar; displayed at ~68×60 px via uniform scale
+- **AI-generated bird sprite with 3-frame flap animation** — `bird_frame1/2/3.png` (wings up / level / down), facing right; animated via `this.anims.create('bird_flap')` at 9 fps cycling through frames 1→2→3→2; rendered at 72×60 px via `setDisplaySize`; animation stops on death
 - Green pipes drawn with Graphics (highlight + shadow + cap band) — generated as a texture at startup; top pipe is flipY'd so the cap faces downward
 - Idle bob tween on the bird while waiting to start
 - Physics-based flap (upward velocity impulse) with smooth downward tilt when falling and snappy upward tilt on flap
@@ -30,7 +30,7 @@
 |------|------|
 | `src/scenes/GameScene.ts` | All game logic — bird, pipes, enemies, score, death, restart |
 | `src/scenes/UIScene.ts` | Placeholder (score is handled entirely in GameScene) |
-| `src/scenes/BootScene.ts` | Loads assets (bird_sprite) with progress bar, then starts GameScene |
+| `src/scenes/BootScene.ts` | Loads assets (bird_frame1/2/3) with progress bar, then starts GameScene |
 | `src/config.ts` | `GAME_WIDTH = 1280`, `GAME_HEIGHT = 720` |
 
 **Constants (top of GameScene.ts)**  
@@ -77,6 +77,8 @@ In `update()`, pipes with `x < -PIPE_W - 20` are removed via `pipes.remove(p, tr
 ---
 
 ## Changed this turn
-- Replaced the programmatically drawn player bird with an AI-generated Angry Birds style sprite (`public/generated/bird_sprite.png`, 890×793 px source, rendered at ~68×60 px via uniform scale).
-- Added loading-progress bar to BootScene (`preload()`) that animates as the image loads, auto-destroys on completion.
-- BootScene now registers `bird_sprite` in its asset manifest so the texture is always available when GameScene starts.
+- Replaced old left-facing bird sprite with 3 new AI-generated frames (`bird_frame1/2/3.png`) — chubby cartoon bird facing right, wings up/level/down.
+- Wired a `bird_flap` animation (9 fps, looping 1→2→3→2) so the bird's wings beat continuously during gameplay.
+- Bird is now a `Phaser.Physics.Arcade.Sprite` (was `Image`) with `setDisplaySize(72, 60)` for consistent size across frames.
+- Animation stops (`bird.stop()`) when the bird dies for a frozen-in-air look.
+- BootScene updated to load the three frame files instead of the old `bird_sprite`.
