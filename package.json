@@ -8,7 +8,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "phaser": "^3.80.1"
+    "@unboxy/phaser-sdk": "^0.2.15",
+    "phaser": "^3.80.1",
+    "phaser3-rex-plugins": "^1.80.20"
   },
   "devDependencies": {
     "typescript": "^5.3.3",

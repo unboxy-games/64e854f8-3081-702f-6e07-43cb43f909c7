@@ -68,7 +68,6 @@ export class GameScene extends Phaser.Scene {
     this.enemyData    = [];
 
     this._drawBackground();
-    this._genBirdTexture();
     this._genPipeTexture();
     this._genEnemyTextures();
 
@@ -76,12 +75,13 @@ export class GameScene extends Phaser.Scene {
     this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT - GROUND_H / 2,  GAME_WIDTH, GROUND_H, 0xC8A96E).setDepth(1);
     this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT - GROUND_H,       GAME_WIDTH, 16,       0x7EC850).setDepth(1);
 
-    // Bird
-    this.bird = this.physics.add.image(220, GAME_HEIGHT / 2, 'bird').setDepth(3);
+    // Bird — AI-generated Angry Birds style sprite, scaled to ~68×60 px
+    this.bird = this.physics.add.image(220, GAME_HEIGHT / 2, 'bird_sprite').setDepth(3);
+    this.bird.setScale(60 / this.bird.height);
     const bBody = this.bird.body as Phaser.Physics.Arcade.Body;
     bBody.setGravityY(BIRD_GRAVITY);
     bBody.setAllowGravity(false);
-    bBody.setSize(32, 30);
+    bBody.setSize(38, 34);
 
     // Pipes group (dynamic but immovable)
     this.pipes = this.physics.add.group();
@@ -107,7 +107,7 @@ export class GameScene extends Phaser.Scene {
 
     // Hint
     this.hintText = this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 100, 'Tap to start a', {
+      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 100, 'Tap to start', {
         fontSize: '26px', color: '#ffffff',
         stroke: '#333', strokeThickness: 5,
       })
@@ -546,20 +546,6 @@ export class GameScene extends Phaser.Scene {
        [640,108,40],[702,93,52],[770,108,37],
        [1040,75,38],[1105,62,50],[1175,75,36] ] as number[][])
       .forEach(([x, y, r]) => g.fillCircle(x, y, r));
-  }
-
-  private _genBirdTexture(): void {
-    const g = this.make.graphics({ x: 0, y: 0 });
-    const cx = 24, cy = 22;
-    g.fillStyle(0xFFD700, 1);  g.fillCircle(cx, cy, 20);         // body
-    g.fillStyle(0xFFEC6E, 1);  g.fillCircle(cx + 5, cy + 6, 12); // belly
-    g.fillStyle(0xF0A500, 1);  g.fillEllipse(cx - 7, cy + 6, 18, 10); // wing
-    g.fillStyle(0xffffff, 1);  g.fillCircle(cx + 10, cy - 5, 7); // eye white
-    g.fillStyle(0x111111, 1);  g.fillCircle(cx + 12, cy - 5, 4); // pupil
-    g.fillStyle(0xffffff, 1);  g.fillCircle(cx + 14, cy - 7, 2); // shine
-    g.fillStyle(0xFF8C00, 1);  g.fillTriangle(cx + 17, cy - 2, cx + 27, cy + 2, cx + 17, cy + 7); // beak
-    g.generateTexture('bird', 50, 44);
-    g.destroy();
   }
 
   private _spawnEnemy(): void {

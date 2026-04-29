@@ -7,7 +7,7 @@
 
 ## Features implemented
 - Sky gradient background with static clouds and a ground strip
-- Cute yellow bird drawn with Phaser Graphics API (body, belly, wing, eye, beak) — generated as a texture at startup
+- **AI-generated Angry Birds style bird sprite** (`public/generated/bird_sprite.png`) — round chubby yellow bird with angry brow, large eyes, orange beak, red tuft; loaded in BootScene with a loading-progress bar; displayed at ~68×60 px via uniform scale
 - Green pipes drawn with Graphics (highlight + shadow + cap band) — generated as a texture at startup; top pipe is flipY'd so the cap faces downward
 - Idle bob tween on the bird while waiting to start
 - Physics-based flap (upward velocity impulse) with smooth downward tilt when falling and snappy upward tilt on flap
@@ -30,7 +30,7 @@
 |------|------|
 | `src/scenes/GameScene.ts` | All game logic — bird, pipes, enemies, score, death, restart |
 | `src/scenes/UIScene.ts` | Placeholder (score is handled entirely in GameScene) |
-| `src/scenes/BootScene.ts` | Launches GameScene (unchanged) |
+| `src/scenes/BootScene.ts` | Loads assets (bird_sprite) with progress bar, then starts GameScene |
 | `src/config.ts` | `GAME_WIDTH = 1280`, `GAME_HEIGHT = 720` |
 
 **Constants (top of GameScene.ts)**  
@@ -77,6 +77,6 @@ In `update()`, pipes with `x < -PIPE_W - 20` are removed via `pipes.remove(p, tr
 ---
 
 ## Changed this turn
-- Fixed enemies overlapping with pipes via two-part fix:
-  1. **Spawn guard** — `_spawnEnemy()` now inspects `pipeData` for any pipe near the spawn column (GAME_WIDTH + 60) and constrains the random Y to lie within that pipe's gap (±32 px margin).
-  2. **In-flight clamp** — every `update()` tick, each enemy checks all active pipes; if its X column overlaps a pipe's X range it is immediately clamped into the gap and its vertical velocity is dampened to ≤ 60 px/s, preventing it from instantly escaping back into a pipe body.
+- Replaced the programmatically drawn player bird with an AI-generated Angry Birds style sprite (`public/generated/bird_sprite.png`, 890×793 px source, rendered at ~68×60 px via uniform scale).
+- Added loading-progress bar to BootScene (`preload()`) that animates as the image loads, auto-destroys on completion.
+- BootScene now registers `bird_sprite` in its asset manifest so the texture is always available when GameScene starts.
