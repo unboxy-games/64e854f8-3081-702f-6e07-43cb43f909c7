@@ -77,8 +77,4 @@ In `update()`, pipes with `x < -PIPE_W - 20` are removed via `pipes.remove(p, tr
 ---
 
 ## Changed this turn
-- Replaced old left-facing bird sprite with 3 new AI-generated frames (`bird_frame1/2/3.png`) — chubby cartoon bird facing right, wings up/level/down.
-- Wired a `bird_flap` animation (9 fps, looping 1→2→3→2) so the bird's wings beat continuously during gameplay.
-- Bird is now a `Phaser.Physics.Arcade.Sprite` (was `Image`) with `setDisplaySize(72, 60)` for consistent size across frames.
-- Animation stops (`bird.stop()`) when the bird dies for a frozen-in-air look.
-- BootScene updated to load the three frame files instead of the old `bird_sprite`.
+- Reduced starting lives from 6 → 5 (both initial value and restart reset).
