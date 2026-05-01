@@ -1,27 +1,22 @@
 import Phaser from 'phaser';
+import { GAME_WIDTH, GAME_HEIGHT } from '../config';
 
 /**
- * UIScene - runs in parallel over GameScene for HUD elements.
- * Add score displays, health bars, timers, etc. here.
+ * UIScene - HUD overlay running in parallel with GameScene.
  */
 export class UIScene extends Phaser.Scene {
-  private scoreText!: Phaser.GameObjects.Text;
-  private score = 0;
-
   constructor() {
     super({ key: 'UIScene' });
   }
 
   create(): void {
-    this.scoreText = this.add.text(16, 16, 'Score: 0', {
-      fontSize: '20px',
-      color: '#ffffff',
-    });
-
-    // Listen for score events from GameScene
-    this.scene.get('GameScene').events.on('score', (points: number) => {
-      this.score += points;
-      this.scoreText.setText(`Score: ${this.score}`);
-    });
+    // Controls hint at the bottom of the screen
+    this.add
+      .text(GAME_WIDTH / 2, GAME_HEIGHT - 18, 'Arrow Keys or WASD to move', {
+        fontSize: '14px',
+        color: '#556688',
+      })
+      .setOrigin(0.5, 1)
+      .setDepth(10);
   }
 }
