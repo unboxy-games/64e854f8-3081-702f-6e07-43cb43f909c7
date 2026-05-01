@@ -34,6 +34,9 @@ export class BootScene extends Phaser.Scene {
 
     // Player ship sprite
     this.load.image('playerSprite', 'uploaded/playerlife1_red.png');
+
+    // Background music
+    this.load.audio('bgm', 'uploaded/mission_plausible.ogg');
   }
 
   create(): void {

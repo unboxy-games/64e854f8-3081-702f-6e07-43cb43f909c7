@@ -19,8 +19,4 @@
 - **UIScene** – minimal HUD with controls hint text
 
 ## Changed this turn
-- Shrunk player ship to scale 1.5 (half of original 3×)
-- Removed left/right tilt — ship always points straight up
-- Added bullet shooting: Space bar fires glowing cyan laser bolts upward with 180ms cooldown
-- Bullets are cleaned up when they leave the top of the screen
-- Updated HUD hint to include shoot control
+- Added background music: `mission_plausible.ogg` loops forever, fades in over 1.5s on game start

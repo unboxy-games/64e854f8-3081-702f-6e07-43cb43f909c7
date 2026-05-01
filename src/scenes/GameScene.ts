@@ -34,6 +34,11 @@ export class GameScene extends Phaser.Scene {
     this.createBullets();
     this.setupInput();
     this.scene.launch('UIScene');
+
+    // Background music — loop forever, start quiet then fade in
+    const music = this.sound.add('bgm', { loop: true, volume: 0 });
+    music.play();
+    this.tweens.add({ targets: music, volume: 0.6, duration: 1500 });
   }
 
   // ─── Background ────────────────────────────────────────────────────────────
