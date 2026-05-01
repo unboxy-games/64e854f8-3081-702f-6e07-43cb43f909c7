@@ -21,8 +21,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.setCollideWorldBounds(true);
     this.setDepth(3);
-    // Scale up so the ship is nicely visible on a 1280×720 canvas
-    this.setScale(3);
+    this.setScale(1.5);
   }
 
   setWASD(wasd: {
@@ -42,15 +41,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     const goUp    = cursors.up.isDown    || (this.wasd?.up.isDown    ?? false);
     const goDown  = cursors.down.isDown  || (this.wasd?.down.isDown  ?? false);
 
-    if (goLeft)  this.setVelocityX(-this.speed);
+    if (goLeft)       this.setVelocityX(-this.speed);
     else if (goRight) this.setVelocityX(this.speed);
 
-    if (goUp)   this.setVelocityY(-this.speed);
-    else if (goDown) this.setVelocityY(this.speed);
+    if (goUp)         this.setVelocityY(-this.speed);
+    else if (goDown)  this.setVelocityY(this.speed);
 
-    // Slight tilt when banking left/right
-    if (goLeft)       this.setAngle(-12);
-    else if (goRight) this.setAngle(12);
-    else              this.setAngle(0);
+    // Always face straight up
+    this.setAngle(0);
   }
 }

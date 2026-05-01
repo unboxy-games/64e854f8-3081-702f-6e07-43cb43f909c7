@@ -17,6 +17,10 @@ export class GameScene extends Phaser.Scene {
   };
   private stars: { obj: Phaser.GameObjects.Rectangle; speed: number }[] = [];
   private thrusterEmitter!: Phaser.GameObjects.Particles.ParticleEmitter;
+  private bullets!: Phaser.Physics.Arcade.Group;
+  private spaceKey!: Phaser.Input.Keyboard.Key;
+  private lastFired = 0;
+  private readonly FIRE_COOLDOWN = 180; // ms between shots
 
   constructor() {
     super({ key: 'GameScene' });
@@ -27,6 +31,7 @@ export class GameScene extends Phaser.Scene {
     this.createStarLayers();
     this.createPlayer();
     this.createThruster();
+    this.createBullets();
     this.setupInput();
     this.scene.launch('UIScene');
   }
@@ -111,6 +116,49 @@ export class GameScene extends Phaser.Scene {
     this.thrusterEmitter.setDepth(2);
   }
 
+  // ─── Bullets ────────────────────────────────────────────────────────────────
+
+  private createBullets(): void {
+    // Generate a glowing cyan laser bolt texture
+    const g = this.make.graphics({ x: 0, y: 0 });
+    // Outer glow
+    g.fillStyle(0x44ffff, 0.3);
+    g.fillRect(1, 0, 6, 22);
+    // Bright core
+    g.fillStyle(0xaaffff, 1);
+    g.fillRect(3, 2, 2, 18);
+    // Hot tip
+    g.fillStyle(0xffffff, 1);
+    g.fillRect(3, 2, 2, 4);
+    g.generateTexture('bullet', 8, 22);
+    g.destroy();
+
+    this.bullets = this.physics.add.group({
+      defaultKey: 'bullet',
+      maxSize: 30,
+      runChildUpdate: false,
+    });
+  }
+
+  private fireBullet(time: number): void {
+    if (time - this.lastFired < this.FIRE_COOLDOWN) return;
+    this.lastFired = time;
+
+    const b = this.bullets.get(this.player.x, this.player.y - 20) as Phaser.Physics.Arcade.Image;
+    if (!b) return;
+
+    b.setActive(true).setVisible(true).setDepth(3);
+    (b.body as Phaser.Physics.Arcade.Body).setVelocityY(-700);
+
+    // Flash feedback on the ship
+    this.tweens.add({
+      targets: this.player,
+      alpha: 0.6,
+      duration: 40,
+      yoyo: true,
+    });
+  }
+
   // ─── Input ──────────────────────────────────────────────────────────────────
 
   private setupInput(): void {
@@ -122,11 +170,12 @@ export class GameScene extends Phaser.Scene {
       right: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D),
     };
     this.player.setWASD(this.wasd);
+    this.spaceKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
   }
 
   // ─── Update loop ─────────────────────────────────────────────────────────────
 
-  update(_time: number, _delta: number): void {
+  update(time: number, _delta: number): void {
     // Scroll stars downward (ship flying up through space)
     for (const star of this.stars) {
       star.obj.y += star.speed;
@@ -138,6 +187,20 @@ export class GameScene extends Phaser.Scene {
 
     // Player movement
     this.player.handleMovement(this.cursors);
+
+    // Shooting
+    if (this.spaceKey.isDown) {
+      this.fireBullet(time);
+    }
+
+    // Destroy bullets that fly off the top of the screen
+    this.bullets.getChildren().forEach((b) => {
+      const bullet = b as Phaser.Physics.Arcade.Image;
+      if (bullet.active && bullet.y < -30) {
+        bullet.setActive(false).setVisible(false);
+        (bullet.body as Phaser.Physics.Arcade.Body).setVelocity(0);
+      }
+    });
 
     // Keep thruster anchored just behind the ship's exhaust
     this.thrusterEmitter.setPosition(this.player.x, this.player.y + 20);

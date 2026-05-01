@@ -12,7 +12,7 @@ export class UIScene extends Phaser.Scene {
   create(): void {
     // Controls hint at the bottom of the screen
     this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT - 18, 'Arrow Keys or WASD to move', {
+      .text(GAME_WIDTH / 2, GAME_HEIGHT - 18, 'Arrow Keys / WASD — move   |   Space — shoot', {
         fontSize: '14px',
         color: '#556688',
       })
