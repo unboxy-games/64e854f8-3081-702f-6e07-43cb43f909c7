@@ -1,31 +1,46 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT } from '../config';
+import { Player } from '../objects/Player';
 
 /**
  * GameScene - the main gameplay scene.
- * This is where the core game logic lives.
- * The AI agent will modify this file to implement the requested game.
  */
 export class GameScene extends Phaser.Scene {
+  private player!: Player;
+  private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
+
   constructor() {
     super({ key: 'GameScene' });
   }
 
   create(): void {
-    // Placeholder — agent will replace this with real game logic
-    this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2, 'Describe your game\nin the chat!', {
-        fontSize: '28px',
-        color: '#ffffff',
-        align: 'center',
-      })
-      .setOrigin(0.5);
+    // Gradient background
+    const bg = this.add.graphics();
+    bg.fillGradientStyle(0x1a1a2e, 0x1a1a2e, 0x16213e, 0x0f3460, 1);
+    bg.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+    bg.setDepth(0);
+
+    // Player in the centre
+    this.player = new Player(this, GAME_WIDTH / 2, GAME_HEIGHT / 2);
+    this.player.setDepth(2);
+
+    // Gentle idle bob tween
+    this.tweens.add({
+      targets: this.player,
+      y: GAME_HEIGHT / 2 - 6,
+      duration: 900,
+      ease: 'Sine.easeInOut',
+      yoyo: true,
+      repeat: -1,
+    });
+
+    this.cursors = this.input.keyboard!.createCursorKeys();
 
     // Start the UI overlay scene in parallel
     this.scene.launch('UIScene');
   }
 
   update(_time: number, _delta: number): void {
-    // Game loop logic goes here
+    this.player.handleMovement(this.cursors);
   }
 }
