@@ -25,8 +25,8 @@
       "kind": "sprite",
       "role": "player",
       "transform": {
-        "x": 657.9697624190063,
-        "y": 432.35272033897627,
+        "x": 815.5507559395247,
+        "y": 365.93023197191377,
         "depth": 2,
         "scaleX": 2,
         "scaleY": 2
@@ -34,7 +34,7 @@
       "visual": {
         "kind": "sprite",
         "assetId": "playerlife1_blue",
-        "tint": "#cecb69"
+        "tint": "#69ceb0"
       }
     }
   ]
