@@ -1,8 +1,9 @@
 import Phaser from 'phaser';
+import { preloadManifest, getManifest } from '@unboxy/phaser-sdk';
 import { GAME_WIDTH, GAME_HEIGHT } from '../config';
 
 /**
- * BootScene - loads assets before the game starts.
+ * BootScene - loads the scene manifest and assets before the game starts.
  */
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -46,11 +47,12 @@ export class BootScene extends Phaser.Scene {
       pctText.destroy();
     });
 
-    // --- Asset manifest ---
-    this.load.image('playerlife1_blue', 'uploaded/playerlife1_blue.png');
+    // Load scene manifest — assets are lazy-loaded by the world scene loader
+    preloadManifest(this);
   }
 
   create(): void {
-    this.scene.start('GameScene');
+    const manifest = getManifest(this);
+    this.scene.start('GameScene', { sceneId: manifest.initialScene });
   }
 }
