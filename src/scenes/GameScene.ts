@@ -1,31 +1,55 @@
 import Phaser from 'phaser';
+import { loadWorldScene, getEntityRegistry } from '@unboxy/phaser-sdk';
 import { GAME_WIDTH, GAME_HEIGHT } from '../config';
 
 /**
- * GameScene - the main gameplay scene.
- * This is where the core game logic lives.
- * The AI agent will modify this file to implement the requested game.
+ * GameScene — generic loader for world scene files (`scenes/world/*.json`).
+ *
+ * Takes a `sceneId` via init data and asks the SDK to spawn its entities,
+ * configure the camera, and register them. Behavior code lives in
+ * `update()` and per-role helpers; it looks entities up via the entity
+ * registry rather than holding direct references to objects created here.
+ *
+ * Example (the agent writes this kind of thing in update or pointer
+ * handlers, NOT in create — entities come from the scene file now):
+ *
+ * ```ts
+ * const player = getEntityRegistry(this)?.byRole('player')[0];
+ * if (player && this.input.keyboard?.checkDown(this.cursors.up)) {
+ *   (player as Phaser.GameObjects.Sprite).y -= 4;
+ * }
+ * ```
  */
 export class GameScene extends Phaser.Scene {
+  private sceneId!: string;
+
   constructor() {
     super({ key: 'GameScene' });
   }
 
-  create(): void {
-    // Placeholder — agent will replace this with real game logic
-    this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2, 'Describe your game\nin the chat!', {
-        fontSize: '28px',
-        color: '#ffffff',
-        align: 'center',
-      })
-      .setOrigin(0.5);
+  init(data: { sceneId: string }): void {
+    this.sceneId = data.sceneId;
+  }
 
-    // Start the UI overlay scene in parallel
-    this.scene.launch('UIScene');
+  async create(): Promise<void> {
+    const { sceneFile } = await loadWorldScene(this, this.sceneId);
+
+    if (sceneFile.entities.length === 0) {
+      this.add
+        .text(GAME_WIDTH / 2, GAME_HEIGHT / 2, 'Describe your game\nin the chat!', {
+          fontSize: '28px',
+          color: '#ffffff',
+          align: 'center',
+        })
+        .setOrigin(0.5);
+    }
+
+    // Behavior wiring goes below this line. Look entities up via
+    //   const player = getEntityRegistry(this)?.byRole('player')[0];
+    // See SDK-GUIDE.md and `scenes/manifest.json`.
   }
 
   update(_time: number, _delta: number): void {
-    // Game loop logic goes here
+    // Agent-written game-loop logic. Empty by default.
   }
 }
