@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "game-hud",
+  "name": "Game HUD",
+  "type": "hud",
+  "design": {
+    "designAspectRatio": "16:9",
+    "safeArea": { "top": 16, "right": 16, "bottom": 16, "left": 16 }
+  },
+  "entities": []
+}
