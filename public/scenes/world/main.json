@@ -38,59 +38,6 @@
       }
     },
     {
-      "id": "e-mow64k5o-l1ms",
-      "kind": "code-rendered",
-      "transform": {
-        "x": 324.55696202531647,
-        "y": 474.19409282700417,
-        "rotation": 0,
-        "scaleX": 1,
-        "scaleY": 1,
-        "depth": 10
-      },
-      "visual": {
-        "kind": "code-rendered",
-        "script": "src/visuals/coin.ts",
-        "params": {
-          "radius": 32,
-          "color": "#ff0000",
-          "shine": true
-        }
-      }
-    },
-    {
-      "id": "e-mowxa343-ibhi",
-      "kind": "sprite",
-      "transform": {
-        "x": 528,
-        "y": 264,
-        "rotation": 0,
-        "scaleX": 1,
-        "scaleY": 1,
-        "depth": 10
-      },
-      "visual": {
-        "kind": "sprite",
-        "assetId": "fb1e78e2-e735-4599-9c01-3597bd9380fc"
-      }
-    },
-    {
-      "id": "e-mowxiyw0-6xwl",
-      "kind": "sprite",
-      "transform": {
-        "x": 560,
-        "y": 496,
-        "rotation": 0,
-        "scaleX": 1,
-        "scaleY": 1,
-        "depth": 10
-      },
-      "visual": {
-        "kind": "sprite",
-        "assetId": "fb1e78e2-e735-4599-9c01-3597bd9380fc"
-      }
-    },
-    {
       "id": "e-mowxj2nc-civy",
       "kind": "sprite",
       "transform": {
