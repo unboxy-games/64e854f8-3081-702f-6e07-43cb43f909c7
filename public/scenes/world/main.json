@@ -238,6 +238,38 @@
         "kind": "sprite",
         "assetId": "fb1e78e2-e735-4599-9c01-3597bd9380fc"
       }
+    },
+    {
+      "id": "e-mowxx366-z04o",
+      "kind": "sprite",
+      "transform": {
+        "x": 128,
+        "y": 544,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "depth": 10
+      },
+      "visual": {
+        "kind": "sprite",
+        "assetId": "playerlife1_blue"
+      }
+    },
+    {
+      "id": "e-mowxx8rs-ccuq",
+      "kind": "sprite",
+      "transform": {
+        "x": 336,
+        "y": 296,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "depth": 10
+      },
+      "visual": {
+        "kind": "sprite",
+        "assetId": "playerlife1_blue"
+      }
     }
   ]
 }
