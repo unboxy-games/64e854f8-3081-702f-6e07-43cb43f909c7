@@ -70,7 +70,7 @@
         "script": "src/visuals/coin.ts",
         "params": {
           "radius": 32,
-          "color": "#ffd700",
+          "color": "#ff0000",
           "shine": true
         }
       }
