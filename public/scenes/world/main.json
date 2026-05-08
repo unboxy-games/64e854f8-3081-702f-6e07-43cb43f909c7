@@ -36,6 +36,23 @@
         "assetId": "playerlife1_blue",
         "tint": "#69ceb0"
       }
+    },
+    {
+      "id": "e-mow62qjh-i5eu",
+      "kind": "sprite",
+      "transform": {
+        "x": 718.0759493670887,
+        "y": 474.2953586497891,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "depth": 10
+      },
+      "visual": {
+        "kind": "sprite",
+        "assetId": "fb1e78e2-e735-4599-9c01-3597bd9380fc",
+        "tint": "#b13535"
+      }
     }
   ]
 }
