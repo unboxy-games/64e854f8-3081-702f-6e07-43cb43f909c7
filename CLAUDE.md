@@ -12,6 +12,7 @@ Scene-as-data (migrated). Layout lives in `public/scenes/`; behavior lives in `s
 - Idle bob tween on the player (kept from original design)
 - Gradient background (dark blue theme, code-rendered in GameScene)
 - Loading bar in BootScene for asset loading
+- Entity `e-mowxj6d4-z3ct` (sprite, scale 2x) continuously spins via a 360° tween (1200ms, Linear, repeat -1)
 
 ## Scene data files
 - `public/scenes/manifest.json` — asset table + scene list
@@ -19,7 +20,7 @@ Scene-as-data (migrated). Layout lives in `public/scenes/`; behavior lives in `s
 
 ## Key implementation details
 - **BootScene**: calls `preloadManifest(this)` in `preload()`, reads `getManifest(this)` in `create()`, passes `{ sceneId: manifest.initialScene }` to GameScene
-- **GameScene**: async `create()` calls `loadWorldScene(this, this.sceneId)`, retrieves player via `registry.byRole('player')[0]`, adds Arcade physics, movement inlined in `update()`
+- **GameScene**: async `create()` calls `loadWorldScene(this, this.sceneId)`, retrieves player via `registry.byRole('player')[0]`, adds Arcade physics, movement inlined in `update()`; entity `e-mowxj6d4-z3ct` looked up via `registry.byId()` for spin tween
 - **Player entity**: id `"player"`, role `"player"`, sprite `playerlife1_blue`, at (640, 360), depth 2
 - **Player.ts**: still exists in `src/objects/` but is no longer used — movement is inlined in GameScene
 - Controls: arrow keys
@@ -30,5 +31,4 @@ Scene-as-data (migrated). Layout lives in `public/scenes/`; behavior lives in `s
   - Referenced by entity `e-mow64k5o-l1ms` in main.json
 
 ## Changes this turn
-- Converted circle primitive `e-mow64k5o-l1ms` to `kind: "code-rendered"` coin
-- Created `src/visuals/coin.ts` — outer dark ring, main gold body, inner bevel, dual-layer shine highlight
+- Added continuous 360° spin tween (1200ms, Linear, repeat forever) to entity `e-mowxj6d4-z3ct` in GameScene

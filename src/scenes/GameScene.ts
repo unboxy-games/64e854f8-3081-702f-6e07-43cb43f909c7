@@ -51,6 +51,18 @@ export class GameScene extends Phaser.Scene {
       });
     }
 
+    // Spin tween for entity e-mowxj6d4-z3ct
+    const spinSprite = registry.byId('e-mowxj6d4-z3ct') as Phaser.GameObjects.Sprite | undefined;
+    if (spinSprite) {
+      this.tweens.add({
+        targets: spinSprite,
+        angle: 360,
+        duration: 1200,
+        ease: 'Linear',
+        repeat: -1,
+      });
+    }
+
     // Start the UI overlay scene in parallel
     this.scene.launch('UIScene');
   }
