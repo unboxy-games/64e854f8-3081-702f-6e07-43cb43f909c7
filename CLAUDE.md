@@ -24,10 +24,11 @@ Scene-as-data (migrated). Layout lives in `public/scenes/`; behavior lives in `s
 - **Player.ts**: still exists in `src/objects/` but is no longer used — movement is inlined in GameScene
 - Controls: arrow keys
 
+## Render scripts
+- `src/visuals/coin.ts` — golden coin with bevel ring, mid-gold sheen, and specular shine highlight
+  - Params: `radius` (default 32), `color` (default #ffd700), `shine` (default true)
+  - Referenced by entity `e-mow64k5o-l1ms` in main.json
+
 ## Changes this turn
-- Migrated to scene-as-data architecture
-- Created `public/scenes/manifest.json` with asset record for `playerlife1_blue`
-- Created `public/scenes/world/main.json` with player entity declaration
-- Rewrote BootScene to use `preloadManifest` / `getManifest` (SDK 0.2.17)
-- Rewrote GameScene to use `loadWorldScene` / `getEntityRegistry`; movement logic inlined
-- Removed direct `new Player(...)` construction; physics attached to registry-spawned sprite
+- Converted circle primitive `e-mow64k5o-l1ms` to `kind: "code-rendered"` coin
+- Created `src/visuals/coin.ts` — outer dark ring, main gold body, inner bevel, dual-layer shine highlight
