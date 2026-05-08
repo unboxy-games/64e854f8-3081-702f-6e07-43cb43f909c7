@@ -82,8 +82,9 @@
       "visual": {
         "kind": "text",
         "source": {
-          "mode": "static",
-          "text": "hello"
+          "mode": "dynamic",
+          "binding": "currentTime",
+          "fallback": "--:--:--"
         },
         "fontSize": 24,
         "color": "#ffffff"

@@ -13,14 +13,16 @@ Scene-as-data (migrated). Layout lives in `public/scenes/`; behavior lives in `s
 - Gradient background (dark blue theme, code-rendered in GameScene)
 - Loading bar in BootScene for asset loading
 - Entity `e-mowxj6d4-z3ct` (sprite, scale 2x) continuously spins via a 360° tween (1200ms, Linear, repeat -1)
+- HUD text widget `e-moxb2ad6-7vwg` shows the current wall-clock time (HH:MM:SS), updated every second via registry binding `currentTime`
 
 ## Scene data files
 - `public/scenes/manifest.json` — asset table + scene list
 - `public/scenes/world/main.json` — player entity at (640, 360), depth 2
+- `public/scenes/hud/game-hud.json` — HUD widgets including the clock widget
 
 ## Key implementation details
 - **BootScene**: calls `preloadManifest(this)` in `preload()`, reads `getManifest(this)` in `create()`, passes `{ sceneId: manifest.initialScene }` to GameScene
-- **GameScene**: async `create()` calls `loadWorldScene(this, this.sceneId)`, retrieves player via `registry.byRole('player')[0]`, adds Arcade physics, movement inlined in `update()`; entity `e-mowxj6d4-z3ct` looked up via `registry.byId()` for spin tween
+- **GameScene**: async `create()` calls `loadWorldScene(this, this.sceneId)`, retrieves player via `registry.byRole('player')[0]`, adds Arcade physics, movement inlined in `update()`; entity `e-mowxj6d4-z3ct` looked up via `registry.byId()` for spin tween; clock timer sets `currentTime` in game registry every 1000ms
 - **Player entity**: id `"player"`, role `"player"`, sprite `playerlife1_blue`, at (640, 360), depth 2
 - **Player.ts**: still exists in `src/objects/` but is no longer used — movement is inlined in GameScene
 - Controls: arrow keys
@@ -31,4 +33,5 @@ Scene-as-data (migrated). Layout lives in `public/scenes/`; behavior lives in `s
   - Referenced by entity `e-mow64k5o-l1ms` in main.json
 
 ## Changes this turn
-- Added continuous 360° spin tween (1200ms, Linear, repeat forever) to entity `e-mowxj6d4-z3ct` in GameScene
+- HUD text widget `e-moxb2ad6-7vwg` source changed from static "hello" to dynamic `currentTime` binding
+- GameScene now runs a 1-second repeating timer that writes the current HH:MM:SS to the registry

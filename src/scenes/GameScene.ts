@@ -63,6 +63,17 @@ export class GameScene extends Phaser.Scene {
       });
     }
 
+    // Push current time to the HUD every second
+    const updateTime = () => {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      this.registry.set('currentTime', `${hh}:${mm}:${ss}`);
+    };
+    updateTime(); // set immediately so HUD shows on frame 1
+    this.time.addEvent({ delay: 1000, callback: updateTime, loop: true });
+
     // Start the UI overlay scene in parallel
     this.scene.launch('UIScene');
   }
