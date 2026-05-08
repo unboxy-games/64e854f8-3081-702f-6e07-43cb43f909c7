@@ -84,6 +84,27 @@
         "kind": "sprite",
         "assetId": "playerlife1_blue"
       }
+    },
+    {
+      "id": "e-mox03fd1-xt7o",
+      "kind": "tilemap",
+      "transform": {
+        "x": 440,
+        "y": 456,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "depth": 10
+      },
+      "tileSize": {
+        "width": 16,
+        "height": 16
+      },
+      "size": {
+        "width": 30,
+        "height": 20
+      },
+      "layers": []
     }
   ]
 }
