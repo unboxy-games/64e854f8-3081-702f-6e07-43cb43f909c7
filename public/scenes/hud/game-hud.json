@@ -74,9 +74,9 @@
       "id": "e-moxb2ad6-7vwg",
       "kind": "text",
       "anchor": {
-        "side": "top-left",
-        "offsetX": 488,
-        "offsetY": 576
+        "side": "bottom-left",
+        "offsetX": 0,
+        "offsetY": 0
       },
       "layer": "base",
       "visual": {
