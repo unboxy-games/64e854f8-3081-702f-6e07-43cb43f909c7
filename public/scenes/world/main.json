@@ -70,6 +70,56 @@
         "radius": 32,
         "fillColor": "#535e88"
       }
+    },
+    {
+      "id": "e-mow69px8-gdn5",
+      "kind": "primitive",
+      "transform": {
+        "x": 208,
+        "y": 360,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "depth": 10
+      },
+      "visual": {
+        "kind": "rect",
+        "width": 64,
+        "height": 64,
+        "fillColor": "#4662D8"
+      }
+    },
+    {
+      "id": "e-mow69ukk-24e1",
+      "kind": "group",
+      "transform": {
+        "x": 408,
+        "y": 608,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "depth": 10
+      },
+      "children": []
+    },
+    {
+      "id": "e-mow69ya5-7hvc",
+      "kind": "trigger",
+      "transform": {
+        "x": 360,
+        "y": 624,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "depth": 10
+      },
+      "shape": {
+        "kind": "rect",
+        "width": 96,
+        "height": 96
+      },
+      "description": "",
+      "targets": []
     }
   ]
 }
