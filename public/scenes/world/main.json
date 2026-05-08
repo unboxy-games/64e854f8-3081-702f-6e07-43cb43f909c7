@@ -53,6 +53,23 @@
         "assetId": "fb1e78e2-e735-4599-9c01-3597bd9380fc",
         "tint": "#b13535"
       }
+    },
+    {
+      "id": "e-mow64k5o-l1ms",
+      "kind": "primitive",
+      "transform": {
+        "x": 280,
+        "y": 512,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "depth": 10
+      },
+      "visual": {
+        "kind": "circle",
+        "radius": 32,
+        "fillColor": "#535e88"
+      }
     }
   ]
 }
