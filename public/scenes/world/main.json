@@ -190,6 +190,54 @@
         "kind": "sprite",
         "assetId": "fb1e78e2-e735-4599-9c01-3597bd9380fc"
       }
+    },
+    {
+      "id": "e-mowxiyw0-6xwl",
+      "kind": "sprite",
+      "transform": {
+        "x": 560,
+        "y": 496,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "depth": 10
+      },
+      "visual": {
+        "kind": "sprite",
+        "assetId": "fb1e78e2-e735-4599-9c01-3597bd9380fc"
+      }
+    },
+    {
+      "id": "e-mowxj2nc-civy",
+      "kind": "sprite",
+      "transform": {
+        "x": 968,
+        "y": 112,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "depth": 10
+      },
+      "visual": {
+        "kind": "sprite",
+        "assetId": "fb1e78e2-e735-4599-9c01-3597bd9380fc"
+      }
+    },
+    {
+      "id": "e-mowxj6d4-z3ct",
+      "kind": "sprite",
+      "transform": {
+        "x": 832,
+        "y": 608,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "depth": 10
+      },
+      "visual": {
+        "kind": "sprite",
+        "assetId": "fb1e78e2-e735-4599-9c01-3597bd9380fc"
+      }
     }
   ]
 }
