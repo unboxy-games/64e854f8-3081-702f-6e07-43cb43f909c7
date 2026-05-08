@@ -21,23 +21,6 @@
   },
   "entities": [
     {
-      "id": "player",
-      "kind": "sprite",
-      "role": "player",
-      "transform": {
-        "x": 764.4060475161986,
-        "y": 377.6557719941513,
-        "depth": 2,
-        "scaleX": 2,
-        "scaleY": 2
-      },
-      "visual": {
-        "kind": "sprite",
-        "assetId": "playerlife1_blue",
-        "tint": "#69ceb0"
-      }
-    },
-    {
       "id": "e-mow62qjh-i5eu",
       "kind": "sprite",
       "transform": {
