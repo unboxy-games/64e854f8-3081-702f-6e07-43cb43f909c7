@@ -31,6 +31,25 @@
         "fontSize": 24,
         "color": "#ffffff"
       }
+    },
+    {
+      "id": "e-moxa1k17-lc5b",
+      "kind": "text",
+      "anchor": {
+        "side": "top-left",
+        "offsetX": 392,
+        "offsetY": 648
+      },
+      "layer": "base",
+      "visual": {
+        "kind": "text",
+        "source": {
+          "mode": "static",
+          "text": "New text"
+        },
+        "fontSize": 24,
+        "color": "#ffffff"
+      }
     }
   ]
 }
