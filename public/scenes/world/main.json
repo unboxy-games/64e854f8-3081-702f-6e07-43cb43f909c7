@@ -89,8 +89,8 @@
       "id": "e-mox03fd1-xt7o",
       "kind": "tilemap",
       "transform": {
-        "x": 499.4092827004222,
-        "y": 322.3291139240506,
+        "x": 504.8101265822787,
+        "y": 314.22784810126575,
         "rotation": 0,
         "scaleX": 1,
         "scaleY": 1,
@@ -126,16 +126,33 @@
       "id": "e-moxp46bt-of5e",
       "kind": "sprite",
       "transform": {
-        "x": 484.15189873417717,
-        "y": 322.22784810126586,
+        "x": 501.704641350211,
+        "y": 531.5105485232068,
         "rotation": 0,
-        "scaleX": 99,
-        "scaleY": 9,
+        "scaleX": 3,
+        "scaleY": 3,
         "depth": 10
       },
       "visual": {
         "kind": "sprite",
         "assetId": "playerlife1_blue"
+      }
+    },
+    {
+      "id": "e-moxp62g9-q54v",
+      "kind": "primitive",
+      "transform": {
+        "x": 296,
+        "y": 576,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "depth": 10
+      },
+      "visual": {
+        "kind": "circle",
+        "radius": 32,
+        "fillColor": "#4662D8"
       }
     }
   ]
