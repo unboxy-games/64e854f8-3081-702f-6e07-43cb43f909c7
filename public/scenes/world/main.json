@@ -121,6 +121,22 @@
         "kind": "sprite",
         "assetId": "playerlife1_blue"
       }
+    },
+    {
+      "id": "e-moxp46bt-of5e",
+      "kind": "sprite",
+      "transform": {
+        "x": 484.15189873417717,
+        "y": 322.22784810126586,
+        "rotation": 0,
+        "scaleX": 99,
+        "scaleY": 9,
+        "depth": 10
+      },
+      "visual": {
+        "kind": "sprite",
+        "assetId": "playerlife1_blue"
+      }
     }
   ]
 }
