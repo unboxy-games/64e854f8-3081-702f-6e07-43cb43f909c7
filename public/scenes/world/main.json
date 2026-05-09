@@ -105,6 +105,22 @@
         "height": 20
       },
       "layers": []
+    },
+    {
+      "id": "e-moxp3gtw-s10p",
+      "kind": "sprite",
+      "transform": {
+        "x": 976,
+        "y": 288,
+        "rotation": 0,
+        "scaleX": 2,
+        "scaleY": 2,
+        "depth": 10
+      },
+      "visual": {
+        "kind": "sprite",
+        "assetId": "playerlife1_blue"
+      }
     }
   ]
 }
