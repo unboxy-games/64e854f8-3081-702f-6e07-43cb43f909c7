@@ -115,6 +115,26 @@
           "value": 100
         }
       }
+    },
+    {
+      "id": "e-moyotrwm-9di1",
+      "kind": "panel",
+      "anchor": {
+        "side": "top",
+        "offsetX": 0,
+        "offsetY": 0
+      },
+      "layer": "base",
+      "visual": {
+        "kind": "panel",
+        "width": 240,
+        "height": 120,
+        "backgroundColor": "#000000",
+        "backgroundAlpha": 0.5,
+        "borderRadius": 8,
+        "borderColor": "#ffffff",
+        "borderWidth": 1
+      }
     }
   ]
 }
