@@ -13,7 +13,10 @@
     }
   ],
   "huds": [
-    { "id": "game-hud", "file": "hud/game-hud.json" }
+    {
+      "id": "game-hud",
+      "file": "hud/game-hud.json"
+    }
   ],
   "assets": [
     {
@@ -26,6 +29,12 @@
       "id": "fb1e78e2-e735-4599-9c01-3597bd9380fc",
       "textureKey": "playerlife1_blue",
       "path": "uploaded/playerlife1_blue.png",
+      "kind": "image"
+    },
+    {
+      "id": "glock_gun_p8a99",
+      "textureKey": "glock_gun_p8a99",
+      "path": "uploaded/glock_gun_p8a99.png",
       "kind": "image"
     }
   ]

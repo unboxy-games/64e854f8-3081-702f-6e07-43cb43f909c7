@@ -137,6 +137,22 @@
         "kind": "sprite",
         "assetId": "playerlife1_blue"
       }
+    },
+    {
+      "id": "e-moxpag7m-ykn1",
+      "kind": "sprite",
+      "transform": {
+        "x": 516.3544303797469,
+        "y": 482.5991561181435,
+        "rotation": 90,
+        "scaleX": 0.1,
+        "scaleY": 0.1,
+        "depth": 10
+      },
+      "visual": {
+        "kind": "sprite",
+        "assetId": "glock_gun_p8a99"
+      }
     }
   ]
 }
