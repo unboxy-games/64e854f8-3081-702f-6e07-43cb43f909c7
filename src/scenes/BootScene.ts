@@ -47,6 +47,9 @@ export class BootScene extends Phaser.Scene {
       pctText.destroy();
     });
 
+    // User-uploaded assets
+    this.load.image('glock_gun_p8a99', 'uploaded/glock_gun_p8a99.png');
+
     // Load scene manifest — assets are lazy-loaded by the world scene loader
     preloadManifest(this);
   }

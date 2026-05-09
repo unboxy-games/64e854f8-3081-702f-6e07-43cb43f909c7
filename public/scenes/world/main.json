@@ -140,7 +140,7 @@
     },
     {
       "id": "e-moxp62g9-q54v",
-      "kind": "primitive",
+      "kind": "sprite",
       "transform": {
         "x": 296,
         "y": 576,
@@ -150,9 +150,8 @@
         "depth": 10
       },
       "visual": {
-        "kind": "circle",
-        "radius": 32,
-        "fillColor": "#4662D8"
+        "kind": "sprite",
+        "assetId": "glock_gun_p8a99"
       }
     }
   ]

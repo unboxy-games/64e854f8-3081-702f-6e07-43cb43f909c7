@@ -33,5 +33,5 @@ Scene-as-data (migrated). Layout lives in `public/scenes/`; behavior lives in `s
   - Referenced by entity `e-mow64k5o-l1ms` in main.json
 
 ## Changes this turn
-- HUD text widget `e-moxb2ad6-7vwg` source changed from static "hello" to dynamic `currentTime` binding
-- GameScene now runs a 1-second repeating timer that writes the current HH:MM:SS to the registry
+- Entity `e-moxp62g9-q54v` changed from a blue circle primitive to a sprite using the user-generated `glock_gun_p8a99.png`
+- `glock_gun_p8a99.png` registered in BootScene.preload() via `this.load.image`
