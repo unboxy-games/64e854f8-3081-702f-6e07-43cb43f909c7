@@ -89,6 +89,32 @@
         "fontSize": 24,
         "color": "#ffffff"
       }
+    },
+    {
+      "id": "e-moyons46-f67e",
+      "kind": "progress-bar",
+      "anchor": {
+        "side": "top-left",
+        "offsetX": 256,
+        "offsetY": 608
+      },
+      "layer": "base",
+      "visual": {
+        "kind": "progress-bar",
+        "width": 200,
+        "height": 16,
+        "fillColor": "#22c55e",
+        "backgroundColor": "#0f172a",
+        "borderRadius": 4,
+        "value": {
+          "mode": "static",
+          "value": 75
+        },
+        "max": {
+          "mode": "static",
+          "value": 100
+        }
+      }
     }
   ]
 }
