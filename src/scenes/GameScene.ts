@@ -38,17 +38,8 @@ export class GameScene extends Phaser.Scene {
     if (playerSprite) {
       // Enable Arcade physics on the spawned sprite
       this.physics.add.existing(playerSprite);
-      (playerSprite.body as Phaser.Physics.Arcade.Body).setCollideWorldBounds(true);
-
-      // Gentle idle bob tween (one-shot entry variant kept from original design)
-      this.tweens.add({
-        targets: playerSprite,
-        y: playerSprite.y - 6,
-        duration: 900,
-        ease: 'Sine.easeInOut',
-        yoyo: true,
-        repeat: -1,
-      });
+      const body = playerSprite.body as Phaser.Physics.Arcade.Body;
+      body.setCollideWorldBounds(true);
     }
 
     // Spin tween for entity e-mowxj6d4-z3ct

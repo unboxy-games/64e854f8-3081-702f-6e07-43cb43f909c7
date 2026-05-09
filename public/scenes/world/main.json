@@ -125,6 +125,7 @@
     {
       "id": "e-moxp46bt-of5e",
       "kind": "sprite",
+      "role": "player",
       "transform": {
         "x": 408.5400843881857,
         "y": 539.6118143459917,
