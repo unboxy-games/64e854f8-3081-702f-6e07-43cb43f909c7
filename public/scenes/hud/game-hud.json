@@ -103,7 +103,7 @@
         "kind": "progress-bar",
         "width": 200,
         "height": 16,
-        "fillColor": "#22c55e",
+        "fillColor": "#2134c4",
         "backgroundColor": "#0f172a",
         "borderRadius": 4,
         "value": {
