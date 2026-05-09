@@ -32,5 +32,6 @@ Scene-as-data (migrated). Layout lives in `public/scenes/`; behavior lives in `s
   - Referenced by entity `e-mow64k5o-l1ms` in main.json
 
 ## Changes this turn
-- Entity `e-moxp46bt-of5e` given `role: "player"` in main.json so the existing arrow-key movement code drives it
-- Removed the idle bob tween from the player (planes stay static when idle)
+- Progress bar `e-moyons46-f67e` in game-hud.json switched to dynamic binding `playerX` (max static 1280)
+- GameScene seeds `playerX` in create() and updates it every frame in update() from the player sprite's x position
+- Bar fills right as player moves right, empties as player moves left

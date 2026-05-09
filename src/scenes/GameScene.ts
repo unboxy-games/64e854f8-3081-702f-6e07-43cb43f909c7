@@ -40,6 +40,8 @@ export class GameScene extends Phaser.Scene {
       this.physics.add.existing(playerSprite);
       const body = playerSprite.body as Phaser.Physics.Arcade.Body;
       body.setCollideWorldBounds(true);
+      // Seed the HUD bar with the player's starting position
+      this.registry.set('playerX', playerSprite.x);
     }
 
     // Spin tween for entity e-mowxj6d4-z3ct
@@ -92,5 +94,8 @@ export class GameScene extends Phaser.Scene {
     } else if (this.cursors.down.isDown) {
       body.setVelocityY(this.playerSpeed);
     }
+
+    // Update the HUD position bar every frame
+    this.registry.set('playerX', playerSprite.x);
   }
 }

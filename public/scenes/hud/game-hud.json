@@ -107,12 +107,13 @@
         "backgroundColor": "#0f172a",
         "borderRadius": 4,
         "value": {
-          "mode": "static",
-          "value": 75
+          "mode": "dynamic",
+          "binding": "playerX",
+          "fallback": 0
         },
         "max": {
           "mode": "static",
-          "value": 100
+          "value": 1280
         }
       }
     },
