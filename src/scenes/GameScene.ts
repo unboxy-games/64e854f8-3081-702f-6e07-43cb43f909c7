@@ -11,6 +11,7 @@ export class GameScene extends Phaser.Scene {
   private sceneId!: string;
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private playerSpeed = 200;
+  private lastDirection: 'down' | 'up' | 'left' | 'right' = 'down';
 
   constructor() {
     super({ key: 'GameScene' });
@@ -40,6 +41,8 @@ export class GameScene extends Phaser.Scene {
       this.physics.add.existing(playerSprite);
       const body = playerSprite.body as Phaser.Physics.Arcade.Body;
       body.setCollideWorldBounds(true);
+      // Start in idle-down pose
+      playerSprite.play('idle-down', true);
       // Seed the HUD bar with the player's starting position
       this.registry.set('playerX', playerSprite.x);
     }
@@ -81,18 +84,24 @@ export class GameScene extends Phaser.Scene {
     if (!playerSprite || !playerSprite.body) return;
 
     const body = playerSprite.body as Phaser.Physics.Arcade.Body;
-    body.setVelocity(0);
 
-    if (this.cursors.left.isDown) {
-      body.setVelocityX(-this.playerSpeed);
-    } else if (this.cursors.right.isDown) {
-      body.setVelocityX(this.playerSpeed);
-    }
+    let vx = 0;
+    let vy = 0;
+    let dir: 'down' | 'up' | 'left' | 'right' | null = null;
 
-    if (this.cursors.up.isDown) {
-      body.setVelocityY(-this.playerSpeed);
-    } else if (this.cursors.down.isDown) {
-      body.setVelocityY(this.playerSpeed);
+    // Check all four directions — last one evaluated wins when multiple held
+    if (this.cursors.left.isDown)  { vx = -this.playerSpeed; dir = 'left'; }
+    if (this.cursors.right.isDown) { vx =  this.playerSpeed; dir = 'right'; }
+    if (this.cursors.up.isDown)    { vy = -this.playerSpeed; dir = 'up'; }
+    if (this.cursors.down.isDown)  { vy =  this.playerSpeed; dir = 'down'; }
+
+    body.setVelocity(vx, vy);
+
+    if (dir !== null) {
+      this.lastDirection = dir;
+      playerSprite.play(`walk-${dir}`, true);
+    } else {
+      playerSprite.play(`idle-${this.lastDirection}`, true);
     }
 
     // Update the HUD position bar every frame

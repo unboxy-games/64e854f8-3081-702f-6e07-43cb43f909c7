@@ -36,6 +36,31 @@
       "textureKey": "glock_gun_p8a99",
       "path": "uploaded/glock_gun_p8a99.png",
       "kind": "image"
+    },
+    {
+      "id": "a_cat_with_gun_0zre2",
+      "textureKey": "a_cat_with_gun_0zre2",
+      "path": "uploaded/a_cat_with_gun_0zre2.png",
+      "kind": "image"
+    },
+    {
+      "id": "premium_character_spritesheet",
+      "textureKey": "premium_character_spritesheet",
+      "path": "uploaded/premium_character_spritesheet.png",
+      "kind": "spritesheet",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "fps": 8,
+      "animations": [
+        { "name": "idle-down",  "from": 0,  "to": 7,  "loop": true },
+        { "name": "idle-up",    "from": 8,  "to": 15, "loop": true },
+        { "name": "idle-left",  "from": 16, "to": 23, "loop": true },
+        { "name": "idle-right", "from": 24, "to": 31, "loop": true },
+        { "name": "walk-down",  "from": 32, "to": 39, "loop": true },
+        { "name": "walk-up",    "from": 40, "to": 47, "loop": true },
+        { "name": "walk-left",  "from": 48, "to": 55, "loop": true },
+        { "name": "walk-right", "from": 56, "to": 63, "loop": true }
+      ]
     }
   ]
 }

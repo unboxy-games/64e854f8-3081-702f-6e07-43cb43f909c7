@@ -130,37 +130,21 @@
         "x": 408.5400843881857,
         "y": 539.6118143459917,
         "rotation": 0,
-        "scaleX": 3,
-        "scaleY": 3,
+        "scaleX": 2,
+        "scaleY": 2,
         "depth": 10
       },
       "visual": {
         "kind": "sprite",
-        "assetId": "playerlife1_blue"
-      }
-    },
-    {
-      "id": "e-moz0y0km-na4v",
-      "kind": "sprite",
-      "transform": {
-        "x": 736,
-        "y": 552,
-        "rotation": 0,
-        "scaleX": 1,
-        "scaleY": 1,
-        "depth": 10
-      },
-      "visual": {
-        "kind": "sprite",
-        "assetId": "a_cat_with_gun_0zre2"
+        "assetId": "premium_character_spritesheet"
       }
     },
     {
       "id": "e-moxpag7m-ykn1",
       "kind": "sprite",
       "transform": {
-        "x": 681.0801687763714,
-        "y": 230.10970464135033,
+        "x": 904.6025568360728,
+        "y": 284.5574658353801,
         "rotation": 90,
         "scaleX": 0.1,
         "scaleY": 0.1,
@@ -172,19 +156,19 @@
       }
     },
     {
-      "id": "e-moz1iofn-hl9x",
+      "id": "e-moz55i21-kuyt",
       "kind": "sprite",
       "transform": {
-        "x": 488,
-        "y": 216,
+        "x": 894.5671641791043,
+        "y": 574.4477611940299,
         "rotation": 0,
-        "scaleX": 1,
-        "scaleY": 1,
+        "scaleX": 0.2,
+        "scaleY": 0.2,
         "depth": 10
       },
       "visual": {
         "kind": "sprite",
-        "assetId": "glock_gun_p8a99"
+        "assetId": "a_cat_with_gun_0zre2"
       }
     }
   ]
