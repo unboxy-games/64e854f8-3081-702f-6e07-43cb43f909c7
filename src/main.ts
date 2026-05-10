@@ -10,4 +10,5 @@ createUnboxyGame({
   height: GAME_HEIGHT,
   scenes: [BootScene, GameScene, UIScene],
   renderScripts,
+  pixelArt: true,
 });

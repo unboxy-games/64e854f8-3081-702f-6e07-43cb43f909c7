@@ -36,4 +36,4 @@ Scene-as-data (migrated). Layout lives in `public/scenes/`; behavior lives in `s
   - Referenced by entity `e-mow64k5o-l1ms` in main.json
 
 ## Changes this turn
-- Fixed walk-left and walk-right animation frame ranges being swapped (walk-left now uses frames 56-63, walk-right uses 48-55)
+- Enabled pixel-art mode (`pixelArt: true`) in game config — all textures now use nearest-neighbor filtering instead of linear, eliminating blurring on scaled sprites
