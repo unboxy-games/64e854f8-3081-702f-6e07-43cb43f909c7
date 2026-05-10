@@ -106,7 +106,8 @@
       "id": "square_button_19x26",
       "textureKey": "square_button_19x26",
       "path": "uploaded/square_button_19x26.png",
-      "kind": "image"
+      "kind": "image",
+      "ninePatch": { "leftWidth": 4, "rightWidth": 4, "topHeight": 4, "bottomHeight": 4 }
     }
   ]
 }

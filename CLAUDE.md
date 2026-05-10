@@ -35,5 +35,13 @@ Scene-as-data (migrated). Layout lives in `public/scenes/`; behavior lives in `s
   - Params: `radius` (default 32), `color` (default #ffd700), `shine` (default true)
   - Referenced by entity `e-mow64k5o-l1ms` in main.json
 
+## Assets
+- `square_button_19x26` — 19×26 px button sprite, registered in manifest with ninePatch `{ leftWidth:4, rightWidth:4, topHeight:4, bottomHeight:4 }`
+
+## HUD entities (game-hud.json)
+- `test-9slice-btn` — icon-button, anchored center, 200×64, label "Click me", backgroundAssetId `square_button_19x26`
+
 ## Changes this turn
-- Fixed idle-left and idle-right animation frame ranges being swapped (idle-right now uses frames 16-23, idle-left uses 24-31), matching the same correction previously made to walk-left/walk-right
+- Imported `square_button_19x26.png` into `public/uploaded/`
+- Added ninePatch metadata to the manifest asset entry for `square_button_19x26`
+- Added `test-9slice-btn` icon-button entity (center-anchored, 200×64, nine-slice button background) to the HUD

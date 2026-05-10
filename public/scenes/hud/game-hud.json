@@ -158,6 +158,18 @@
       }
     },
     {
+      "id": "test-9slice-btn",
+      "kind": "icon-button",
+      "anchor": { "side": "center" },
+      "visual": {
+        "kind": "icon-button",
+        "label": "Click me",
+        "width": 200,
+        "height": 64,
+        "backgroundAssetId": "square_button_19x26"
+      }
+    },
+    {
       "id": "e-mp0cfk5s-gac3",
       "kind": "image",
       "anchor": {
