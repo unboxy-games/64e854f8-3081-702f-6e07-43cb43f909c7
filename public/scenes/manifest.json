@@ -58,8 +58,8 @@
         { "name": "idle-right", "from": 24, "to": 31, "loop": true },
         { "name": "walk-down",  "from": 32, "to": 39, "loop": true },
         { "name": "walk-up",    "from": 40, "to": 47, "loop": true },
-        { "name": "walk-left",  "from": 48, "to": 55, "loop": true },
-        { "name": "walk-right", "from": 56, "to": 63, "loop": true }
+        { "name": "walk-left",  "from": 56, "to": 63, "loop": true },
+        { "name": "walk-right", "from": 48, "to": 55, "loop": true }
       ]
     }
   ]

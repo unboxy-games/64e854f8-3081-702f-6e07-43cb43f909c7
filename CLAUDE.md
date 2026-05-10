@@ -26,7 +26,7 @@ Scene-as-data (migrated). Layout lives in `public/scenes/`; behavior lives in `s
 - **BootScene**: calls `preloadManifest(this)` in `preload()`, reads `getManifest(this)` in `create()`, passes `{ sceneId: manifest.initialScene }` to GameScene
 - **GameScene**: async `create()` calls `loadWorldScene(this, this.sceneId)`, retrieves player via `registry.byRole('player')[0]`, adds Arcade physics, movement + animation inlined in `update()`; `lastDirection` tracks the last pressed direction for idle anim fallback; entity `e-mowxj6d4-z3ct` looked up via `registry.byId()` for spin tween; clock timer sets `currentTime` in game registry every 1000ms
 - **Player entity**: id `"e-moxp46bt-of5e"`, role `"player"`, assetId `"premium_character_spritesheet"`, at (408, 539), scale 2, depth 10
-- **Spritesheet**: `uploaded/premium_character_spritesheet.png`, 48×48 frames, 8 fps. Animations registered via manifest.json: idle-down (0-7), idle-up (8-15), idle-left (16-23), idle-right (24-31), walk-down (32-39), walk-up (40-47), walk-left (48-55), walk-right (56-63)
+- **Spritesheet**: `uploaded/premium_character_spritesheet.png`, 48×48 frames, 8 fps. Animations registered via manifest.json: idle-down (0-7), idle-up (8-15), idle-left (16-23), idle-right (24-31), walk-down (32-39), walk-up (40-47), walk-left (56-63), walk-right (48-55) — note walk-left/right frame ranges were swapped from the original labelling
 - **Player.ts**: still exists in `src/objects/` but is not used — movement is inlined in GameScene
 - Controls: arrow keys
 
@@ -36,7 +36,4 @@ Scene-as-data (migrated). Layout lives in `public/scenes/`; behavior lives in `s
   - Referenced by entity `e-mow64k5o-l1ms` in main.json
 
 ## Changes this turn
-- Player entity switched from `playerlife1_blue` static sprite to `premium_character_spritesheet` (Sprout Lands character)
-- Spritesheet registered in manifest.json as a spritesheet asset with 8 named animations (walk + idle in 4 directions)
-- GameScene updated: `lastDirection` state tracks last pressed direction; `update()` plays directional walk/idle anims via `sprite.play(..., true)`
-- Player scale reduced from 3 to 2 (96px rendered height, appropriate for 48×48 source frames)
+- Fixed walk-left and walk-right animation frame ranges being swapped (walk-left now uses frames 56-63, walk-right uses 48-55)
