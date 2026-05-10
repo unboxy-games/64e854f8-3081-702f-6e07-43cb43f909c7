@@ -32,6 +32,5 @@ Scene-as-data (migrated). Layout lives in `public/scenes/`; behavior lives in `s
   - Referenced by entity `e-mow64k5o-l1ms` in main.json
 
 ## Changes this turn
-- Progress bar `e-moyons46-f67e` in game-hud.json switched to dynamic binding `playerX` (max static 1280)
-- GameScene seeds `playerX` in create() and updates it every frame in update() from the player sprite's x position
-- Bar fills right as player moves right, empties as player moves left
+- Entity `e-moz0y0km-na4v` changed from a blue circle primitive to a sprite using the user-generated `a_cat_with_gun_0zre2.png`
+- `a_cat_with_gun_0zre2.png` registered in BootScene.preload() via `this.load.image`

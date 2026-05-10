@@ -140,6 +140,22 @@
       }
     },
     {
+      "id": "e-moz0y0km-na4v",
+      "kind": "sprite",
+      "transform": {
+        "x": 736,
+        "y": 552,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "depth": 10
+      },
+      "visual": {
+        "kind": "sprite",
+        "assetId": "a_cat_with_gun_0zre2"
+      }
+    },
+    {
       "id": "e-moxpag7m-ykn1",
       "kind": "sprite",
       "transform": {

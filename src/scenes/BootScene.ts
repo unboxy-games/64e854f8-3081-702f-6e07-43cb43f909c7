@@ -49,6 +49,7 @@ export class BootScene extends Phaser.Scene {
 
     // User-uploaded assets
     this.load.image('glock_gun_p8a99', 'uploaded/glock_gun_p8a99.png');
+    this.load.image('a_cat_with_gun_0zre2', 'uploaded/a_cat_with_gun_0zre2.png');
 
     // Load scene manifest — assets are lazy-loaded by the world scene loader
     preloadManifest(this);
