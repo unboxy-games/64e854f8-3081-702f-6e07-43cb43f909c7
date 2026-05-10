@@ -170,6 +170,22 @@
         "kind": "sprite",
         "assetId": "glock_gun_p8a99"
       }
+    },
+    {
+      "id": "e-moz1iofn-hl9x",
+      "kind": "sprite",
+      "transform": {
+        "x": 488,
+        "y": 216,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "depth": 10
+      },
+      "visual": {
+        "kind": "sprite",
+        "assetId": "glock_gun_p8a99"
+      }
     }
   ]
 }
