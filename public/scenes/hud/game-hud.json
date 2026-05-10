@@ -136,6 +136,42 @@
         "borderColor": "#524747",
         "borderWidth": 1
       }
+    },
+    {
+      "id": "e-mp0cedgi-qsh9",
+      "kind": "icon-button",
+      "anchor": {
+        "side": "top-left",
+        "offsetX": 616,
+        "offsetY": 584
+      },
+      "layer": "base",
+      "visual": {
+        "kind": "icon-button",
+        "label": "Button",
+        "shape": "rounded-rect",
+        "width": 96,
+        "height": 48,
+        "fillColor": "#3b82f6",
+        "textColor": "#ffffff",
+        "backgroundAssetId": "9a814588-273f-43f2-b34d-b438c0ae8842"
+      }
+    },
+    {
+      "id": "e-mp0cfk5s-gac3",
+      "kind": "image",
+      "anchor": {
+        "side": "top-left",
+        "offsetX": 504,
+        "offsetY": 592
+      },
+      "layer": "base",
+      "visual": {
+        "kind": "image",
+        "assetId": "square_button_19x26",
+        "width": 64,
+        "height": 64
+      }
     }
   ]
 }

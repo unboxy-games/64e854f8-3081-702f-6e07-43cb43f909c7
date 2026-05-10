@@ -170,6 +170,22 @@
         "kind": "sprite",
         "assetId": "a_cat_with_gun_0zre2"
       }
+    },
+    {
+      "id": "e-mp0e60ig-wziq",
+      "kind": "sprite",
+      "transform": {
+        "x": 104,
+        "y": 400,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "depth": 10
+      },
+      "visual": {
+        "kind": "sprite",
+        "assetId": "square_button_19x26"
+      }
     }
   ]
 }
