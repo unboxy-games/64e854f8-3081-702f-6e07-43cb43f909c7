@@ -54,8 +54,8 @@
       "animations": [
         { "name": "idle-down",  "from": 0,  "to": 7,  "loop": true },
         { "name": "idle-up",    "from": 8,  "to": 15, "loop": true },
-        { "name": "idle-left",  "from": 16, "to": 23, "loop": true },
-        { "name": "idle-right", "from": 24, "to": 31, "loop": true },
+        { "name": "idle-left",  "from": 24, "to": 31, "loop": true },
+        { "name": "idle-right", "from": 16, "to": 23, "loop": true },
         { "name": "walk-down",  "from": 32, "to": 39, "loop": true },
         { "name": "walk-up",    "from": 40, "to": 47, "loop": true },
         { "name": "walk-left",  "from": 56, "to": 63, "loop": true },

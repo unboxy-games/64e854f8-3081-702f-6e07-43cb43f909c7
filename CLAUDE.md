@@ -26,7 +26,7 @@ Scene-as-data (migrated). Layout lives in `public/scenes/`; behavior lives in `s
 - **BootScene**: calls `preloadManifest(this)` in `preload()`, reads `getManifest(this)` in `create()`, passes `{ sceneId: manifest.initialScene }` to GameScene
 - **GameScene**: async `create()` calls `loadWorldScene(this, this.sceneId)`, retrieves player via `registry.byRole('player')[0]`, adds Arcade physics, movement + animation inlined in `update()`; `lastDirection` tracks the last pressed direction for idle anim fallback; entity `e-mowxj6d4-z3ct` looked up via `registry.byId()` for spin tween; clock timer sets `currentTime` in game registry every 1000ms
 - **Player entity**: id `"e-moxp46bt-of5e"`, role `"player"`, assetId `"premium_character_spritesheet"`, at (408, 539), scale 2, depth 10
-- **Spritesheet**: `uploaded/premium_character_spritesheet.png`, 48×48 frames, 8 fps. Animations registered via manifest.json: idle-down (0-7), idle-up (8-15), idle-left (16-23), idle-right (24-31), walk-down (32-39), walk-up (40-47), walk-left (56-63), walk-right (48-55) — note walk-left/right frame ranges were swapped from the original labelling
+- **Spritesheet**: `uploaded/premium_character_spritesheet.png`, 48×48 frames, 8 fps. Animations registered via manifest.json: idle-down (0-7), idle-up (8-15), idle-right (16-23), idle-left (24-31), walk-down (32-39), walk-up (40-47), walk-right (48-55), walk-left (56-63) — note left/right frame ranges are swapped vs. the original sheet labelling for both idle and walk rows
 - **Player.ts**: still exists in `src/objects/` but is not used — movement is inlined in GameScene
 - Controls: arrow keys
 
@@ -36,4 +36,4 @@ Scene-as-data (migrated). Layout lives in `public/scenes/`; behavior lives in `s
   - Referenced by entity `e-mow64k5o-l1ms` in main.json
 
 ## Changes this turn
-- Enabled pixel-art mode (`pixelArt: true`) in game config — all textures now use nearest-neighbor filtering instead of linear, eliminating blurring on scaled sprites
+- Fixed idle-left and idle-right animation frame ranges being swapped (idle-right now uses frames 16-23, idle-left uses 24-31), matching the same correction previously made to walk-left/walk-right
