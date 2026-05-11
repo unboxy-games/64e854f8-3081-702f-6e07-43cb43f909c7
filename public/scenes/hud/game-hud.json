@@ -203,6 +203,28 @@
         "width": 96,
         "height": 48,
         "fillColor": "#3b82f6",
+        "textColor": "#d24141",
+        "backgroundAssetId": "square_buttons_19x26",
+        "backgroundRegion": "gray_square_button",
+        "backgroundFrame": null
+      }
+    },
+    {
+      "id": "e-mp17k8sb-jipu",
+      "kind": "icon-button",
+      "anchor": {
+        "side": "top-left",
+        "offsetX": 1056,
+        "offsetY": 528
+      },
+      "layer": "base",
+      "visual": {
+        "kind": "icon-button",
+        "label": "Button",
+        "shape": "rounded-rect",
+        "width": 96,
+        "height": 48,
+        "fillColor": "#3b82f6",
         "textColor": "#ffffff",
         "backgroundAssetId": "square_buttons_19x26",
         "backgroundRegion": "gray_square_button",
