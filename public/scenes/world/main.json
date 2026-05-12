@@ -144,11 +144,11 @@
       "kind": "sprite",
       "role": "well",
       "transform": {
-        "x": 640,
-        "y": 350,
+        "x": 459.071729957806,
+        "y": 528.2278481012659,
         "rotation": 0,
-        "scaleX": 3,
-        "scaleY": 3
+        "scaleX": 1,
+        "scaleY": 1
       },
       "visual": {
         "kind": "sprite",
