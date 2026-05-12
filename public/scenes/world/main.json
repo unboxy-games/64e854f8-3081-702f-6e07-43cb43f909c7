@@ -6,18 +6,29 @@
   "world": {
     "width": 720,
     "height": 1280,
-    "background": { "color": "#06060f" }
+    "background": {
+      "color": "#06060f"
+    }
   },
   "camera": {
     "follow": null,
-    "bounds": { "x": 0, "y": 0, "width": 720, "height": 1280 }
+    "bounds": {
+      "x": 0,
+      "y": 0,
+      "width": 720,
+      "height": 1280
+    }
   },
   "entities": [
     {
       "id": "player",
       "kind": "code-rendered",
       "role": "player",
-      "transform": { "x": 360, "y": 1145, "depth": 3 },
+      "transform": {
+        "x": 295.5863570391875,
+        "y": 1150.5732946298983,
+        "depth": 3
+      },
       "visual": {
         "kind": "code-rendered",
         "script": "src/visuals/player-ship.ts",
@@ -27,7 +38,9 @@
           "wingColor": "#1a5599"
         }
       },
-      "properties": { "speed": 340 }
+      "properties": {
+        "speed": 340
+      }
     }
   ]
 }
