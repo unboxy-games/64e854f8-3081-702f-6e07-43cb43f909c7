@@ -12,6 +12,7 @@ export class GameScene extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private playerSpeed = 200;
   private lastDirection: 'down' | 'up' | 'left' | 'right' = 'down';
+  private wellSprite?: Phaser.GameObjects.Sprite;
 
   constructor() {
     super({ key: 'GameScene' });
@@ -41,10 +42,33 @@ export class GameScene extends Phaser.Scene {
       this.physics.add.existing(playerSprite);
       const body = playerSprite.body as Phaser.Physics.Arcade.Body;
       body.setCollideWorldBounds(true);
-      // Start in idle-down pose
-      playerSprite.play('idle-down', true);
+      // Narrow the physics body to the character's feet (bottom third, centred)
+      body.setSize(body.width * 0.5, body.height * 0.3);
+      body.setOffset(body.width * 0.25, body.height * 0.7);
       // Seed the HUD bar with the player's starting position
       this.registry.set('playerX', playerSprite.x);
+    }
+
+    // Wire the water well — static obstacle + Y-sorted
+    const wellSprite = registry.byRole('well')[0] as Phaser.GameObjects.Sprite | undefined;
+    if (wellSprite) {
+      this.wellSprite = wellSprite;
+      this.physics.add.existing(wellSprite, true); // true = static body
+      const wellBody = wellSprite.body as Phaser.Physics.Arcade.StaticBody;
+      // Collision footprint: lower half of the well, slightly narrower than the visual
+      wellBody.setSize(
+        wellSprite.displayWidth * 0.5,
+        wellSprite.displayHeight * 0.3,
+        true // centre on sprite
+      );
+      // Shift the hitbox down into the base of the well
+      wellBody.y = wellSprite.y + wellSprite.displayHeight * 0.12;
+      wellBody.updateCenter();
+    }
+
+    // Player ↔ well solid collision
+    if (playerSprite && wellSprite) {
+      this.physics.add.collider(playerSprite, wellSprite);
     }
 
     // Spin tween for entity e-mowxj6d4-z3ct
@@ -101,7 +125,10 @@ export class GameScene extends Phaser.Scene {
       this.lastDirection = dir;
       playerSprite.play(`walk-${dir}`, true);
     } else {
-      playerSprite.play(`idle-${this.lastDirection}`, true);
+      // Basic spritesheet has no idle anims — freeze on the last walked frame
+      if (playerSprite.anims.isPlaying) {
+        playerSprite.anims.stop();
+      }
     }
 
     // Update the HUD position bar every frame

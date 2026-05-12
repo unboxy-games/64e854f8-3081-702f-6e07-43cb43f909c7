@@ -121,6 +121,26 @@
       "kind": "atlas",
       "atlasPath": "uploaded/square_buttons_19x26.json",
       "atlasFormat": "json"
+    },
+    {
+      "id": "basic_character_spritesheet",
+      "textureKey": "basic_character_spritesheet",
+      "path": "uploaded/basic_character_spritesheet.png",
+      "kind": "spritesheet",
+      "spriteSheetConfig": { "frameWidth": 48, "frameHeight": 48 },
+      "fps": 8,
+      "animations": [
+        { "name": "walk-down",  "from": 0,  "to": 3,  "loop": true },
+        { "name": "walk-up",   "from": 4,  "to": 7,  "loop": true },
+        { "name": "walk-left", "from": 8,  "to": 11, "loop": true },
+        { "name": "walk-right","from": 12, "to": 15, "loop": true }
+      ]
+    },
+    {
+      "id": "water_well",
+      "textureKey": "water_well",
+      "path": "uploaded/water_well.png",
+      "kind": "image"
     }
   ]
 }

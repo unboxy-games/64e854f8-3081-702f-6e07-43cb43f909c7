@@ -19,6 +19,7 @@
       "height": 720
     }
   },
+  "ySort": true,
   "entities": [
     {
       "id": "e-mow62qjh-i5eu",
@@ -130,13 +131,28 @@
         "x": 408.5400843881857,
         "y": 539.6118143459917,
         "rotation": 0,
-        "scaleX": 3,
-        "scaleY": 3,
-        "depth": 10
+        "scaleX": 2,
+        "scaleY": 2
       },
       "visual": {
         "kind": "sprite",
-        "assetId": "premium_character_spritesheet"
+        "assetId": "basic_character_spritesheet"
+      }
+    },
+    {
+      "id": "e-water-well-001",
+      "kind": "sprite",
+      "role": "well",
+      "transform": {
+        "x": 640,
+        "y": 350,
+        "rotation": 0,
+        "scaleX": 3,
+        "scaleY": 3
+      },
+      "visual": {
+        "kind": "sprite",
+        "assetId": "water_well"
       }
     },
     {
