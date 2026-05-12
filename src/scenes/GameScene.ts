@@ -1,5 +1,10 @@
 import Phaser from 'phaser';
-import { loadWorldScene, getEntityRegistry } from '@unboxy/phaser-sdk';
+import {
+  loadWorldScene,
+  getEntityRegistry,
+  getManifest,
+  applyAssetHitbox,
+} from '@unboxy/phaser-sdk';
 import { GAME_WIDTH, GAME_HEIGHT } from '../config';
 
 /**
@@ -34,6 +39,16 @@ export class GameScene extends Phaser.Scene {
 
     // Load all entities from scene data
     const { registry } = await loadWorldScene(this, this.sceneId);
+    const manifest = getManifest(this);
+
+    // Helper: look up the asset record so we can hand it to applyAssetHitbox.
+    // The slice-1 spawnEntity stashes the assetId on the GO's data manager;
+    // the manifest is loaded by BootScene and accessible via getManifest.
+    const assetFor = (sprite: Phaser.GameObjects.Sprite) => {
+      const id = sprite.getData('entityAssetId') as string | undefined;
+      if (!id || !manifest?.assets) return undefined;
+      return manifest.assets.find((a) => a.id === id);
+    };
 
     // Wire up behavior for the player entity
     const playerSprite = registry.byRole('player')[0] as Phaser.GameObjects.Sprite | undefined;
@@ -42,9 +57,10 @@ export class GameScene extends Phaser.Scene {
       this.physics.add.existing(playerSprite);
       const body = playerSprite.body as Phaser.Physics.Arcade.Body;
       body.setCollideWorldBounds(true);
-      // Narrow the physics body to the character's feet (bottom third, centred)
-      body.setSize(body.width * 0.5, body.height * 0.3);
-      body.setOffset(body.width * 0.25, body.height * 0.7);
+      // Slice 8: apply the vision-derived foot footprint from manifest metadata
+      // instead of hardcoding numbers. Falls through silently if no hitbox set.
+      const playerAsset = assetFor(playerSprite);
+      if (playerAsset) applyAssetHitbox(playerSprite, playerAsset);
       // Seed the HUD bar with the player's starting position
       this.registry.set('playerX', playerSprite.x);
     }
@@ -54,16 +70,9 @@ export class GameScene extends Phaser.Scene {
     if (wellSprite) {
       this.wellSprite = wellSprite;
       this.physics.add.existing(wellSprite, true); // true = static body
-      const wellBody = wellSprite.body as Phaser.Physics.Arcade.StaticBody;
-      // Collision footprint: lower half of the well, slightly narrower than the visual
-      wellBody.setSize(
-        wellSprite.displayWidth * 0.5,
-        wellSprite.displayHeight * 0.3,
-        true // centre on sprite
-      );
-      // Shift the hitbox down into the base of the well
-      wellBody.y = wellSprite.y + wellSprite.displayHeight * 0.12;
-      wellBody.updateCenter();
+      // Slice 8: apply the vision-derived well-base footprint.
+      const wellAsset = assetFor(wellSprite);
+      if (wellAsset) applyAssetHitbox(wellSprite, wellAsset);
     }
 
     // Player ↔ well solid collision
