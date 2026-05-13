@@ -1,0 +1,38 @@
+{
+  "_comment": "Space Invaders — tunable game values",
+  "balance": {
+    "startingLives": 3,
+    "_meta_startingLives": { "min": 1, "max": 5, "step": 1, "label": "Starting Lives" },
+    "gruntHp": 1,
+    "_meta_gruntHp": { "min": 1, "max": 4, "step": 1, "label": "Grunt HP" },
+    "bomberHp": 2,
+    "_meta_bomberHp": { "min": 1, "max": 6, "step": 1, "label": "Bomber HP" },
+    "bossHp": 15,
+    "_meta_bossHp": { "min": 5, "max": 30, "step": 1, "label": "Boss HP" },
+    "gruntScore": 100,
+    "bomberScore": 300,
+    "bossScore": 2000
+  },
+  "controls": {
+    "playerSpeed": 350,
+    "_meta_playerSpeed": { "min": 150, "max": 600, "step": 10, "label": "Player Speed (px/s)" },
+    "shootCooldownMs": 270,
+    "_meta_shootCooldownMs": { "min": 100, "max": 700, "step": 10, "label": "Shoot Cooldown (ms)" }
+  },
+  "physics": {
+    "bulletSpeed": 700,
+    "_meta_bulletSpeed": { "min": 400, "max": 1200, "step": 50, "label": "Player Bullet Speed (px/s)" },
+    "enemyBulletSpeed": 320,
+    "_meta_enemyBulletSpeed": { "min": 160, "max": 600, "step": 20, "label": "Enemy Bullet Speed (px/s)" },
+    "baseEnemySpeed": 55,
+    "_meta_baseEnemySpeed": { "min": 20, "max": 200, "step": 5, "label": "Base Enemy Speed (px/s)" },
+    "enemyDropAmount": 32,
+    "_meta_enemyDropAmount": { "min": 10, "max": 80, "step": 2, "label": "Enemy Drop Distance (px)" }
+  },
+  "difficulty": {
+    "enemyFireIntervalMs": 1500,
+    "_meta_enemyFireIntervalMs": { "min": 400, "max": 3000, "step": 50, "label": "Enemy Fire Interval (ms)" },
+    "bossFireIntervalMs": 700,
+    "_meta_bossFireIntervalMs": { "min": 200, "max": 2000, "step": 50, "label": "Boss Fire Interval (ms)" }
+  }
+}
