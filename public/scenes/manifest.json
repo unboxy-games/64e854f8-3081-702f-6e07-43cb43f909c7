@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "id": "unboxy-game",
-  "title": "Unboxy Game",
+  "id": "space-invaders",
+  "title": "Space Invaders",
   "version": "1.0.0",
   "initialScene": "main",
   "scenes": [
@@ -10,5 +10,107 @@
   "huds": [
     { "id": "game-hud", "file": "hud/game-hud.json" }
   ],
-  "assets": []
+  "assets": [],
+  "prefabs": [
+    {
+      "id": "enemy_grunt",
+      "kind": "code-rendered",
+      "role": "enemy",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-grunt.ts",
+        "width": 50,
+        "height": 40
+      },
+      "physics": {
+        "bodyW": 44,
+        "bodyH": 34,
+        "offsetX": -22,
+        "offsetY": -17,
+        "immovable": true,
+        "collideWorldBounds": false
+      },
+      "properties": { "hp": 1, "scoreValue": 100 }
+    },
+    {
+      "id": "enemy_bomber",
+      "kind": "code-rendered",
+      "role": "enemy",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-bomber.ts",
+        "width": 60,
+        "height": 50
+      },
+      "physics": {
+        "bodyW": 52,
+        "bodyH": 40,
+        "offsetX": -26,
+        "offsetY": -20,
+        "immovable": true,
+        "collideWorldBounds": false
+      },
+      "properties": { "hp": 2, "scoreValue": 300 }
+    },
+    {
+      "id": "enemy_boss",
+      "kind": "code-rendered",
+      "role": "enemy",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-boss.ts",
+        "width": 140,
+        "height": 100
+      },
+      "physics": {
+        "bodyW": 120,
+        "bodyH": 80,
+        "offsetX": -60,
+        "offsetY": -40,
+        "immovable": true,
+        "collideWorldBounds": false
+      },
+      "properties": { "hp": 15, "scoreValue": 2000 }
+    },
+    {
+      "id": "player_bullet",
+      "kind": "code-rendered",
+      "role": "player-bullet",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/player-bullet.ts",
+        "width": 6,
+        "height": 20
+      },
+      "physics": {
+        "bodyW": 6,
+        "bodyH": 20,
+        "offsetX": -3,
+        "offsetY": -10,
+        "velocityY": -700,
+        "collideWorldBounds": false
+      },
+      "properties": {}
+    },
+    {
+      "id": "enemy_bullet",
+      "kind": "code-rendered",
+      "role": "enemy-bullet",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-bullet.ts",
+        "width": 8,
+        "height": 16
+      },
+      "physics": {
+        "bodyW": 8,
+        "bodyH": 16,
+        "offsetX": -4,
+        "offsetY": -8,
+        "velocityY": 480,
+        "collideWorldBounds": false
+      },
+      "properties": {}
+    }
+  ]
 }

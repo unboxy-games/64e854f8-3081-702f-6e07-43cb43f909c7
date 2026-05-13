@@ -4,8 +4,48 @@
   "name": "Game HUD",
   "type": "hud",
   "design": {
-    "designAspectRatio": "16:9",
+    "designAspectRatio": "9:16",
     "safeArea": { "top": 16, "right": 16, "bottom": 16, "left": 16 }
   },
-  "entities": []
+  "entities": [
+    {
+      "id": "score-display",
+      "kind": "text",
+      "anchor": { "side": "top-left", "offsetX": 18, "offsetY": 18 },
+      "visual": {
+        "kind": "text",
+        "source": { "mode": "dynamic", "binding": "score", "prefix": "SCORE\n", "fallback": 0 },
+        "fontSize": 20,
+        "color": "#00eeff",
+        "align": "left",
+        "fontFamily": "monospace"
+      }
+    },
+    {
+      "id": "wave-display",
+      "kind": "text",
+      "anchor": { "side": "top", "offsetX": 0, "offsetY": 20 },
+      "visual": {
+        "kind": "text",
+        "source": { "mode": "dynamic", "binding": "wave", "prefix": "WAVE ", "fallback": 1 },
+        "fontSize": 24,
+        "color": "#ffdd00",
+        "align": "center",
+        "fontFamily": "monospace"
+      }
+    },
+    {
+      "id": "lives-display",
+      "kind": "text",
+      "anchor": { "side": "top-right", "offsetX": -18, "offsetY": 20 },
+      "visual": {
+        "kind": "text",
+        "source": { "mode": "dynamic", "binding": "lives", "prefix": "♥ ", "fallback": 3 },
+        "fontSize": 24,
+        "color": "#ff4466",
+        "align": "right",
+        "fontFamily": "monospace"
+      }
+    }
+  ]
 }

@@ -1,0 +1,30 @@
+{
+  "balance": {
+    "playerSpeed": 340,
+    "fireCooldownMs": 380,
+    "startingLives": 3,
+    "invincibleMs": 2200,
+    "_meta_playerSpeed": { "min": 100, "max": 600, "step": 10, "label": "Player Speed (px/s)" },
+    "_meta_fireCooldownMs": { "min": 100, "max": 800, "step": 50, "label": "Fire Cooldown (ms)" },
+    "_meta_startingLives": { "min": 1, "max": 5, "step": 1, "label": "Starting Lives" },
+    "_meta_invincibleMs": { "min": 500, "max": 4000, "step": 100, "label": "Invincibility Duration (ms)" }
+  },
+  "enemies": {
+    "baseSpeed": 80,
+    "maxSpeed": 280,
+    "dropY": 32,
+    "fireIntervalMs": 1600,
+    "grantHP": 1,
+    "gruntScore": 100,
+    "bomberHP": 2,
+    "bomberScore": 300,
+    "bossHP": 15,
+    "bossScore": 2000,
+    "bossFireIntervalMs": 680,
+    "bossMoveSpeed": 130,
+    "_meta_baseSpeed": { "min": 40, "max": 200, "step": 5, "label": "Enemy Base Speed" },
+    "_meta_fireIntervalMs": { "min": 500, "max": 4000, "step": 100, "label": "Enemy Fire Interval (ms)" },
+    "_meta_bossHP": { "min": 5, "max": 30, "step": 1, "label": "Boss HP" },
+    "_meta_bossFireIntervalMs": { "min": 300, "max": 2000, "step": 50, "label": "Boss Fire Interval (ms)" }
+  }
+}

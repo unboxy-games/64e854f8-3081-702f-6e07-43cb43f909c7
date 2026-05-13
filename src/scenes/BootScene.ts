@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { preloadManifest, getManifest } from '@unboxy/phaser-sdk';
+import { preloadManifest, getManifest, preloadRules } from '@unboxy/phaser-sdk';
 import { GAME_WIDTH, GAME_HEIGHT } from '../config';
 
 /**
@@ -22,9 +22,17 @@ export class BootScene extends Phaser.Scene {
   preload(): void {
     drawLoadingBar(this);
     preloadManifest(this);
+    preloadRules(this);
   }
 
   create(): void {
+    // Create particle texture used by explosion emitters in GameScene
+    const gfx = this.add.graphics();
+    gfx.fillStyle(0xffffff, 1);
+    gfx.fillRect(0, 0, 4, 4);
+    gfx.generateTexture('particle', 4, 4);
+    gfx.destroy();
+
     const manifest = getManifest(this);
     this.scene.start('GameScene', { sceneId: manifest.initialScene });
   }
