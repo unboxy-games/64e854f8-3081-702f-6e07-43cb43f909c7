@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "unboxy-game",
-  "title": "Unboxy Game",
+  "title": "Space Invaders",
   "version": "1.0.0",
   "initialScene": "main",
   "scenes": [
@@ -10,5 +10,49 @@
   "huds": [
     { "id": "game-hud", "file": "hud/game-hud.json" }
   ],
-  "assets": []
+  "assets": [],
+  "prefabs": [
+    {
+      "id": "enemy_grunt",
+      "kind": "code-rendered",
+      "role": "enemy",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-grunt.ts",
+        "width": 44,
+        "height": 40,
+        "params": { "color": "#44ee55", "eyeColor": "#ffff44" }
+      },
+      "physics": { "bodyW": 32, "bodyH": 24, "offsetX": 6, "offsetY": 8 },
+      "properties": { "hp": 1, "scoreValue": 100, "fireRate": 1400 }
+    },
+    {
+      "id": "enemy_bomber",
+      "kind": "code-rendered",
+      "role": "enemy",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-bomber.ts",
+        "width": 58,
+        "height": 48,
+        "params": { "color": "#ff8822", "glowColor": "#ffcc44" }
+      },
+      "physics": { "bodyW": 46, "bodyH": 34, "offsetX": 6, "offsetY": 7 },
+      "properties": { "hp": 2, "scoreValue": 300, "fireRate": 1100 }
+    },
+    {
+      "id": "enemy_boss",
+      "kind": "code-rendered",
+      "role": "enemy",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-boss.ts",
+        "width": 140,
+        "height": 118,
+        "params": { "color": "#cc1133", "eyeColor": "#ff4488", "phase": 1 }
+      },
+      "physics": { "bodyW": 100, "bodyH": 80, "offsetX": 20, "offsetY": 19 },
+      "properties": { "hp": 15, "scoreValue": 2000, "fireRate": 680 }
+    }
+  ]
 }
