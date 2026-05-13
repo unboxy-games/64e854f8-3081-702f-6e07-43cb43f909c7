@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "unboxy-game",
-  "title": "Unboxy Game",
+  "title": "Space Invaders",
   "version": "1.0.0",
   "initialScene": "main",
   "scenes": [
@@ -10,5 +10,77 @@
   "huds": [
     { "id": "game-hud", "file": "hud/game-hud.json" }
   ],
-  "assets": []
+  "assets": [],
+  "prefabs": [
+    {
+      "id": "enemy_grunt",
+      "kind": "code-rendered",
+      "role": "enemy",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-grunt.ts",
+        "width": 44,
+        "height": 40,
+        "params": { "color": "#44ee55", "eyeColor": "#ffff44" }
+      },
+      "physics": { "bodyW": 34, "bodyH": 26, "offsetX": -17, "offsetY": -13 },
+      "properties": { "hp": 1, "scoreValue": 100 }
+    },
+    {
+      "id": "enemy_bomber",
+      "kind": "code-rendered",
+      "role": "enemy",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-bomber.ts",
+        "width": 60,
+        "height": 52,
+        "params": { "color": "#ff8822", "glowColor": "#ffcc44" }
+      },
+      "physics": { "bodyW": 46, "bodyH": 34, "offsetX": -23, "offsetY": -17 },
+      "properties": { "hp": 2, "scoreValue": 300 }
+    },
+    {
+      "id": "enemy_boss",
+      "kind": "code-rendered",
+      "role": "enemy",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-boss.ts",
+        "width": 130,
+        "height": 106,
+        "params": { "color": "#cc1133", "eyeColor": "#ff4488", "phase": 1 }
+      },
+      "physics": { "bodyW": 90, "bodyH": 70, "offsetX": -45, "offsetY": -35 },
+      "properties": { "hp": 15, "scoreValue": 2000 }
+    },
+    {
+      "id": "player_bullet",
+      "kind": "code-rendered",
+      "role": "player_bullet",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/player-bullet.ts",
+        "width": 8,
+        "height": 20,
+        "params": { "color": "#00eeff" }
+      },
+      "physics": { "bodyW": 4, "bodyH": 18, "offsetX": -2, "offsetY": -9 },
+      "properties": { "damage": 1 }
+    },
+    {
+      "id": "enemy_bullet",
+      "kind": "code-rendered",
+      "role": "enemy_bullet",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-bullet.ts",
+        "width": 10,
+        "height": 18,
+        "params": { "color": "#ff4422" }
+      },
+      "physics": { "bodyW": 6, "bodyH": 14, "offsetX": -3, "offsetY": -7 },
+      "properties": { "damage": 1 }
+    }
+  ]
 }

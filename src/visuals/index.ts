@@ -28,5 +28,5 @@ for (const [key, mod] of Object.entries(modules)) {
   // key is './<name>.ts' — turn it into 'src/visuals/<name>.ts'
   const filename = key.replace(/^\.\//, '');
   if (filename === 'index.ts') continue;
-  renderScripts[`src/visuals/${filename}`] = mod;
+  renderScripts[`src/visuals/${filename}`] = mod as RenderScriptModule;
 }

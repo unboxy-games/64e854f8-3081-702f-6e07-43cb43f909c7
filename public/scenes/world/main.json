@@ -4,13 +4,28 @@
   "name": "Main",
   "type": "world",
   "world": {
-    "width": 1280,
-    "height": 720,
-    "background": { "color": "#1a1a2e" }
+    "width": 720,
+    "height": 1280,
+    "background": { "color": "#030310" }
   },
   "camera": {
     "follow": null,
-    "bounds": { "x": 0, "y": 0, "width": 1280, "height": 720 }
+    "bounds": { "x": 0, "y": 0, "width": 720, "height": 1280 }
   },
-  "entities": []
+  "entities": [
+    {
+      "id": "player",
+      "kind": "code-rendered",
+      "role": "player",
+      "transform": { "x": 360, "y": 1150, "scaleX": 1, "scaleY": 1, "angle": 0 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/player-ship.ts",
+        "width": 80,
+        "height": 72,
+        "params": { "color": "#22ddff", "cockpitColor": "#aaffff", "engineColor": "#ff9922" }
+      },
+      "properties": {}
+    }
+  ]
 }
