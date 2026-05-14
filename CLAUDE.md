@@ -36,3 +36,4 @@ Side-scrolling platformer. Player uses arrow keys to move left/right, Space (or 
 
 ## What Changed This Turn
 - Built entire game from scratch (new project): all render scripts, scene data, HUD, GameScene behavior, UIScene simplified
+- Updated @unboxy/phaser-sdk to 0.2.52 (body-offset bug fix for code-rendered entity hitboxes)
