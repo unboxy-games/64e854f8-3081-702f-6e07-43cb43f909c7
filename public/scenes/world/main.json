@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "id": "main",
-  "name": "Main",
+  "name": "Mushroom Kingdom",
   "type": "world",
   "world": {
-    "width": 1280,
+    "width": 4096,
     "height": 720,
-    "background": { "color": "#1a1a2e" }
+    "background": { "color": "#5599ff" }
   },
   "camera": {
     "follow": null,
-    "bounds": { "x": 0, "y": 0, "width": 1280, "height": 720 }
+    "bounds": { "x": 0, "y": 0, "width": 4096, "height": 720 }
   },
   "entities": []
 }
