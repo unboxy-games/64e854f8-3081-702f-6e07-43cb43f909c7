@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "unboxy-game",
-  "title": "Unboxy Game",
+  "title": "Super Jumper",
   "version": "1.0.0",
   "initialScene": "main",
   "scenes": [
@@ -10,5 +10,47 @@
   "huds": [
     { "id": "game-hud", "file": "hud/game-hud.json" }
   ],
-  "assets": []
+  "assets": [],
+  "prefabs": [
+    {
+      "id": "enemy_goomba",
+      "kind": "code-rendered",
+      "role": "enemy",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-goomba.ts",
+        "width": 40,
+        "height": 36,
+        "params": { "bodyColor": "#8b4513", "dead": false }
+      },
+      "physics": {
+        "bodyW": 32,
+        "bodyH": 28
+      },
+      "properties": {
+        "hp": 1,
+        "scoreValue": 200,
+        "speed": 80
+      }
+    },
+    {
+      "id": "coin",
+      "kind": "code-rendered",
+      "role": "coin",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/coin.ts",
+        "width": 24,
+        "height": 24,
+        "params": {}
+      },
+      "physics": {
+        "bodyW": 20,
+        "bodyH": 20
+      },
+      "properties": {
+        "value": 100
+      }
+    }
+  ]
 }

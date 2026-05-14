@@ -1,0 +1,24 @@
+{
+  "physics": {
+    "playerSpeed": 220,
+    "jumpVelocity": 600,
+    "stompBounce": 380,
+    "gravity": 1000,
+    "enemySpeed": 80,
+    "_meta_playerSpeed": { "min": 100, "max": 400, "step": 10, "label": "Player Speed" },
+    "_meta_jumpVelocity": { "min": 300, "max": 900, "step": 25, "label": "Jump Velocity" },
+    "_meta_stompBounce": { "min": 150, "max": 600, "step": 25, "label": "Stomp Bounce" },
+    "_meta_gravity": { "min": 400, "max": 2000, "step": 50, "label": "Gravity" },
+    "_meta_enemySpeed": { "min": 30, "max": 200, "step": 10, "label": "Enemy Walk Speed" }
+  },
+  "balance": {
+    "startLives": 3,
+    "scorePerCoin": 100,
+    "scorePerEnemy": 200,
+    "invincibleMs": 1500,
+    "_meta_startLives": { "min": 1, "max": 5, "step": 1, "label": "Starting Lives" },
+    "_meta_scorePerCoin": { "min": 50, "max": 500, "step": 50, "label": "Score per Coin" },
+    "_meta_scorePerEnemy": { "min": 50, "max": 1000, "step": 50, "label": "Score per Enemy" },
+    "_meta_invincibleMs": { "min": 500, "max": 4000, "step": 250, "label": "Invincibility Duration (ms)" }
+  }
+}

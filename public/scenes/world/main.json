@@ -4,13 +4,209 @@
   "name": "Main",
   "type": "world",
   "world": {
-    "width": 1280,
+    "width": 3840,
     "height": 720,
-    "background": { "color": "#1a1a2e" }
+    "background": { "color": "#5c9de8" }
   },
   "camera": {
     "follow": null,
-    "bounds": { "x": 0, "y": 0, "width": 1280, "height": 720 }
+    "bounds": { "x": 0, "y": 0, "width": 3840, "height": 720 }
   },
-  "entities": []
+  "entities": [
+    {
+      "id": "player",
+      "kind": "code-rendered",
+      "role": "player",
+      "transform": { "x": 150, "y": 672, "depth": 2 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/player.ts",
+        "width": 32,
+        "height": 48,
+        "params": { "hatColor": "#cc2200", "shirtColor": "#cc2200", "overallsColor": "#2244cc" }
+      }
+    },
+    {
+      "id": "ground",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 1920, "y": 708, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 3840,
+        "height": 24,
+        "params": { "w": 3840, "h": 24, "isGround": true }
+      }
+    },
+    {
+      "id": "plat-01",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 440, "y": 560, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 192,
+        "height": 24,
+        "params": { "w": 192, "h": 24, "isGround": false }
+      }
+    },
+    {
+      "id": "plat-02",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 700, "y": 480, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 160,
+        "height": 24,
+        "params": { "w": 160, "h": 24, "isGround": false }
+      }
+    },
+    {
+      "id": "plat-03",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 980, "y": 400, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 208,
+        "height": 24,
+        "params": { "w": 208, "h": 24, "isGround": false }
+      }
+    },
+    {
+      "id": "plat-04",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 1260, "y": 520, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 176,
+        "height": 24,
+        "params": { "w": 176, "h": 24, "isGround": false }
+      }
+    },
+    {
+      "id": "plat-05",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 1540, "y": 440, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 192,
+        "height": 24,
+        "params": { "w": 192, "h": 24, "isGround": false }
+      }
+    },
+    {
+      "id": "plat-06",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 1820, "y": 360, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 160,
+        "height": 24,
+        "params": { "w": 160, "h": 24, "isGround": false }
+      }
+    },
+    {
+      "id": "plat-07",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 2100, "y": 500, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 192,
+        "height": 24,
+        "params": { "w": 192, "h": 24, "isGround": false }
+      }
+    },
+    {
+      "id": "plat-08",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 2380, "y": 420, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 208,
+        "height": 24,
+        "params": { "w": 208, "h": 24, "isGround": false }
+      }
+    },
+    {
+      "id": "plat-09",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 2640, "y": 340, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 160,
+        "height": 24,
+        "params": { "w": 160, "h": 24, "isGround": false }
+      }
+    },
+    {
+      "id": "plat-10",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 2900, "y": 460, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 192,
+        "height": 24,
+        "params": { "w": 192, "h": 24, "isGround": false }
+      }
+    },
+    {
+      "id": "plat-11",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 3160, "y": 380, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 208,
+        "height": 24,
+        "params": { "w": 208, "h": 24, "isGround": false }
+      }
+    },
+    {
+      "id": "plat-12",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 3440, "y": 520, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 192,
+        "height": 24,
+        "params": { "w": 192, "h": 24, "isGround": false }
+      }
+    },
+    {
+      "id": "plat-13",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 3700, "y": 640, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 256,
+        "height": 24,
+        "params": { "w": 256, "h": 24, "isGround": false }
+      }
+    }
+  ]
 }
