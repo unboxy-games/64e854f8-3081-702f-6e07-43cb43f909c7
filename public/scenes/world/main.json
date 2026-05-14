@@ -158,8 +158,8 @@
       "kind": "primitive",
       "role": "platform",
       "transform": {
-        "x": 1060,
-        "y": 260,
+        "x": 969.3805309734513,
+        "y": 337.4041297935103,
         "depth": 1
       },
       "visual": {
@@ -176,8 +176,8 @@
       "kind": "primitive",
       "role": "decoration",
       "transform": {
-        "x": 1060,
-        "y": 250,
+        "x": 970.3244837758111,
+        "y": 329.29203539823004,
         "depth": 2
       },
       "visual": {
@@ -194,8 +194,8 @@
       "kind": "code-rendered",
       "role": "exit",
       "transform": {
-        "x": 1155,
-        "y": 221,
+        "x": 1087.0353982300885,
+        "y": 296.5162241887906,
         "depth": 2
       },
       "visual": {
@@ -245,8 +245,8 @@
       "kind": "code-rendered",
       "role": "coin",
       "transform": {
-        "x": 994.542772861357,
-        "y": 231.43067846607673,
+        "x": 926.5781710914455,
+        "y": 308.834808259587,
         "depth": 4
       },
       "visual": {
