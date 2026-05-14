@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "unboxy-game",
-  "title": "Unboxy Game",
+  "title": "Super Jump Bros",
   "version": "1.0.0",
   "initialScene": "main",
   "scenes": [
@@ -10,5 +10,49 @@
   "huds": [
     { "id": "game-hud", "file": "hud/game-hud.json" }
   ],
-  "assets": []
+  "assets": [],
+  "globals": {
+    "physics": {
+      "gravity": { "x": 0, "y": 700 }
+    }
+  },
+  "prefabs": [
+    {
+      "id": "goomba",
+      "kind": "code-rendered",
+      "role": "enemy",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/goomba.ts",
+        "width": 40,
+        "height": 36,
+        "params": {}
+      },
+      "physics": {
+        "bodyW": 36,
+        "bodyH": 32,
+        "collideWorldBounds": true
+      },
+      "properties": {
+        "hp": 1,
+        "scoreValue": 100,
+        "walkSpeed": 75
+      }
+    },
+    {
+      "id": "coin",
+      "kind": "code-rendered",
+      "role": "coin",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/coin.ts",
+        "width": 24,
+        "height": 24,
+        "params": {}
+      },
+      "properties": {
+        "scoreValue": 50
+      }
+    }
+  ]
 }

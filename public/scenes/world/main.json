@@ -1,16 +1,283 @@
 {
   "schemaVersion": 1,
   "id": "main",
-  "name": "Main",
+  "name": "World 1",
   "type": "world",
   "world": {
-    "width": 1280,
+    "width": 5120,
     "height": 720,
-    "background": { "color": "#1a1a2e" }
+    "background": { "color": "#5ba3d0" }
   },
   "camera": {
-    "follow": null,
-    "bounds": { "x": 0, "y": 0, "width": 1280, "height": 720 }
+    "follow": "player",
+    "smoothing": 0.1,
+    "bounds": { "x": 0, "y": 0, "width": 5120, "height": 720 }
   },
-  "entities": []
+  "entities": [
+    {
+      "id": "player",
+      "kind": "code-rendered",
+      "role": "player",
+      "transform": { "x": 120, "y": 634, "depth": 3 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/player.ts",
+        "width": 32,
+        "height": 48,
+        "params": {}
+      },
+      "physics": {
+        "bodyW": 26,
+        "bodyH": 44,
+        "collideWorldBounds": true
+      }
+    },
+    {
+      "id": "ground",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 2560, "y": 688, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 5120,
+        "height": 64,
+        "params": { "w": 5120, "h": 64 }
+      }
+    },
+    {
+      "id": "platform_01",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 400, "y": 530, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 160,
+        "height": 20,
+        "params": { "w": 160, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_02",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 700, "y": 480, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 180,
+        "height": 20,
+        "params": { "w": 180, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_03",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 1000, "y": 520, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 160,
+        "height": 20,
+        "params": { "w": 160, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_04",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 1280, "y": 460, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 180,
+        "height": 20,
+        "params": { "w": 180, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_05",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 1560, "y": 500, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 200,
+        "height": 20,
+        "params": { "w": 200, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_06",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 1840, "y": 420, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 160,
+        "height": 20,
+        "params": { "w": 160, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_07",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 2120, "y": 470, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 200,
+        "height": 20,
+        "params": { "w": 200, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_08",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 2400, "y": 390, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 180,
+        "height": 20,
+        "params": { "w": 180, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_09",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 2680, "y": 450, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 160,
+        "height": 20,
+        "params": { "w": 160, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_10",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 2960, "y": 360, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 180,
+        "height": 20,
+        "params": { "w": 180, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_11",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 3240, "y": 420, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 200,
+        "height": 20,
+        "params": { "w": 200, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_12",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 3520, "y": 380, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 160,
+        "height": 20,
+        "params": { "w": 160, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_13",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 3800, "y": 450, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 180,
+        "height": 20,
+        "params": { "w": 180, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_14",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 4080, "y": 370, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 160,
+        "height": 20,
+        "params": { "w": 160, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_15",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 4360, "y": 450, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 200,
+        "height": 20,
+        "params": { "w": 200, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_16",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 4640, "y": 380, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 160,
+        "height": 20,
+        "params": { "w": 160, "h": 20 }
+      }
+    },
+    {
+      "id": "platform_17",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 4920, "y": 460, "depth": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform.ts",
+        "width": 160,
+        "height": 20,
+        "params": { "w": 160, "h": 20 }
+      }
+    },
+    {
+      "id": "flag",
+      "kind": "code-rendered",
+      "role": "goal",
+      "transform": { "x": 4990, "y": 596, "depth": 2 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/flag.ts",
+        "width": 50,
+        "height": 120,
+        "params": {}
+      }
+    }
+  ]
 }
