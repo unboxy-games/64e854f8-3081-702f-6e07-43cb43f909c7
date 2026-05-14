@@ -7,5 +7,42 @@
     "designAspectRatio": "16:9",
     "safeArea": { "top": 16, "right": 16, "bottom": 16, "left": 16 }
   },
-  "entities": []
+  "entities": [
+    {
+      "id": "score-text",
+      "kind": "text",
+      "anchor": { "side": "top-left", "offsetX": 20, "offsetY": 20 },
+      "layer": "base",
+      "visual": {
+        "kind": "text",
+        "source": {
+          "mode": "dynamic",
+          "binding": "score",
+          "prefix": "Score: ",
+          "fallback": "0"
+        },
+        "fontSize": 24,
+        "color": "#ffd700",
+        "fontFamily": "sans-serif"
+      }
+    },
+    {
+      "id": "lives-text",
+      "kind": "text",
+      "anchor": { "side": "top-right", "offsetX": -20, "offsetY": 20 },
+      "layer": "base",
+      "visual": {
+        "kind": "text",
+        "source": {
+          "mode": "dynamic",
+          "binding": "lives",
+          "prefix": "Lives: ",
+          "fallback": "3"
+        },
+        "fontSize": 24,
+        "color": "#ff6666",
+        "fontFamily": "sans-serif"
+      }
+    }
+  ]
 }

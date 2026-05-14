@@ -6,11 +6,190 @@
   "world": {
     "width": 1280,
     "height": 720,
-    "background": { "color": "#1a1a2e" }
+    "background": { "color": "#0d1b2a" },
+    "physics": { "gravity": { "y": 800 } }
   },
   "camera": {
     "follow": null,
     "bounds": { "x": 0, "y": 0, "width": 1280, "height": 720 }
   },
-  "entities": []
+  "entities": [
+    {
+      "id": "player",
+      "kind": "code-rendered",
+      "role": "player",
+      "transform": { "x": 80, "y": 620, "depth": 3 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/player.ts",
+        "width": 28,
+        "height": 48,
+        "params": { "bodyColor": "#3a7bd5", "skinColor": "#f4c58a" }
+      }
+    },
+    {
+      "id": "ground",
+      "kind": "primitive",
+      "role": "platform",
+      "transform": { "x": 640, "y": 700, "depth": 1 },
+      "visual": {
+        "kind": "rect",
+        "width": 1280,
+        "height": 28,
+        "fillColor": "#2d4a2c",
+        "strokeColor": "#4a7a3a",
+        "strokeWidth": 2
+      }
+    },
+    {
+      "id": "ground_strip",
+      "kind": "primitive",
+      "role": "decoration",
+      "transform": { "x": 640, "y": 688, "depth": 2 },
+      "visual": {
+        "kind": "rect",
+        "width": 1280,
+        "height": 8,
+        "fillColor": "#4a8a3a",
+        "strokeColor": "#5aaa4a",
+        "strokeWidth": 1
+      }
+    },
+    {
+      "id": "platform_1",
+      "kind": "primitive",
+      "role": "platform",
+      "transform": { "x": 280, "y": 540, "depth": 1 },
+      "visual": {
+        "kind": "rect",
+        "width": 280,
+        "height": 22,
+        "fillColor": "#3a4f5c",
+        "strokeColor": "#5a8090",
+        "strokeWidth": 2
+      }
+    },
+    {
+      "id": "platform_1_top",
+      "kind": "primitive",
+      "role": "decoration",
+      "transform": { "x": 280, "y": 530, "depth": 2 },
+      "visual": {
+        "kind": "rect",
+        "width": 280,
+        "height": 6,
+        "fillColor": "#6aaabb",
+        "strokeColor": "#7accdd",
+        "strokeWidth": 1
+      }
+    },
+    {
+      "id": "platform_2",
+      "kind": "primitive",
+      "role": "platform",
+      "transform": { "x": 650, "y": 400, "depth": 1 },
+      "visual": {
+        "kind": "rect",
+        "width": 260,
+        "height": 22,
+        "fillColor": "#3a4f5c",
+        "strokeColor": "#5a8090",
+        "strokeWidth": 2
+      }
+    },
+    {
+      "id": "platform_2_top",
+      "kind": "primitive",
+      "role": "decoration",
+      "transform": { "x": 650, "y": 390, "depth": 2 },
+      "visual": {
+        "kind": "rect",
+        "width": 260,
+        "height": 6,
+        "fillColor": "#6aaabb",
+        "strokeColor": "#7accdd",
+        "strokeWidth": 1
+      }
+    },
+    {
+      "id": "platform_3",
+      "kind": "primitive",
+      "role": "platform",
+      "transform": { "x": 1060, "y": 260, "depth": 1 },
+      "visual": {
+        "kind": "rect",
+        "width": 280,
+        "height": 22,
+        "fillColor": "#3a4f5c",
+        "strokeColor": "#5a8090",
+        "strokeWidth": 2
+      }
+    },
+    {
+      "id": "platform_3_top",
+      "kind": "primitive",
+      "role": "decoration",
+      "transform": { "x": 1060, "y": 250, "depth": 2 },
+      "visual": {
+        "kind": "rect",
+        "width": 280,
+        "height": 6,
+        "fillColor": "#6aaabb",
+        "strokeColor": "#7accdd",
+        "strokeWidth": 1
+      }
+    },
+    {
+      "id": "exit_door",
+      "kind": "code-rendered",
+      "role": "exit",
+      "transform": { "x": 1155, "y": 221, "depth": 2 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/exit-door.ts",
+        "width": 40,
+        "height": 56,
+        "params": {}
+      }
+    },
+    {
+      "id": "coin_1",
+      "kind": "code-rendered",
+      "role": "coin",
+      "transform": { "x": 220, "y": 490, "depth": 4 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/coin.ts",
+        "width": 24,
+        "height": 24,
+        "params": {}
+      }
+    },
+    {
+      "id": "coin_2",
+      "kind": "code-rendered",
+      "role": "coin",
+      "transform": { "x": 650, "y": 350, "depth": 4 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/coin.ts",
+        "width": 24,
+        "height": 24,
+        "params": {}
+      }
+    },
+    {
+      "id": "coin_3",
+      "kind": "code-rendered",
+      "role": "coin",
+      "transform": { "x": 970, "y": 205, "depth": 4 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/coin.ts",
+        "width": 24,
+        "height": 24,
+        "params": {}
+      }
+    }
+  ]
 }

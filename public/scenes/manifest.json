@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "unboxy-game",
-  "title": "Unboxy Game",
+  "title": "Platformer Quest",
   "version": "1.0.0",
   "initialScene": "main",
   "scenes": [
@@ -10,5 +10,25 @@
   "huds": [
     { "id": "game-hud", "file": "hud/game-hud.json" }
   ],
-  "assets": []
+  "assets": [],
+  "prefabs": [
+    {
+      "id": "enemy_patroller",
+      "kind": "code-rendered",
+      "role": "enemy",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-patroller.ts",
+        "width": 36,
+        "height": 44,
+        "params": { "bodyColor": "#cc3344" }
+      },
+      "physics": {
+        "bodyW": 26,
+        "bodyH": 32,
+        "collideWorldBounds": true
+      },
+      "properties": { "hp": 1, "scoreValue": 200 }
+    }
+  ]
 }
