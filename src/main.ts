@@ -8,6 +8,10 @@ import { renderScripts } from './visuals';
 createUnboxyGame({
   width: GAME_WIDTH,
   height: GAME_HEIGHT,
+  physics: {
+    default: 'arcade',
+    arcade: { gravity: { x: 0, y: 900 }, debug: false },
+  },
   scenes: [BootScene, GameScene, UIScene],
   renderScripts,
 });

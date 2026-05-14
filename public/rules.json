@@ -1,0 +1,14 @@
+{
+  "balance": {
+    "lives": 3,
+    "_meta_lives": { "label": "Starting lives", "min": 1, "max": 5, "step": 1 },
+    "playerSpeed": 220,
+    "_meta_playerSpeed": { "label": "Player speed (px/s)", "min": 100, "max": 400, "step": 10 },
+    "jumpVelocity": 590,
+    "_meta_jumpVelocity": { "label": "Jump velocity", "min": 300, "max": 900, "step": 10 },
+    "enemySpeed": 80,
+    "_meta_enemySpeed": { "label": "Enemy patrol speed (px/s)", "min": 20, "max": 200, "step": 5 },
+    "scorePerCoin": 100,
+    "_meta_scorePerCoin": { "label": "Points per coin", "min": 10, "max": 500, "step": 10 }
+  }
+}

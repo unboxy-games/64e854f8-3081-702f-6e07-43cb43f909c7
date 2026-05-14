@@ -7,5 +7,77 @@
     "designAspectRatio": "16:9",
     "safeArea": { "top": 16, "right": 16, "bottom": 16, "left": 16 }
   },
-  "entities": []
+  "entities": [
+    {
+      "id": "hud-bg-left",
+      "kind": "panel",
+      "anchor": { "side": "top-left", "offsetX": 12, "offsetY": 12 },
+      "layer": "base",
+      "visual": {
+        "kind": "panel",
+        "width": 180,
+        "height": 44,
+        "backgroundColor": "#000000",
+        "backgroundAlpha": 0.55,
+        "borderColor": "#3b82f6",
+        "borderWidth": 2,
+        "borderRadius": 8
+      }
+    },
+    {
+      "id": "score-text",
+      "kind": "text",
+      "anchor": { "side": "top-left", "offsetX": 26, "offsetY": 26 },
+      "layer": "base",
+      "visual": {
+        "kind": "text",
+        "source": { "mode": "dynamic", "binding": "score", "prefix": "Score: ", "fallback": 0 },
+        "fontSize": 22,
+        "color": "#ffffff",
+        "align": "left"
+      }
+    },
+    {
+      "id": "hud-bg-right",
+      "kind": "panel",
+      "anchor": { "side": "top-right", "offsetX": -12, "offsetY": 12 },
+      "layer": "base",
+      "visual": {
+        "kind": "panel",
+        "width": 150,
+        "height": 44,
+        "backgroundColor": "#000000",
+        "backgroundAlpha": 0.55,
+        "borderColor": "#ef4444",
+        "borderWidth": 2,
+        "borderRadius": 8
+      }
+    },
+    {
+      "id": "lives-text",
+      "kind": "text",
+      "anchor": { "side": "top-right", "offsetX": -26, "offsetY": 26 },
+      "layer": "base",
+      "visual": {
+        "kind": "text",
+        "source": { "mode": "dynamic", "binding": "lives", "prefix": "\u2665 Lives: ", "fallback": 3 },
+        "fontSize": 22,
+        "color": "#ff6b6b",
+        "align": "right"
+      }
+    },
+    {
+      "id": "coins-text",
+      "kind": "text",
+      "anchor": { "side": "top", "offsetX": 0, "offsetY": 26 },
+      "layer": "base",
+      "visual": {
+        "kind": "text",
+        "source": { "mode": "dynamic", "binding": "coins", "prefix": "\u25c6 ", "suffix": " / 3", "fallback": 0 },
+        "fontSize": 20,
+        "color": "#ffd700",
+        "align": "center"
+      }
+    }
+  ]
 }

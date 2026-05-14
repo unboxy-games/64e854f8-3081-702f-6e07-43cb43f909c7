@@ -6,11 +6,130 @@
   "world": {
     "width": 1280,
     "height": 720,
-    "background": { "color": "#1a1a2e" }
+    "background": { "color": "#0d1b3a" }
   },
   "camera": {
     "follow": null,
     "bounds": { "x": 0, "y": 0, "width": 1280, "height": 720 }
   },
-  "entities": []
+  "entities": [
+    {
+      "id": "ground",
+      "kind": "primitive",
+      "role": "ground",
+      "transform": { "x": 640, "y": 702, "rotation": 0, "scaleX": 1, "scaleY": 1 },
+      "visual": {
+        "kind": "rect",
+        "width": 1280,
+        "height": 36,
+        "fillColor": "#3d2a1a",
+        "strokeColor": "#5a3e2b",
+        "strokeWidth": 2
+      }
+    },
+    {
+      "id": "platform1",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 260, "y": 540, "rotation": 0, "scaleX": 1, "scaleY": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform-tile.ts",
+        "width": 280,
+        "height": 22,
+        "params": { "width": 280, "height": 22 }
+      }
+    },
+    {
+      "id": "platform2",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 640, "y": 400, "rotation": 0, "scaleX": 1, "scaleY": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform-tile.ts",
+        "width": 280,
+        "height": 22,
+        "params": { "width": 280, "height": 22 }
+      }
+    },
+    {
+      "id": "platform3",
+      "kind": "code-rendered",
+      "role": "platform",
+      "transform": { "x": 1020, "y": 260, "rotation": 0, "scaleX": 1, "scaleY": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/platform-tile.ts",
+        "width": 280,
+        "height": 22,
+        "params": { "width": 280, "height": 22 }
+      }
+    },
+    {
+      "id": "player",
+      "kind": "code-rendered",
+      "role": "player",
+      "transform": { "x": 80, "y": 630, "rotation": 0, "scaleX": 1, "scaleY": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/player-char.ts",
+        "width": 32,
+        "height": 56,
+        "params": { "bodyColor": "#3b82f6", "capColor": "#1e40af" }
+      }
+    },
+    {
+      "id": "coin1",
+      "kind": "code-rendered",
+      "role": "coin",
+      "transform": { "x": 180, "y": 508, "rotation": 0, "scaleX": 1, "scaleY": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/coin-item.ts",
+        "width": 24,
+        "height": 24,
+        "params": {}
+      }
+    },
+    {
+      "id": "coin2",
+      "kind": "code-rendered",
+      "role": "coin",
+      "transform": { "x": 640, "y": 368, "rotation": 0, "scaleX": 1, "scaleY": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/coin-item.ts",
+        "width": 24,
+        "height": 24,
+        "params": {}
+      }
+    },
+    {
+      "id": "coin3",
+      "kind": "code-rendered",
+      "role": "coin",
+      "transform": { "x": 1050, "y": 228, "rotation": 0, "scaleX": 1, "scaleY": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/coin-item.ts",
+        "width": 24,
+        "height": 24,
+        "params": {}
+      }
+    },
+    {
+      "id": "door",
+      "kind": "code-rendered",
+      "role": "door",
+      "transform": { "x": 1160, "y": 222, "rotation": 0, "scaleX": 1, "scaleY": 1 },
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/door-exit.ts",
+        "width": 50,
+        "height": 72,
+        "params": { "open": false }
+      }
+    }
+  ]
 }
