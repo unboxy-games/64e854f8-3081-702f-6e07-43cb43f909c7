@@ -6,32 +6,54 @@
   "world": {
     "width": 1280,
     "height": 720,
-    "background": { "color": "#0d1b2a" },
-    "physics": { "gravity": { "y": 800 } }
+    "background": {
+      "color": "#0d1b2a"
+    },
+    "physics": {
+      "gravity": {
+        "y": 800
+      }
+    }
   },
   "camera": {
     "follow": null,
-    "bounds": { "x": 0, "y": 0, "width": 1280, "height": 720 }
+    "bounds": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720
+    }
   },
   "entities": [
     {
       "id": "player",
       "kind": "code-rendered",
       "role": "player",
-      "transform": { "x": 80, "y": 620, "depth": 3 },
+      "transform": {
+        "x": 80,
+        "y": 620,
+        "depth": 3
+      },
       "visual": {
         "kind": "code-rendered",
         "script": "src/visuals/player.ts",
         "width": 28,
         "height": 48,
-        "params": { "bodyColor": "#3a7bd5", "skinColor": "#f4c58a" }
+        "params": {
+          "bodyColor": "#3a7bd5",
+          "skinColor": "#f4c58a"
+        }
       }
     },
     {
       "id": "ground",
       "kind": "primitive",
       "role": "platform",
-      "transform": { "x": 640, "y": 700, "depth": 1 },
+      "transform": {
+        "x": 640,
+        "y": 700,
+        "depth": 1
+      },
       "visual": {
         "kind": "rect",
         "width": 1280,
@@ -45,7 +67,11 @@
       "id": "ground_strip",
       "kind": "primitive",
       "role": "decoration",
-      "transform": { "x": 640, "y": 688, "depth": 2 },
+      "transform": {
+        "x": 640,
+        "y": 688,
+        "depth": 2
+      },
       "visual": {
         "kind": "rect",
         "width": 1280,
@@ -59,7 +85,11 @@
       "id": "platform_1",
       "kind": "primitive",
       "role": "platform",
-      "transform": { "x": 280, "y": 540, "depth": 1 },
+      "transform": {
+        "x": 280,
+        "y": 540,
+        "depth": 1
+      },
       "visual": {
         "kind": "rect",
         "width": 280,
@@ -73,7 +103,11 @@
       "id": "platform_1_top",
       "kind": "primitive",
       "role": "decoration",
-      "transform": { "x": 280, "y": 530, "depth": 2 },
+      "transform": {
+        "x": 280,
+        "y": 530,
+        "depth": 2
+      },
       "visual": {
         "kind": "rect",
         "width": 280,
@@ -87,7 +121,11 @@
       "id": "platform_2",
       "kind": "primitive",
       "role": "platform",
-      "transform": { "x": 650, "y": 400, "depth": 1 },
+      "transform": {
+        "x": 650,
+        "y": 400,
+        "depth": 1
+      },
       "visual": {
         "kind": "rect",
         "width": 260,
@@ -101,7 +139,11 @@
       "id": "platform_2_top",
       "kind": "primitive",
       "role": "decoration",
-      "transform": { "x": 650, "y": 390, "depth": 2 },
+      "transform": {
+        "x": 650,
+        "y": 390,
+        "depth": 2
+      },
       "visual": {
         "kind": "rect",
         "width": 260,
@@ -115,7 +157,11 @@
       "id": "platform_3",
       "kind": "primitive",
       "role": "platform",
-      "transform": { "x": 1060, "y": 260, "depth": 1 },
+      "transform": {
+        "x": 1060,
+        "y": 260,
+        "depth": 1
+      },
       "visual": {
         "kind": "rect",
         "width": 280,
@@ -129,7 +175,11 @@
       "id": "platform_3_top",
       "kind": "primitive",
       "role": "decoration",
-      "transform": { "x": 1060, "y": 250, "depth": 2 },
+      "transform": {
+        "x": 1060,
+        "y": 250,
+        "depth": 2
+      },
       "visual": {
         "kind": "rect",
         "width": 280,
@@ -143,7 +193,11 @@
       "id": "exit_door",
       "kind": "code-rendered",
       "role": "exit",
-      "transform": { "x": 1155, "y": 221, "depth": 2 },
+      "transform": {
+        "x": 1155,
+        "y": 221,
+        "depth": 2
+      },
       "visual": {
         "kind": "code-rendered",
         "script": "src/visuals/exit-door.ts",
@@ -156,7 +210,11 @@
       "id": "coin_1",
       "kind": "code-rendered",
       "role": "coin",
-      "transform": { "x": 220, "y": 490, "depth": 4 },
+      "transform": {
+        "x": 207.72861356932154,
+        "y": 511.71091445427726,
+        "depth": 4
+      },
       "visual": {
         "kind": "code-rendered",
         "script": "src/visuals/coin.ts",
@@ -169,7 +227,11 @@
       "id": "coin_2",
       "kind": "code-rendered",
       "role": "coin",
-      "transform": { "x": 650, "y": 350, "depth": 4 },
+      "transform": {
+        "x": 627.3451327433628,
+        "y": 366.9911504424779,
+        "depth": 4
+      },
       "visual": {
         "kind": "code-rendered",
         "script": "src/visuals/coin.ts",
@@ -182,7 +244,11 @@
       "id": "coin_3",
       "kind": "code-rendered",
       "role": "coin",
-      "transform": { "x": 970, "y": 205, "depth": 4 },
+      "transform": {
+        "x": 994.542772861357,
+        "y": 231.43067846607673,
+        "depth": 4
+      },
       "visual": {
         "kind": "code-rendered",
         "script": "src/visuals/coin.ts",
