@@ -15,6 +15,7 @@ export class GameScene extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private spaceKey!: Phaser.Input.Keyboard.Key;
   private restartKey!: Phaser.Input.Keyboard.Key;
+  private pauseKey!: Phaser.Input.Keyboard.Key;
 
   private bullets!: Phaser.Physics.Arcade.Group;
   private enemies!: Phaser.Physics.Arcade.Group;
@@ -24,6 +25,7 @@ export class GameScene extends Phaser.Scene {
   private score = 0;
   private lives = 3;
   private isGameOver = false;
+  private isPaused = false;
   private waveNumber = 0;
   private lastShotTime = 0;
   private wavePending = false;
@@ -41,6 +43,9 @@ export class GameScene extends Phaser.Scene {
   private goScoreText!: Phaser.GameObjects.Text;
   private goWaveText!: Phaser.GameObjects.Text;
 
+  // Pause UI
+  private pauseContainer!: Phaser.GameObjects.Container;
+
   constructor() {
     super({ key: 'GameScene' });
   }
@@ -55,6 +60,7 @@ export class GameScene extends Phaser.Scene {
     this.buildInput();
     this.buildCollisions();
     this.buildGameOverUI();
+    this.buildPauseUI();
 
     // Launch HUD overlay
     if (!this.scene.isActive('UIScene')) {
@@ -233,6 +239,7 @@ export class GameScene extends Phaser.Scene {
     this.cursors = this.input.keyboard!.createCursorKeys();
     this.spaceKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     this.restartKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+    this.pauseKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
   }
 
   private buildCollisions(): void {
@@ -315,6 +322,54 @@ export class GameScene extends Phaser.Scene {
     this.gameOverContainer.setDepth(1000).setVisible(false);
   }
 
+  private buildPauseUI(): void {
+    // Semi-transparent dark veil
+    const bg = this.add
+      .rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000022, 0.72)
+      .setOrigin(0, 0);
+
+    // Decorative cyan border bars
+    const topBar = this.add.rectangle(0, 0, GAME_WIDTH, 5, 0x00ccff, 1).setOrigin(0, 0);
+    const botBar = this.add.rectangle(0, GAME_HEIGHT - 5, GAME_WIDTH, 5, 0x00ccff, 1).setOrigin(0, 0);
+
+    // "II" pause icon drawn as two rectangles
+    const iconL = this.add.rectangle(GAME_WIDTH / 2 - 22, GAME_HEIGHT / 2 - 118, 18, 56, 0x00ccff);
+    const iconR = this.add.rectangle(GAME_WIDTH / 2 + 22, GAME_HEIGHT / 2 - 118, 18, 56, 0x00ccff);
+
+    const title = this.add
+      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 52, 'PAUSED', {
+        fontSize: '72px',
+        color: '#00ccff',
+        fontFamily: 'monospace',
+        fontStyle: 'bold',
+        stroke: '#003344',
+        strokeThickness: 6,
+      })
+      .setOrigin(0.5);
+
+    const hint = this.add
+      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 48, '[ ESC ]  RESUME', {
+        fontSize: '28px',
+        color: '#ffffff',
+        fontFamily: 'monospace',
+        fontStyle: 'bold',
+      })
+      .setOrigin(0.5);
+
+    const subHint = this.add
+      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 94, '[ R ]  RESTART', {
+        fontSize: '20px',
+        color: '#778899',
+        fontFamily: 'monospace',
+      })
+      .setOrigin(0.5);
+
+    this.pauseContainer = this.add.container(0, 0, [
+      bg, topBar, botBar, iconL, iconR, title, hint, subHint,
+    ]);
+    this.pauseContainer.setDepth(900).setVisible(false);
+  }
+
   // ─── Wave spawning ───────────────────────────────────────────────────────
 
   private spawnWave(): void {
@@ -382,16 +437,30 @@ export class GameScene extends Phaser.Scene {
   // ─── Main loop ───────────────────────────────────────────────────────────
 
   update(time: number, _delta: number): void {
-    // Scrolling starfield
-    for (const star of this.stars) {
-      star.rect.y += star.speed * 0.016;
-      if (star.rect.y > GAME_HEIGHT + 3) {
-        star.rect.y = -3;
-        star.rect.x = Phaser.Math.Between(0, GAME_WIDTH);
+    // ── Pause toggle — always available (not during game over) ──
+    if (!this.isGameOver && Phaser.Input.Keyboard.JustDown(this.pauseKey)) {
+      if (this.isPaused) this.resumeGame();
+      else this.pauseGame();
+    }
+
+    // Scrolling starfield — only when not paused
+    if (!this.isPaused) {
+      for (const star of this.stars) {
+        star.rect.y += star.speed * 0.016;
+        if (star.rect.y > GAME_HEIGHT + 3) {
+          star.rect.y = -3;
+          star.rect.x = Phaser.Math.Between(0, GAME_WIDTH);
+        }
       }
     }
 
     if (this.isGameOver) {
+      if (Phaser.Input.Keyboard.JustDown(this.restartKey)) this.restartGame();
+      return;
+    }
+
+    if (this.isPaused) {
+      // While paused, allow restart shortcut too
       if (Phaser.Input.Keyboard.JustDown(this.restartKey)) this.restartGame();
       return;
     }
@@ -691,6 +760,28 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
+  // ─── Pause / resume ──────────────────────────────────────────────────────
+
+  private pauseGame(): void {
+    this.isPaused = true;
+    this.physics.pause();
+    if (this.enemyShootTimer) this.enemyShootTimer.paused = true;
+    this.pauseContainer.setVisible(true).setAlpha(0);
+    this.tweens.add({ targets: this.pauseContainer, alpha: 1, duration: 180 });
+  }
+
+  private resumeGame(): void {
+    this.isPaused = false;
+    this.physics.resume();
+    if (this.enemyShootTimer) this.enemyShootTimer.paused = false;
+    this.tweens.add({
+      targets: this.pauseContainer,
+      alpha: 0,
+      duration: 140,
+      onComplete: () => this.pauseContainer.setVisible(false),
+    });
+  }
+
   // ─── Game over / restart ─────────────────────────────────────────────────
 
   private triggerGameOver(): void {
@@ -718,6 +809,7 @@ export class GameScene extends Phaser.Scene {
 
   private restartGame(): void {
     this.isGameOver = false;
+    this.isPaused = false;
     this.score = 0;
     this.lives = 3;
     this.waveNumber = 0;
@@ -737,6 +829,7 @@ export class GameScene extends Phaser.Scene {
     this.player.setVisible(true).setAlpha(1);
 
     this.gameOverContainer.setVisible(false);
+    this.pauseContainer.setVisible(false);
     this.physics.resume();
 
     this.events.emit('updateScore', 0);

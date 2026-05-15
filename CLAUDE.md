@@ -9,7 +9,8 @@ The player pilots a blue fighter ship at the bottom of the screen, blasting wave
 ## Controls
 - **Arrow Left / Right** — move player ship
 - **Spacebar** — fire bullet
-- **R** — restart after Game Over
+- **Escape** — pause / resume
+- **R** — restart (Game Over screen or while paused)
 
 ## Features Implemented
 - **Player ship** — rendered with Graphics API (blue fighter with cyan wing tips, orange engine glow, cannon)
@@ -36,3 +37,4 @@ The player pilots a blue fighter ship at the bottom of the screen, blasting wave
 - Built the entire game from scratch (fresh workspace)
 - Fixed tsconfig.json to include `"types": ["vite/client"]` to resolve pre-existing `import.meta.glob` TypeScript error
 - Added enemy shooting: red/orange bolts, column-bottom-shooter selection, escalating rate per wave, hit-flash feedback, restart cleanup
+- Added pause: Escape toggles pause overlay; freezes physics + enemy shoot timer + star scroll; R restarts from paused state too
