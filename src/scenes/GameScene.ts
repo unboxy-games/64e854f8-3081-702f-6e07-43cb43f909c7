@@ -6,6 +6,7 @@ const BULLET_SPEED = 700;
 const BULLET_COOLDOWN = 200;
 const ENEMY_MARGIN = 54;
 const ENEMY_DROP = 24;
+const ENEMY_BULLET_SPEED = 320;
 
 export class GameScene extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
@@ -17,6 +18,8 @@ export class GameScene extends Phaser.Scene {
 
   private bullets!: Phaser.Physics.Arcade.Group;
   private enemies!: Phaser.Physics.Arcade.Group;
+  private enemyBullets!: Phaser.Physics.Arcade.Group;
+  private enemyShootTimer!: Phaser.Time.TimerEvent;
 
   private score = 0;
   private lives = 3;
@@ -74,6 +77,7 @@ export class GameScene extends Phaser.Scene {
     this.makeBulletTexture();
     for (let i = 0; i < 4; i++) this.makeEnemyTexture(i);
     this.makeSparkTexture();
+    this.makeEnemyBulletTexture();
   }
 
   private makePlayerTexture(): void {
@@ -164,6 +168,22 @@ export class GameScene extends Phaser.Scene {
     g.destroy();
   }
 
+  private makeEnemyBulletTexture(): void {
+    if (this.textures.exists('enemy-bullet')) return;
+    const g = this.add.graphics().setVisible(false);
+    // Outer glow
+    g.fillStyle(0xff4400);
+    g.fillRect(1, 0, 6, 18);
+    // Bright core
+    g.fillStyle(0xffcc00);
+    g.fillRect(2, 2, 4, 10);
+    // Hot tip
+    g.fillStyle(0xffffff);
+    g.fillRect(3, 12, 2, 4);
+    g.generateTexture('enemy-bullet', 8, 18);
+    g.destroy();
+  }
+
   // ─── Scene construction ──────────────────────────────────────────────────
 
   private buildStarfield(): void {
@@ -206,6 +226,7 @@ export class GameScene extends Phaser.Scene {
   private buildGroups(): void {
     this.bullets = this.physics.add.group({ defaultKey: 'bullet', maxSize: 15 });
     this.enemies = this.physics.add.group();
+    this.enemyBullets = this.physics.add.group({ defaultKey: 'enemy-bullet', maxSize: 20 });
   }
 
   private buildInput(): void {
@@ -226,6 +247,13 @@ export class GameScene extends Phaser.Scene {
       this.player,
       this.enemies,
       this.onPlayerHitEnemy as Phaser.Types.Physics.Arcade.ArcadePhysicsCallback,
+      undefined,
+      this
+    );
+    this.physics.add.overlap(
+      this.enemyBullets,
+      this.player,
+      this.onEnemyBulletHitPlayer as Phaser.Types.Physics.Arcade.ArcadePhysicsCallback,
       undefined,
       this
     );
@@ -295,6 +323,16 @@ export class GameScene extends Phaser.Scene {
     this.formationSpeed = Math.min(50 + (this.waveNumber - 1) * 14, 200);
     this.flipCooldown = 0;
     this.wavePending = false;
+
+    // Schedule enemy shooting — faster every wave (floor at 500 ms)
+    if (this.enemyShootTimer) this.enemyShootTimer.remove();
+    const shootInterval = Math.max(500, 1800 - (this.waveNumber - 1) * 120);
+    this.enemyShootTimer = this.time.addEvent({
+      delay: shootInterval,
+      loop: true,
+      callback: this.fireEnemyBullet,
+      callbackScope: this,
+    });
 
     const cols = Math.min(10, 6 + Math.floor((this.waveNumber - 1) / 2));
     const rows = Math.min(5, 2 + Math.floor((this.waveNumber - 1) / 3));
@@ -379,6 +417,15 @@ export class GameScene extends Phaser.Scene {
       }
     });
 
+    // ── Cull off-screen enemy bullets ──
+    this.enemyBullets.getChildren().forEach((b) => {
+      const blt = b as Phaser.Physics.Arcade.Image;
+      if (blt.active && blt.y > GAME_HEIGHT + 20) {
+        this.enemyBullets.killAndHide(blt);
+        (blt.body as Phaser.Physics.Arcade.Body).stop();
+      }
+    });
+
     // ── Enemy formation ──
     this.updateFormation(time);
 
@@ -420,6 +467,94 @@ export class GameScene extends Phaser.Scene {
       y: flash.y - 14,
       duration: 90,
       onComplete: () => flash.destroy(),
+    });
+  }
+
+  private fireEnemyBullet(): void {
+    if (this.isGameOver) return;
+
+    // Collect active enemies and bucket them by column (approximate X bins of 60 px)
+    const active = this.enemies.getChildren().filter((e) =>
+      (e as Phaser.Physics.Arcade.Sprite).active
+    ) as Phaser.Physics.Arcade.Sprite[];
+    if (active.length === 0) return;
+
+    // Build column map: bin x -> lowest enemy (highest y)
+    const colMap = new Map<number, Phaser.Physics.Arcade.Sprite>();
+    for (const enemy of active) {
+      const bin = Math.round(enemy.x / 60);
+      const prev = colMap.get(bin);
+      if (!prev || enemy.y > prev.y) colMap.set(bin, enemy);
+    }
+
+    // Pick a random column shooter
+    const shooters = Array.from(colMap.values());
+    const shooter = shooters[Phaser.Math.Between(0, shooters.length - 1)];
+
+    const bx = shooter.x;
+    const by = shooter.y + 26; // just below the gun barrel tip
+    const bullet = this.enemyBullets.get(bx, by, 'enemy-bullet') as Phaser.Physics.Arcade.Image | null;
+    if (!bullet) return;
+    bullet.setActive(true).setVisible(true).setDepth(4);
+    const body = bullet.body as Phaser.Physics.Arcade.Body;
+    body.reset(bx, by);
+    body.setVelocityY(ENEMY_BULLET_SPEED);
+
+    // Small muzzle flash at the enemy barrel
+    const flash = this.add.rectangle(bx, by + 6, 6, 10, 0xff6600).setDepth(5).setAlpha(0.9);
+    this.tweens.add({
+      targets: flash,
+      alpha: 0,
+      scaleY: 2,
+      y: flash.y + 10,
+      duration: 80,
+      onComplete: () => flash.destroy(),
+    });
+  }
+
+  private onEnemyBulletHitPlayer(
+    _playerObj: Phaser.Types.Physics.Arcade.GameObjectWithBody,
+    bulletObj: Phaser.Types.Physics.Arcade.GameObjectWithBody
+  ): void {
+    if (this.playerInvincible || this.isGameOver) return;
+
+    const bullet = bulletObj as Phaser.Physics.Arcade.Image;
+    this.enemyBullets.killAndHide(bullet);
+    (bullet.body as Phaser.Physics.Arcade.Body).stop();
+
+    this.lives = Math.max(0, this.lives - 1);
+    this.events.emit('updateLives', this.lives);
+
+    if (this.lives <= 0) {
+      this.triggerGameOver();
+      return;
+    }
+
+    // Small hit flash at player position
+    const flash = this.add
+      .rectangle(this.player.x, this.player.y, 90, 60, 0xff4400, 0.55)
+      .setDepth(6);
+    this.tweens.add({
+      targets: flash,
+      alpha: 0,
+      duration: 130,
+      onComplete: () => flash.destroy(),
+    });
+
+    // Flash invincibility
+    this.playerInvincible = true;
+    this.tweens.add({
+      targets: this.player,
+      alpha: 0.15,
+      duration: 90,
+      yoyo: true,
+      repeat: 9,
+      onComplete: () => {
+        if (this.player?.active) {
+          this.player.setAlpha(1);
+          this.playerInvincible = false;
+        }
+      },
     });
   }
 
@@ -595,6 +730,8 @@ export class GameScene extends Phaser.Scene {
 
     this.enemies.clear(true, true);
     this.bullets.clear(true, true);
+    this.enemyBullets.clear(true, true);
+    if (this.enemyShootTimer) this.enemyShootTimer.remove();
 
     this.player.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - 80);
     this.player.setVisible(true).setAlpha(1);
