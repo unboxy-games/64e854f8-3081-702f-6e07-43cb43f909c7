@@ -29,4 +29,5 @@ Core mechanic: Player ship at bottom moves left/right (←/→ or A/D), shoots u
 - **Rules**: `public/rules.json` — all tunables annotated with `_meta_` for editor sliders
 
 ## What changed this turn
-- Built entire game from scratch: 6 visual scripts, full GameScene with 3-wave system, world scene, manifest prefabs, rules.json
+- Fixed player hitbox: moved physics body spec to world scene JSON (`"physics": { "bodyW": 44, "bodyH": 40 }`); SDK applies correct origin-aware offset at spawn; removed manual `physics.add.existing` / `setSize` / `setOffset` from `setupPlayer()` (kept `setCollideWorldBounds`)
+- Removed debug physics overlay (`arcade: { debug: true }`) from game config

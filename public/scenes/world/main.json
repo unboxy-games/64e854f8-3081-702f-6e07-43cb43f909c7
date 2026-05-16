@@ -42,6 +42,7 @@
           "engineColor": "#ff9922"
         }
       },
+      "physics": { "bodyW": 44, "bodyH": 40 },
       "properties": {}
     }
   ]

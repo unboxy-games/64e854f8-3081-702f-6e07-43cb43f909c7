@@ -138,13 +138,9 @@ export class GameScene extends Phaser.Scene {
     this.player = registry.byRole('player')[0] as Phaser.GameObjects.Graphics;
     this.player.setDepth(3);
 
-    this.physics.add.existing(this.player);
+    // SDK applies physics body (bodyW/bodyH) at spawn from world scene data;
+    // we just grab the already-created body and enable world-bounds clamping.
     this.playerBody = this.player.body as Phaser.Physics.Arcade.Body;
-
-    // Tight hitbox centered on the 60×70 visual
-    const bw = 44, bh = 40, vw = 60, vh = 70;
-    this.playerBody.setSize(bw, bh);
-    this.playerBody.setOffset((vw - bw) / 2, (vh - bh) / 2);
     this.playerBody.setCollideWorldBounds(true);
   }
 
