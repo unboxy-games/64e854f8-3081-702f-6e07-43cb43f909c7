@@ -35,7 +35,7 @@
         }
       },
       "physics": {
-        "bodyW": 34,
+        "bodyW": 60,
         "bodyH": 26
       },
       "properties": {
