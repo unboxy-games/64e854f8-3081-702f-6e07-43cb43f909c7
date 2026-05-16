@@ -10,4 +10,6 @@ createUnboxyGame({
   height: GAME_HEIGHT,
   scenes: [BootScene, GameScene, UIScene],
   renderScripts,
+  // TEMP debug: visualize arcade bodies (green rects). Remove when done.
+  physics: { default: 'arcade', arcade: { debug: true } },
 });
