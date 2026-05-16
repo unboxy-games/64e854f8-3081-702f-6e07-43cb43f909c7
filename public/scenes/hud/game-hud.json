@@ -230,6 +230,22 @@
         "backgroundRegion": "gray_square_button",
         "backgroundFrame": null
       }
+    },
+    {
+      "id": "e-mp8qqkqj-8pcj",
+      "kind": "image",
+      "anchor": {
+        "side": "top-left",
+        "offsetX": 280,
+        "offsetY": 368
+      },
+      "layer": "base",
+      "visual": {
+        "kind": "image",
+        "assetId": "a_cat_with_gun_0zre2",
+        "width": 64,
+        "height": 64
+      }
     }
   ]
 }
