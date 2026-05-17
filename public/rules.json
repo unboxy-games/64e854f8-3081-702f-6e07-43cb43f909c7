@@ -1,6 +1,6 @@
 {
   "balance": {
-    "startingLives": 3,
+    "startingLives": 5,
     "_meta_startingLives": {
       "label": "Starting lives",
       "min": 1,
