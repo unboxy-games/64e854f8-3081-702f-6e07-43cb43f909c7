@@ -7,7 +7,7 @@
       "max": 9,
       "step": 1
     },
-    "gruntHp": 1,
+    "gruntHp": 2,
     "_meta_gruntHp": {
       "label": "Grunt HP",
       "min": 1,
@@ -66,7 +66,7 @@
       "max": 4000,
       "step": 50
     },
-    "bossFireIntervalMs": 700,
+    "bossFireIntervalMs": 1000,
     "_meta_bossFireIntervalMs": {
       "label": "Boss fire interval (ms)",
       "min": 200,

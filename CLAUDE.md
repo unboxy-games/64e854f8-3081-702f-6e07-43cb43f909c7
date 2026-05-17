@@ -29,11 +29,6 @@ Core mechanic: Player ship at bottom moves left/right (←/→ or A/D), shoots u
 - **Rules**: `public/rules.json` — all tunables annotated with `_meta_` for editor sliders
 
 ## What changed this turn
-- Wired `public/rules.json` for live editor control of all major tunables
-- `rules.json` structure: `balance.*` namespace holds startingLives, playerSpeed, playerShootCooldownMs, playerBulletVelocity, enemyBaseSpeed, enemyFireIntervalMs, bossFireIntervalMs, enemyBulletVelocity, enemyDropAmount, and HP/score values; `winCondition.bossWave` controls which wave triggers the boss
-- `BootScene.preload()` now calls `preloadRules(this)` so the cache is ready before GameScene starts
-- `GameScene.init()` reads all tunables via `getRule(this, 'path', fallback)` on every scene (re)start — startingLives is boot-time only (requires restart to take effect)
-- `GameScene.subscribeRules()` (called from `create()`) sets up `onRuleChange` subscriptions for all live-editable values: playerSpeed, shootCooldown, playerBulletVelocity, enemyBulletVelocity, enemyFireIntervalMs, bossFireIntervalMs, enemyBaseSpeed; subscriptions are cleaned up on SHUTDOWN
-- `firePlayerBullet()` overrides velocityY from `this.playerBulletVelocity` each shot (ignoring the manifest default)
-- `fireEnemyBullet()` uses `this.enemyBulletVelocity` for spread calculation
-- `update()` uses instance fields `playerSpeed`, `shootCooldown`, `enemyFireIntervalMs`/`bossFireIntervalMs` instead of former hardcoded readonly constants
+- `enemy_bullet.properties.damage` is now live in gameplay: `onEnemyBulletHitPlayer` reads `getData('damage')` from the bullet (default 1 if absent) and passes it to `damagePlayer(amount)`
+- `damagePlayer` now accepts an `amount` parameter and subtracts that many lives (clamped to 0); the current manifest value is `damage: 2`, so one enemy bullet costs 2 lives
+- Enemy contact (touch) still deals 1 damage (fixed cost — no damage property on the enemy prefab)

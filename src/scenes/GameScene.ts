@@ -448,8 +448,9 @@ export class GameScene extends Phaser.Scene {
     _player: Phaser.GameObjects.GameObject,
   ): void {
     if (this.invincible || this.gameOverFlag) return;
+    const dmg = (bullet as Phaser.GameObjects.Graphics).getData('damage') ?? 1;
     if (bullet.active) bullet.destroy();
-    this.damagePlayer();
+    this.damagePlayer(dmg);
   }
 
   private onEnemyTouchPlayer(
@@ -461,8 +462,8 @@ export class GameScene extends Phaser.Scene {
     this.damagePlayer();
   }
 
-  private damagePlayer(): void {
-    this.lives--;
+  private damagePlayer(amount = 1): void {
+    this.lives = Math.max(0, this.lives - amount);
     this.refreshHUD();
 
     if (this.lives <= 0) {
