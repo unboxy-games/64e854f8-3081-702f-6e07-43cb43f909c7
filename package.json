@@ -8,7 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@unboxy/phaser-sdk": "^0.2.57",
+    "@unboxy/phaser-sdk": "^0.2.58",
     "phaser": "^3.80.1",
     "phaser3-rex-plugins": "^1.80.0"
   },
