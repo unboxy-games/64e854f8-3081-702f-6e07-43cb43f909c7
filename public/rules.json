@@ -1,38 +1,100 @@
 {
   "balance": {
     "startingLives": 3,
-    "_meta_startingLives": { "label": "Starting lives", "min": 1, "max": 9, "step": 1 },
-
+    "_meta_startingLives": {
+      "label": "Starting lives",
+      "min": 1,
+      "max": 9,
+      "step": 1
+    },
     "gruntHp": 1,
-    "_meta_gruntHp": { "label": "Grunt HP", "min": 1, "max": 4, "step": 1 },
+    "_meta_gruntHp": {
+      "label": "Grunt HP",
+      "min": 1,
+      "max": 4,
+      "step": 1
+    },
     "bomberHp": 2,
-    "_meta_bomberHp": { "label": "Bomber HP", "min": 1, "max": 6, "step": 1 },
+    "_meta_bomberHp": {
+      "label": "Bomber HP",
+      "min": 1,
+      "max": 6,
+      "step": 1
+    },
     "bossHp": 15,
-    "_meta_bossHp": { "label": "Boss HP", "min": 5, "max": 30, "step": 1 },
+    "_meta_bossHp": {
+      "label": "Boss HP",
+      "min": 5,
+      "max": 30,
+      "step": 1
+    },
     "gruntScore": 100,
     "bomberScore": 300,
     "bossScore": 2000,
-
-    "playerSpeed": 350,
-    "_meta_playerSpeed": { "label": "Player speed (px/s)", "min": 50, "max": 800, "step": 10 },
+    "playerSpeed": 700,
+    "_meta_playerSpeed": {
+      "label": "Player speed (px/s)",
+      "min": 50,
+      "max": 800,
+      "step": 10
+    },
     "playerShootCooldownMs": 220,
-    "_meta_playerShootCooldownMs": { "label": "Player fire cooldown (ms)", "min": 50, "max": 800, "step": 10 },
+    "_meta_playerShootCooldownMs": {
+      "label": "Player fire cooldown (ms)",
+      "min": 50,
+      "max": 800,
+      "step": 10
+    },
     "playerBulletVelocity": -700,
-    "_meta_playerBulletVelocity": { "label": "Player bullet velocity (negative = up)", "min": -1500, "max": -100, "step": 10 },
-
+    "_meta_playerBulletVelocity": {
+      "label": "Player bullet velocity (negative = up)",
+      "min": -1500,
+      "max": -100,
+      "step": 10
+    },
     "enemyBaseSpeed": 55,
-    "_meta_enemyBaseSpeed": { "label": "Enemy base speed (px/s)", "min": 10, "max": 200, "step": 5 },
+    "_meta_enemyBaseSpeed": {
+      "label": "Enemy base speed (px/s)",
+      "min": 10,
+      "max": 200,
+      "step": 5
+    },
     "enemyFireIntervalMs": 1200,
-    "_meta_enemyFireIntervalMs": { "label": "Enemy fire interval (ms)", "min": 200, "max": 4000, "step": 50 },
+    "_meta_enemyFireIntervalMs": {
+      "label": "Enemy fire interval (ms)",
+      "min": 200,
+      "max": 4000,
+      "step": 50
+    },
     "bossFireIntervalMs": 700,
-    "_meta_bossFireIntervalMs": { "label": "Boss fire interval (ms)", "min": 200, "max": 2000, "step": 50 },
+    "_meta_bossFireIntervalMs": {
+      "label": "Boss fire interval (ms)",
+      "min": 200,
+      "max": 2000,
+      "step": 50
+    },
     "enemyBulletVelocity": 320,
-    "_meta_enemyBulletVelocity": { "label": "Enemy bullet velocity (down)", "min": 50, "max": 800, "step": 10 },
+    "_meta_enemyBulletVelocity": {
+      "label": "Enemy bullet velocity (down)",
+      "min": 50,
+      "max": 800,
+      "step": 10
+    },
     "enemyDropAmount": 32,
-    "_meta_enemyDropAmount": { "label": "Enemy drop distance per bounce (px)", "min": 10, "max": 80, "step": 2 }
+    "_meta_enemyDropAmount": {
+      "label": "Enemy drop distance per bounce (px)",
+      "min": 10,
+      "max": 80,
+      "step": 2
+    }
   },
   "winCondition": {
     "bossWave": 3,
-    "_meta_bossWave": { "label": "Wave when boss appears", "min": 1, "max": 9, "step": 1 }
+    "_meta_bossWave": {
+      "label": "Wave when boss appears",
+      "min": 1,
+      "max": 9,
+      "step": 1
+    }
   }
 }
