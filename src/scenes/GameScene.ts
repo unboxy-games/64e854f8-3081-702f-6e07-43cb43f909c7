@@ -449,7 +449,7 @@ export class GameScene extends Phaser.Scene {
     _player: Phaser.GameObjects.GameObject,
   ): void {
     if (this.invincible || this.gameOverFlag) return;
-    const dmg = (bullet as Phaser.GameObjects.Graphics).getData('damage') ?? 1;
+    const dmg = (bullet.getData('entityProperties') as { damage?: number } | undefined)?.damage ?? 1;
     if (bullet.active) bullet.destroy();
     this.damagePlayer(dmg);
   }
