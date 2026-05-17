@@ -25,12 +25,17 @@
 - Enemies touching the player zone (y > GAME_HEIGHT - 170) also triggers Game Over
 
 ## Key implementation details
-- `GameScene.ts` — self-contained scene-as-code (no loadWorldScene); all game logic inline
+- `GameScene.ts` — uses `loadWorldScene('main')` + `spawnPrefab`; game logic inline
 - `UIScene.ts` — launched once, listens to `this.registry.events.on('changedata')` for score/lives — survives GameScene.restart()
 - Registry keys: `score` (number), `lives` (number)
 - All visuals drawn with Phaser Graphics API (no external sprites)
 - Collision: manual AABB distance checks (no physics engine)
 - Enemy march stored in `enemies[]` array; each enemy has `{gfx, x, y, alive, row}`
+- Enemy marching moves `gfx.x` / `gfx.y` — no redraw per frame
+
+## Editor-editable entities
+- **Player ship** — scene entity in `public/scenes/world/main.json`; params: `bodyColor`, `cockpitColor`, `engineColor`
+- **Enemy grunts** — 3 prefab types in `manifest.json`: `enemy_grunt_row0` (red), `enemy_grunt_row1` (orange), `enemy_grunt_row2` (green); render script: `src/visuals/enemy-grunt.ts`; params per row: `bodyColor`, `highlightColor`, `darkColor`, `eyeGlowColor`
 
 ## Controls
 - Move: ← → (arrows) or A / D
@@ -38,9 +43,8 @@
 - Retry: SPACE or tap after Game Over / You Win
 
 ## This turn
-- Migrated player ship to a scene entity + render script (`src/visuals/player-ship.ts`)
-- Player is now in `public/scenes/world/main.json` — editable in the visual editor
-- Editable params: `bodyColor`, `cockpitColor`, `engineColor`
-- `GameScene.create()` is now async; calls `loadWorldScene('main')` then retrieves the player from the entity registry
-- Movement/collision/flash all use `this.playerGfx.x` / `this.playerGfx.y` / `setAlpha()` — no manual redraw
-- Fixed `main.json` world dimensions and camera bounds to portrait (720×1280)
+- Migrated enemy grunts to 3 prefab entries in `manifest.json` (one per row palette)
+- Extracted alien drawing to `src/visuals/enemy-grunt.ts` render script (draws at origin)
+- `buildEnemyGrid()` now uses `spawnPrefab(this, 'enemy_grunt_rowN', x, y)`
+- `marchEnemies()` now sets `gfx.x = e.x; gfx.y = e.y` instead of redrawing
+- Removed the inline `drawEnemy()` private method from GameScene

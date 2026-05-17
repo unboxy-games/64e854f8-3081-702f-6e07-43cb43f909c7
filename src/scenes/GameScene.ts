@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { loadWorldScene, getEntityRegistry } from '@unboxy/phaser-sdk';
+import { loadWorldScene, getEntityRegistry, spawnPrefab } from '@unboxy/phaser-sdk';
 import { GAME_WIDTH, GAME_HEIGHT } from '../config';
 
 interface Star {
@@ -132,7 +132,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   // ────────────────────────────────────────────────────────────────
-  //  Enemy grid builder
+  //  Enemy grid builder — uses prefabs so rows are editor-tunable
   // ────────────────────────────────────────────────────────────────
   private buildEnemyGrid(): void {
     const COLS = 6;
@@ -142,77 +142,17 @@ export class GameScene extends Phaser.Scene {
     const START_X = (GAME_WIDTH - (COLS - 1) * SPACE_X) / 2;
     const START_Y = 185;
 
+    const prefabIds = ['enemy_grunt_row0', 'enemy_grunt_row1', 'enemy_grunt_row2'];
+
     for (let row = 0; row < ROWS; row++) {
       for (let col = 0; col < COLS; col++) {
         const x = START_X + col * SPACE_X;
         const y = START_Y + row * SPACE_Y;
-        const gfx = this.add.graphics().setDepth(2);
-        this.drawEnemy(gfx, x, y, row);
+        const gfx = spawnPrefab(this, prefabIds[row], x, y) as Phaser.GameObjects.Graphics;
+        gfx.setDepth(2);
         this.enemies.push({ gfx, x, y, alive: true, row });
       }
     }
-  }
-
-  // ────────────────────────────────────────────────────────────────
-  //  Enemy drawing
-  // ────────────────────────────────────────────────────────────────
-  private drawEnemy(gfx: Phaser.GameObjects.Graphics, x: number, y: number, row: number): void {
-    gfx.clear();
-
-    // Three row colour palettes
-    const palettes = [
-      { body: 0xff2244, highlight: 0xff88aa, dark: 0xaa0022, eyeGlow: 0xff99bb },
-      { body: 0xff8800, highlight: 0xffcc55, dark: 0xaa5500, eyeGlow: 0xffdd88 },
-      { body: 0x22cc55, highlight: 0x88ffaa, dark: 0x118833, eyeGlow: 0xaaffcc },
-    ];
-    const p = palettes[row % palettes.length];
-
-    // Drop shadow
-    gfx.fillStyle(0x000000, 0.25);
-    gfx.fillEllipse(x, y + 20, 40, 10);
-
-    // Main body
-    gfx.fillStyle(p.body, 1);
-    gfx.fillRoundedRect(x - 20, y - 16, 40, 32, 9);
-
-    // Body sheen
-    gfx.fillStyle(p.highlight, 0.28);
-    gfx.fillRoundedRect(x - 15, y - 14, 18, 11, 4);
-
-    // Eyes
-    gfx.fillStyle(0x110000, 1);
-    gfx.fillEllipse(x - 8, y - 4, 12, 11);
-    gfx.fillEllipse(x + 8, y - 4, 12, 11);
-    gfx.fillStyle(p.eyeGlow, 1);
-    gfx.fillEllipse(x - 8, y - 5, 7, 7);
-    gfx.fillEllipse(x + 8, y - 5, 7, 7);
-    gfx.fillStyle(0xffffff, 0.9);
-    gfx.fillCircle(x - 5, y - 7, 2);
-    gfx.fillCircle(x + 11, y - 7, 2);
-
-    // Mouth slot
-    gfx.fillStyle(p.dark, 1);
-    gfx.fillRect(x - 10, y + 7, 20, 5);
-    // Teeth
-    gfx.fillStyle(0xffffff, 1);
-    for (let t = 0; t < 3; t++) {
-      gfx.fillRect(x - 9 + t * 7, y + 7, 5, 5);
-    }
-
-    // Antennae
-    gfx.lineStyle(2, p.body, 1);
-    gfx.strokeLineShape(new Phaser.Geom.Line(x - 9, y - 16, x - 13, y - 28));
-    gfx.strokeLineShape(new Phaser.Geom.Line(x + 9, y - 16, x + 13, y - 28));
-    gfx.fillStyle(p.highlight, 1);
-    gfx.fillCircle(x - 13, y - 28, 4);
-    gfx.fillCircle(x + 13, y - 28, 4);
-
-    // Legs / tentacles
-    gfx.lineStyle(3, p.dark, 1);
-    gfx.strokeLineShape(new Phaser.Geom.Line(x - 14, y + 16, x - 20, y + 30));
-    gfx.strokeLineShape(new Phaser.Geom.Line(x - 5,  y + 16, x - 5,  y + 30));
-    gfx.strokeLineShape(new Phaser.Geom.Line(x + 5,  y + 16, x + 5,  y + 30));
-    gfx.strokeLineShape(new Phaser.Geom.Line(x + 14, y + 16, x + 20, y + 30));
   }
 
   // ────────────────────────────────────────────────────────────────
@@ -350,7 +290,8 @@ export class GameScene extends Phaser.Scene {
       if (!e.alive) continue;
       e.x += this.gridMoveX * this.gridDir;
       if (descend) e.y += this.gridDescendY;
-      this.drawEnemy(e.gfx, e.x, e.y, e.row);
+      e.gfx.x = e.x;
+      e.gfx.y = e.y;
     }
   }
 

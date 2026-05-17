@@ -10,5 +10,61 @@
   "huds": [
     { "id": "game-hud", "file": "hud/game-hud.json" }
   ],
-  "assets": []
+  "assets": [],
+  "prefabs": [
+    {
+      "id": "enemy_grunt_row0",
+      "kind": "code-rendered",
+      "role": "enemy",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-grunt.ts",
+        "width": 44,
+        "height": 62,
+        "params": {
+          "bodyColor": "#ff2244",
+          "highlightColor": "#ff88aa",
+          "darkColor": "#aa0022",
+          "eyeGlowColor": "#ff99bb"
+        }
+      },
+      "properties": {}
+    },
+    {
+      "id": "enemy_grunt_row1",
+      "kind": "code-rendered",
+      "role": "enemy",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-grunt.ts",
+        "width": 44,
+        "height": 62,
+        "params": {
+          "bodyColor": "#ff8800",
+          "highlightColor": "#ffcc55",
+          "darkColor": "#aa5500",
+          "eyeGlowColor": "#ffdd88"
+        }
+      },
+      "properties": {}
+    },
+    {
+      "id": "enemy_grunt_row2",
+      "kind": "code-rendered",
+      "role": "enemy",
+      "visual": {
+        "kind": "code-rendered",
+        "script": "src/visuals/enemy-grunt.ts",
+        "width": 44,
+        "height": 62,
+        "params": {
+          "bodyColor": "#22cc55",
+          "highlightColor": "#88ffaa",
+          "darkColor": "#118833",
+          "eyeGlowColor": "#aaffcc"
+        }
+      },
+      "properties": {}
+    }
+  ]
 }
