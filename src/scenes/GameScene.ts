@@ -413,7 +413,8 @@ export class GameScene extends Phaser.Scene {
     bullet.destroy();
 
     const props = enemy.getData('entityProperties') as { hp: number; scoreValue: number };
-    let hp = (enemy.getData('currentHp') as number) - 1;
+    const dmg = (bullet.getData('entityProperties') as { damage?: number } | undefined)?.damage ?? 1;
+    let hp = (enemy.getData('currentHp') as number) - dmg;
     enemy.setData('currentHp', hp);
 
     if (hp > 0) {

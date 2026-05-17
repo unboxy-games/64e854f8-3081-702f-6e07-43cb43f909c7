@@ -29,6 +29,5 @@ Core mechanic: Player ship at bottom moves left/right (←/→ or A/D), shoots u
 - **Rules**: `public/rules.json` — all tunables annotated with `_meta_` for editor sliders
 
 ## What changed this turn
-- `enemy_bullet.properties.damage` is now live in gameplay: `onEnemyBulletHitPlayer` reads `getData('damage')` from the bullet (default 1 if absent) and passes it to `damagePlayer(amount)`
-- `damagePlayer` now accepts an `amount` parameter and subtracts that many lives (clamped to 0); the current manifest value is `damage: 2`, so one enemy bullet costs 2 lives
-- Enemy contact (touch) still deals 1 damage (fixed cost — no damage property on the enemy prefab)
+- `enemy_bullet.properties.damage` is live: `onEnemyBulletHitPlayer` reads `getData('entityProperties').damage` (default 1) and passes it to `damagePlayer(amount)`; `damagePlayer` accepts an `amount` param and clamps lives to 0
+- `player_bullet.properties.damage` is live: `onBulletHitEnemy` reads `getData('entityProperties').damage` from the bullet (default 1) and subtracts that from `currentHp`; editing `damage` in the Types panel now affects both bullet types in gameplay
