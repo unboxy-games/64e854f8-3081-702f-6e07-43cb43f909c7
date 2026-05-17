@@ -38,4 +38,9 @@
 - Retry: SPACE or tap after Game Over / You Win
 
 ## This turn
-- Initial build: wrote complete GameScene.ts and UIScene.ts from scratch.
+- Migrated player ship to a scene entity + render script (`src/visuals/player-ship.ts`)
+- Player is now in `public/scenes/world/main.json` — editable in the visual editor
+- Editable params: `bodyColor`, `cockpitColor`, `engineColor`
+- `GameScene.create()` is now async; calls `loadWorldScene('main')` then retrieves the player from the entity registry
+- Movement/collision/flash all use `this.playerGfx.x` / `this.playerGfx.y` / `setAlpha()` — no manual redraw
+- Fixed `main.json` world dimensions and camera bounds to portrait (720×1280)

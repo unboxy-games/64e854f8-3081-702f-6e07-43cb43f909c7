@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { loadWorldScene, getEntityRegistry } from '@unboxy/phaser-sdk';
 import { GAME_WIDTH, GAME_HEIGHT } from '../config';
 
 interface Star {
@@ -25,10 +26,7 @@ interface Enemy {
 export class GameScene extends Phaser.Scene {
   // Player
   private playerGfx!: Phaser.GameObjects.Graphics;
-  private playerX = GAME_WIDTH / 2;
-  private readonly playerY = GAME_HEIGHT - 120;
   private readonly playerSpeed = 320;
-  private flashAlpha = 1;
 
   // Player bullets
   private playerBullets: Bullet[] = [];
@@ -69,8 +67,6 @@ export class GameScene extends Phaser.Scene {
   }
 
   init(_data?: unknown): void {
-    this.playerX = GAME_WIDTH / 2;
-    this.flashAlpha = 1;
     this.enemies = [];
     this.playerBullets = [];
     this.enemyBullets = [];
@@ -84,10 +80,17 @@ export class GameScene extends Phaser.Scene {
     this.stars = [];
   }
 
-  create(): void {
+  async create(): Promise<void> {
+    // ── Load scene data (spawns the player entity) ───────────────
+    await loadWorldScene(this, 'main');
+
     // Sync registry so HUD picks up reset values
     this.registry.set('score', 0);
     this.registry.set('lives', 3);
+
+    // ── Player — retrieve the entity the SDK just created ────────
+    this.playerGfx = getEntityRegistry(this)!.byRole('player')[0] as Phaser.GameObjects.Graphics;
+    this.playerGfx.setDepth(3);
 
     // ── Background ──────────────────────────────────────────────
     const bg = this.add.graphics().setDepth(0);
@@ -112,10 +115,6 @@ export class GameScene extends Phaser.Scene {
     nebula.fillEllipse(GAME_WIDTH * 0.2, GAME_HEIGHT * 0.35, 280, 200);
     nebula.fillStyle(0x006633, 0.12);
     nebula.fillEllipse(GAME_WIDTH * 0.8, GAME_HEIGHT * 0.65, 220, 160);
-
-    // ── Player ship ──────────────────────────────────────────────
-    this.playerGfx = this.add.graphics().setDepth(3);
-    this.redrawPlayer();
 
     // ── Enemy grid 6 × 3 ────────────────────────────────────────
     this.buildEnemyGrid();
@@ -217,58 +216,6 @@ export class GameScene extends Phaser.Scene {
   }
 
   // ────────────────────────────────────────────────────────────────
-  //  Player drawing
-  // ────────────────────────────────────────────────────────────────
-  private redrawPlayer(): void {
-    const g = this.playerGfx;
-    const x = this.playerX;
-    const y = this.playerY;
-    g.clear();
-    g.setAlpha(this.flashAlpha);
-
-    // Engine exhaust glow
-    g.fillStyle(0x0044ff, 0.22);
-    g.fillEllipse(x, y + 32, 26, 16);
-
-    // Wings
-    g.fillStyle(0x005577, 1);
-    g.fillTriangle(x - 18, y + 20, x - 40, y + 32, x - 10, y + 4);
-    g.fillTriangle(x + 18, y + 20, x + 40, y + 32, x + 10, y + 4);
-
-    // Wing accent
-    g.fillStyle(0x0099bb, 0.55);
-    g.fillTriangle(x - 18, y + 20, x - 30, y + 28, x - 12, y + 8);
-    g.fillTriangle(x + 18, y + 20, x + 30, y + 28, x + 12, y + 8);
-
-    // Body
-    g.fillStyle(0x00ddff, 1);
-    g.fillTriangle(x, y - 36, x - 20, y + 22, x + 20, y + 22);
-
-    // Body centre stripe
-    g.fillStyle(0x007799, 1);
-    g.fillTriangle(x, y - 22, x - 10, y + 16, x + 10, y + 16);
-
-    // Cockpit
-    g.fillStyle(0xaaffff, 0.95);
-    g.fillEllipse(x, y - 14, 14, 20);
-    g.fillStyle(0xffffff, 0.5);
-    g.fillEllipse(x - 2, y - 19, 6, 9);
-
-    // Engine nozzles
-    g.fillStyle(0xff8800, 0.95);
-    g.fillRect(x - 11, y + 22, 8, 13);
-    g.fillRect(x + 3,  y + 22, 8, 13);
-    g.fillStyle(0xffee00, 0.7);
-    g.fillRect(x - 10, y + 27, 6, 6);
-    g.fillRect(x + 4,  y + 27, 6, 6);
-
-    // Wing-tip cannons
-    g.fillStyle(0x00bbdd, 1);
-    g.fillRect(x - 40, y + 24, 5, 12);
-    g.fillRect(x + 35, y + 24, 5, 12);
-  }
-
-  // ────────────────────────────────────────────────────────────────
   //  Main update loop
   // ────────────────────────────────────────────────────────────────
   update(time: number, delta: number): void {
@@ -283,13 +230,12 @@ export class GameScene extends Phaser.Scene {
       this.starGfx.fillRect(s.x, s.y, s.size, s.size);
     }
 
-    // Player movement
-    if ((this.cursors.left.isDown || this.keyA.isDown) && this.playerX > 42) {
-      this.playerX -= this.playerSpeed * delta / 1000;
-    } else if ((this.cursors.right.isDown || this.keyD.isDown) && this.playerX < GAME_WIDTH - 42) {
-      this.playerX += this.playerSpeed * delta / 1000;
+    // Player movement — just translate the game object; render script drew it at (0,0)
+    if ((this.cursors.left.isDown || this.keyA.isDown) && this.playerGfx.x > 42) {
+      this.playerGfx.x -= this.playerSpeed * delta / 1000;
+    } else if ((this.cursors.right.isDown || this.keyD.isDown) && this.playerGfx.x < GAME_WIDTH - 42) {
+      this.playerGfx.x += this.playerSpeed * delta / 1000;
     }
-    this.redrawPlayer();
 
     // Shooting — space (one-shot) or up-arrow (held, rate-limited)
     const wantsShoot =
@@ -357,8 +303,8 @@ export class GameScene extends Phaser.Scene {
     // Glow halo
     g.fillStyle(0x00ffee, 0.22);
     g.fillRect(-5, -19, 10, 22);
-    g.x = this.playerX;
-    g.y = this.playerY - 38;
+    g.x = this.playerGfx.x;
+    g.y = this.playerGfx.y - 38;
     this.playerBullets.push({ gfx: g, vy: 700 });
   }
 
@@ -430,7 +376,7 @@ export class GameScene extends Phaser.Scene {
     if (!this.invincible) {
       for (let bi = this.enemyBullets.length - 1; bi >= 0; bi--) {
         const b = this.enemyBullets[bi];
-        if (Math.abs(b.gfx.x - this.playerX) < 22 && Math.abs(b.gfx.y - this.playerY) < 32) {
+        if (Math.abs(b.gfx.x - this.playerGfx.x) < 22 && Math.abs(b.gfx.y - this.playerGfx.y) < 32) {
           b.gfx.destroy();
           this.enemyBullets.splice(bi, 1);
           this.damagePlayer();
@@ -478,7 +424,7 @@ export class GameScene extends Phaser.Scene {
     this.lives = Math.max(0, this.lives - 1);
     this.registry.set('lives', this.lives);
 
-    this.explode(this.playerX, this.playerY);
+    this.explode(this.playerGfx.x, this.playerGfx.y);
 
     if (this.lives <= 0) {
       this.time.delayedCall(400, () => this.showOutcome(false));
@@ -493,12 +439,12 @@ export class GameScene extends Phaser.Scene {
       repeat: 11,
       callback: () => {
         tick++;
-        this.flashAlpha = tick % 2 === 0 ? 1 : 0.12;
+        this.playerGfx.setAlpha(tick % 2 === 0 ? 1 : 0.12);
       },
     });
     this.time.delayedCall(1250, () => {
       this.invincible = false;
-      this.flashAlpha = 1;
+      this.playerGfx.setAlpha(1);
     });
   }
 
