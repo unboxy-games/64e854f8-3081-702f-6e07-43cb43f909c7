@@ -31,7 +31,7 @@
     "gruntScore": 100,
     "bomberScore": 300,
     "bossScore": 2000,
-    "playerSpeed": 700,
+    "playerSpeed": 170,
     "_meta_playerSpeed": {
       "label": "Player speed (px/s)",
       "min": 50,
