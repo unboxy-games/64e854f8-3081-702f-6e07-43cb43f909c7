@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { loadWorldScene, getEntityRegistry, spawnPrefab } from '@unboxy/phaser-sdk';
+import { loadWorldScene, getEntityRegistry, spawnPrefab, getRule, onRuleChange } from '@unboxy/phaser-sdk';
 import { GAME_WIDTH, GAME_HEIGHT } from '../config';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -55,11 +55,13 @@ export class GameScene extends Phaser.Scene {
   // Invincibility after taking a hit
   private invincible = false;
 
-  // Tunable constants
-  private readonly PLAYER_SPEED      = 350;
-  private readonly SHOOT_COOLDOWN    = 270;
-  private readonly ENEMY_FIRE_MS     = 1500;
-  private readonly BOSS_FIRE_MS      = 700;
+  // Tunable values — populated from rules.json via getRule in init()
+  private playerSpeed          = 350;
+  private shootCooldown        = 220;
+  private enemyFireIntervalMs  = 1200;
+  private bossFireIntervalMs   = 700;
+  private playerBulletVelocity = -700;
+  private enemyBulletVelocity  = 320;
 
   constructor() {
     super({ key: 'GameScene' });
@@ -68,18 +70,27 @@ export class GameScene extends Phaser.Scene {
   init(data: { sceneId: string }): void {
     this.sceneId          = data.sceneId;
     this.score            = 0;
-    this.lives            = 3;
     this.currentWave      = 0;
     this.waveSpawnDone    = false;
     this.waveTransitioning= false;
     this.gameOverFlag     = false;
     this.gameActive       = false;
     this.enemyDirX        = 1;
-    this.enemySpeed       = 55;
-    this.baseSpeed        = 55;
     this.lastPlayerShot   = 0;
     this.lastEnemyFire    = 0;
     this.invincible       = false;
+
+    // Read boot-time tunables from rules.json (cache is ready after BootScene preload)
+    this.lives               = getRule(this, 'balance.startingLives', 3);
+    this.playerSpeed         = getRule(this, 'balance.playerSpeed', 350);
+    this.shootCooldown       = getRule(this, 'balance.playerShootCooldownMs', 220);
+    this.enemyFireIntervalMs = getRule(this, 'balance.enemyFireIntervalMs', 1200);
+    this.bossFireIntervalMs  = getRule(this, 'balance.bossFireIntervalMs', 700);
+    this.playerBulletVelocity= getRule(this, 'balance.playerBulletVelocity', -700);
+    this.enemyBulletVelocity = getRule(this, 'balance.enemyBulletVelocity', 320);
+    const baseSpd            = getRule(this, 'balance.enemyBaseSpeed', 55);
+    this.baseSpeed           = baseSpd;
+    this.enemySpeed          = baseSpd;
   }
 
   // ── Create ────────────────────────────────────────────────────────────────
@@ -93,9 +104,41 @@ export class GameScene extends Phaser.Scene {
     this.setupInput();
     this.setupColliders();
     this.createHUD();
+    this.subscribeRules();
 
     this.time.delayedCall(500, () => this.startWave(1));
     this.gameActive = true;
+  }
+
+  /** Live-subscribe to rules that should take effect without a scene restart. */
+  private subscribeRules(): void {
+    const shutdown = Phaser.Scenes.Events.SHUTDOWN;
+
+    const u1 = onRuleChange(this, 'balance.playerSpeed', (v) => {
+      this.playerSpeed = v as number;
+    });
+    const u2 = onRuleChange(this, 'balance.playerShootCooldownMs', (v) => {
+      this.shootCooldown = v as number;
+    });
+    const u3 = onRuleChange(this, 'balance.playerBulletVelocity', (v) => {
+      this.playerBulletVelocity = v as number;
+    });
+    const u4 = onRuleChange(this, 'balance.enemyBulletVelocity', (v) => {
+      this.enemyBulletVelocity = v as number;
+    });
+    const u5 = onRuleChange(this, 'balance.enemyFireIntervalMs', (v) => {
+      this.enemyFireIntervalMs = v as number;
+    });
+    const u6 = onRuleChange(this, 'balance.bossFireIntervalMs', (v) => {
+      this.bossFireIntervalMs = v as number;
+    });
+    const u7 = onRuleChange(this, 'balance.enemyBaseSpeed', (v) => {
+      // Recalculate baseSpeed & enemySpeed preserving the wave multiplier
+      this.baseSpeed  = (v as number) * (1 + (this.currentWave - 1) * 0.28);
+      this.enemySpeed = this.baseSpeed;
+    });
+
+    this.events.once(shutdown, () => { u1(); u2(); u3(); u4(); u5(); u6(); u7(); });
   }
 
   // ── Background ────────────────────────────────────────────────────────────
@@ -226,7 +269,7 @@ export class GameScene extends Phaser.Scene {
     this.currentWave   = wave;
     this.waveSpawnDone = false;
     this.waveTransitioning = false;
-    this.baseSpeed    = 55 * (1 + (wave - 1) * 0.28);
+    this.baseSpeed    = getRule(this, 'balance.enemyBaseSpeed', 55) * (1 + (wave - 1) * 0.28);
     this.enemySpeed   = this.baseSpeed;
     this.enemyDirX    = 1;
 
@@ -446,8 +489,8 @@ export class GameScene extends Phaser.Scene {
 
     for (let i = 0; i < count; i++) {
       const spread = isBoss ? (i - 1) * (Math.PI / 9) : 0;
-      const vx = Math.sin(spread) * 320;
-      const vy = Math.cos(spread) * 320;
+      const vx = Math.sin(spread) * this.enemyBulletVelocity;
+      const vy = Math.cos(spread) * this.enemyBulletVelocity;
 
       const b = spawnPrefab(this, 'enemy_bullet', shooter.x, shooter.y + 28, {
         physics: { velocityX: vx, velocityY: vy },
@@ -460,7 +503,9 @@ export class GameScene extends Phaser.Scene {
   // ── Player firing ─────────────────────────────────────────────────────────
 
   private firePlayerBullet(): void {
-    const b = spawnPrefab(this, 'player_bullet', this.player.x, this.player.y - 38) as Phaser.GameObjects.Graphics;
+    const b = spawnPrefab(this, 'player_bullet', this.player.x, this.player.y - 38, {
+      physics: { velocityY: this.playerBulletVelocity },
+    }) as Phaser.GameObjects.Graphics;
     b.setDepth(4);
     this.playerBullets.add(b);
   }
@@ -596,13 +641,13 @@ export class GameScene extends Phaser.Scene {
     // ── Player movement
     const leftDown  = this.cursors.left.isDown  || this.keyA.isDown;
     const rightDown = this.cursors.right.isDown || this.keyD.isDown;
-    if (leftDown)       this.playerBody.setVelocityX(-this.PLAYER_SPEED);
-    else if (rightDown) this.playerBody.setVelocityX(this.PLAYER_SPEED);
+    if (leftDown)       this.playerBody.setVelocityX(-this.playerSpeed);
+    else if (rightDown) this.playerBody.setVelocityX(this.playerSpeed);
     else                this.playerBody.setVelocityX(0);
 
     // ── Player shooting
     const fireKey = this.cursors.up.isDown || this.keySpace.isDown;
-    if (fireKey && time - this.lastPlayerShot > this.SHOOT_COOLDOWN) {
+    if (fireKey && time - this.lastPlayerShot > this.shootCooldown) {
       this.lastPlayerShot = time;
       this.firePlayerBullet();
     }
@@ -611,7 +656,8 @@ export class GameScene extends Phaser.Scene {
     this.updateEnemyMovement(delta);
 
     // ── Enemy auto-fire
-    const fireInterval = this.currentWave === 3 ? this.BOSS_FIRE_MS : this.ENEMY_FIRE_MS;
+    const bossWave     = getRule(this, 'winCondition.bossWave', 3);
+    const fireInterval = this.currentWave >= bossWave ? this.bossFireIntervalMs : this.enemyFireIntervalMs;
     if (time - this.lastEnemyFire > fireInterval) {
       this.lastEnemyFire = time;
       this.fireEnemyBullet();

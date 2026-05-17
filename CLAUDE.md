@@ -29,5 +29,11 @@ Core mechanic: Player ship at bottom moves left/right (←/→ or A/D), shoots u
 - **Rules**: `public/rules.json` — all tunables annotated with `_meta_` for editor sliders
 
 ## What changed this turn
-- Fixed player hitbox: moved physics body spec to world scene JSON (`"physics": { "bodyW": 44, "bodyH": 40 }`); SDK applies correct origin-aware offset at spawn; removed manual `physics.add.existing` / `setSize` / `setOffset` from `setupPlayer()` (kept `setCollideWorldBounds`)
-- Removed debug physics overlay (`arcade: { debug: true }`) from game config
+- Wired `public/rules.json` for live editor control of all major tunables
+- `rules.json` structure: `balance.*` namespace holds startingLives, playerSpeed, playerShootCooldownMs, playerBulletVelocity, enemyBaseSpeed, enemyFireIntervalMs, bossFireIntervalMs, enemyBulletVelocity, enemyDropAmount, and HP/score values; `winCondition.bossWave` controls which wave triggers the boss
+- `BootScene.preload()` now calls `preloadRules(this)` so the cache is ready before GameScene starts
+- `GameScene.init()` reads all tunables via `getRule(this, 'path', fallback)` on every scene (re)start — startingLives is boot-time only (requires restart to take effect)
+- `GameScene.subscribeRules()` (called from `create()`) sets up `onRuleChange` subscriptions for all live-editable values: playerSpeed, shootCooldown, playerBulletVelocity, enemyBulletVelocity, enemyFireIntervalMs, bossFireIntervalMs, enemyBaseSpeed; subscriptions are cleaned up on SHUTDOWN
+- `firePlayerBullet()` overrides velocityY from `this.playerBulletVelocity` each shot (ignoring the manifest default)
+- `fireEnemyBullet()` uses `this.enemyBulletVelocity` for spread calculation
+- `update()` uses instance fields `playerSpeed`, `shootCooldown`, `enemyFireIntervalMs`/`bossFireIntervalMs` instead of former hardcoded readonly constants
